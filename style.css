@@ -13,8 +13,8 @@
   --vc-baddest-red: #d2232a;
   --vc-goodest-green: #57aa4a;
 
-  --font-primary: 'Helvetica Neue', Arial, sans-serif;
-  --font-secondary: Georgia, 'Times New Roman', serif;
+  --font-primary: 'Halyard', 'Helvetica Neue', Arial, sans-serif;
+  --font-secondary: 'Gascogne', Georgia, 'Times New Roman', serif;
   --font-mono: 'SF Mono', 'Consolas', monospace;
 
   --sidebar-w: 400px;
@@ -64,13 +64,14 @@ html, body {
   pointer-events: none;
 }
 .header h1 {
-  margin: 0; font-size: 18px; font-weight: 700;
+  margin: 0; font-size: 20px; font-weight: 900;
   letter-spacing: -0.02em; pointer-events: auto;
+  text-transform: uppercase;
 }
 .header h1 span { color: var(--vc-chartreuse); }
 .header .subtitle {
   font-size: 12px; color: var(--sd2); margin-top: 2px;
-  font-weight: 400;
+  font-weight: 400; font-family: var(--font-secondary);
 }
 .header .updated {
   font-size: 10px; color: var(--vc-charcoal); margin-top: 4px;
@@ -92,8 +93,9 @@ html, body {
   flex-shrink: 0;
 }
 .sidebar-header h2 {
-  margin: 0; font-size: 15px; font-weight: 600;
+  margin: 0; font-size: 15px; font-weight: 900;
   letter-spacing: -0.01em;
+  text-transform: uppercase;
 }
 .sidebar-header .district-meta {
   font-size: 11px; color: var(--sd2); margin-top: 4px;
@@ -108,12 +110,13 @@ html, body {
 /* ═══ ABOUT ═══ */
 .about-toggle {
   position: absolute; top: 16px; right: 16px;
-  background: none; border: 1px solid var(--sl);
-  color: var(--sd2); font-size: 11px;
+  background: none; border: 1px solid var(--vc-orange);
+  color: var(--vc-orange); font-size: 11px;
   padding: 3px 10px; border-radius: 4px;
   cursor: pointer; font-family: var(--font-primary);
+  font-weight: 600; letter-spacing: 0.02em;
 }
-.about-toggle:hover { color: var(--st); border-color: var(--vc-charcoal); }
+.about-toggle:hover { color: var(--st); background: var(--vc-orange); border-color: var(--vc-orange); }
 .sidebar-header { position: relative; }
 
 .about-panel {
@@ -234,6 +237,8 @@ html, body {
   font-size: 10px; font-weight: 700;
   text-transform: uppercase; letter-spacing: 0.08em;
   color: var(--vc-charcoal); margin: 0 0 10px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
 }
 
 /* ═══ THEME CARDS ═══ */
@@ -248,12 +253,12 @@ html, body {
 .theme-card.low { border-left-color: var(--vc-cerulean); }
 
 .theme-label {
-  font-size: 13px; font-weight: 600; margin: 0 0 4px;
+  font-size: 13px; font-weight: 900; margin: 0 0 4px;
   color: var(--st);
 }
 .theme-summary {
   font-size: 12px; color: var(--sd2); line-height: 1.5;
-  margin: 0 0 8px;
+  margin: 0 0 8px; font-family: var(--font-secondary);
 }
 .theme-meta {
   display: flex; gap: 8px; flex-wrap: wrap; align-items: center;
@@ -377,7 +382,7 @@ html, body {
   font-size: 12px; color: var(--st); text-decoration: none;
   line-height: 1.4; display: block;
 }
-.reddit-post a:hover { color: var(--vc-chartreuse); }
+.reddit-post a:hover { color: var(--vc-orange); }
 .reddit-meta {
   font-size: 10px; color: var(--vc-charcoal); margin-top: 3px;
 }
@@ -392,7 +397,7 @@ html, body {
   font-size: 12px; color: var(--st); text-decoration: none;
   line-height: 1.4; display: block;
 }
-.news-article a:hover { color: var(--vc-chartreuse); }
+.news-article a:hover { color: var(--vc-orange); }
 .news-outlet {
   font-size: 10px; color: var(--vc-charcoal); margin-top: 3px;
 }
@@ -419,7 +424,7 @@ html, body {
   text-transform: uppercase; letter-spacing: 0.04em;
 }
 .top-story-label {
-  font-size: 13px; font-weight: 700; color: var(--st);
+  font-size: 13px; font-weight: 900; color: var(--st);
   margin-bottom: 3px;
 }
 .top-story-summary {
@@ -444,10 +449,11 @@ html, body {
 }
 .hotspot-info { flex: 1; }
 .hotspot-name {
-  font-size: 13px; font-weight: 600; color: var(--st);
+  font-size: 13px; font-weight: 900; color: var(--st);
 }
 .hotspot-theme {
   font-size: 11px; color: var(--sd2); margin-top: 2px;
+  font-family: var(--font-secondary);
 }
 .hotspot-score {
   width: 40px; height: 40px; border-radius: 50%;
@@ -459,7 +465,7 @@ html, body {
 .cb-info {
   font-size: 12px; color: var(--sd2); line-height: 1.5;
 }
-.cb-info a { color: var(--vc-cerulean); text-decoration: none; }
+.cb-info a { color: var(--vc-orange); text-decoration: none; }
 .cb-info a:hover { text-decoration: underline; }
 .cb-meeting-date {
   font-weight: 600; color: var(--vc-chartreuse);
@@ -475,7 +481,7 @@ html, body {
 }
 .cb-meeting-item:last-child { border-bottom: none; }
 .cb-meeting-title { font-weight: 500; color: var(--vc-white); margin-bottom: 2px; }
-.cb-meeting-title a { color: var(--vc-cerulean); }
+.cb-meeting-title a { color: var(--vc-orange); }
 .cb-meeting-meta { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
 .cb-meeting-meta .theme-tag { font-size: 10px; }
 .cb-meeting-location { font-size: 11px; color: var(--vc-charcoal); margin-top: 2px; }
@@ -551,7 +557,7 @@ html, body {
   display: flex; flex-direction: column; gap: 6px;
 }
 .sources-list a {
-  color: var(--vc-cerulean); text-decoration: none; font-size: 12px;
+  color: var(--vc-orange); text-decoration: none; font-size: 12px;
 }
 .sources-list a:hover { text-decoration: underline; }
 
@@ -590,8 +596,30 @@ html, body {
   background: none; border: none; cursor: pointer;
   padding: 0; margin-bottom: 8px; font-family: var(--font-primary);
 }
-.back-btn:hover { color: var(--vc-chartreuse); }
+.back-btn:hover { color: var(--vc-orange); }
 .back-btn.visible { display: flex; }
+
+/* ═══ VC FOOTER ═══ */
+.vc-footer {
+  padding: 16px 20px; border-top: 1px solid var(--sl);
+  display: flex; align-items: center; justify-content: space-between;
+  flex-shrink: 0; background: var(--sd);
+}
+.vc-footer-logo {
+  height: 14px; opacity: 0.5; filter: invert(1);
+  transition: opacity 0.15s;
+}
+.vc-footer-logo:hover { opacity: 0.8; }
+.vc-footer-text {
+  font-size: 10px; color: var(--vc-charcoal);
+  letter-spacing: 0.04em;
+}
+
+/* ═══ VC LOADING BRAND ═══ */
+.loading-brand {
+  margin-top: 20px; opacity: 0.4;
+}
+.loading-brand img { height: 18px; filter: invert(1); }
 
 /* ═══ RESPONSIVE ═══ */
 @media (max-width: 768px) {

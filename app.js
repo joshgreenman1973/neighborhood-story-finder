@@ -25,9 +25,12 @@ const SCORE_COLORS = [
 ];
 
 const CATEGORY_COLORS = {
+  'heat/hot water': '#ff4500',
+  'noise':          '#c084fc',
+  'parking':        '#f5c542',
+  'streets':        '#a0a0a0',
   'housing':        '#ff7c53',
   'safety':         '#d2232a',
-  'noise':          '#c084fc',
   'transit':        '#217ebe',
   'sanitation':     '#dde44c',
   'pests':          '#f59e0b',
@@ -37,7 +40,6 @@ const CATEGORY_COLORS = {
   'health':         '#e7466d',
   'education':      '#9b59b6',
   'government':     '#9b9fbc',
-  'quality-of-life':'#888',  // legacy fallback
 };
 
 // =============================================================================

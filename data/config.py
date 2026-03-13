@@ -26,11 +26,14 @@ CD_GEOJSON_URL = "https://services5.arcgis.com/GfwWNkhOj9bNBqoJ/arcgis/rest/serv
 
 # Category taxonomy (shared across all sources)
 CATEGORIES = [
+    "heat/hot water",
+    "noise",
+    "parking",
+    "streets",
     "housing",
     "safety",
     "transit",
     "sanitation",
-    "noise",
     "pests",
     "development",
     "infrastructure",
@@ -42,8 +45,23 @@ CATEGORIES = [
 
 # Map 311 complaint types to our categories
 COMPLAINT_CATEGORY_MAP = {
+    "heat/hot water": [
+        "heat/hot water",
+    ],
+    "noise": [
+        "noise", "noise - residential", "noise - commercial", "noise - street/sidewalk",
+        "noise - vehicle", "noise - helicopter", "noise survey",
+    ],
+    "parking": [
+        "illegal parking", "blocked driveway", "broken parking meter",
+        "broken muni meter",
+    ],
+    "streets": [
+        "street condition", "sidewalk condition", "pothole",
+        "curb condition", "street light condition",
+    ],
     "housing": [
-        "heat/hot water", "plumbing", "paint/plaster", "water leak",
+        "plumbing", "paint/plaster", "water leak",
         "elevator", "door/window", "electric",
         "lead", "mold", "appliance", "safety", "flooring/stairs",
     ],
@@ -52,14 +70,9 @@ COMPLAINT_CATEGORY_MAP = {
         "non-emergency police matter", "animal abuse", "illegal fireworks",
         "encampment",
     ],
-    "noise": [
-        "noise", "noise - residential", "noise - commercial", "noise - street/sidewalk",
-        "noise - vehicle", "noise - helicopter", "noise survey",
-    ],
     "transit": [
-        "traffic signal condition", "street light condition", "broken parking meter",
+        "traffic signal condition", "traffic",
         "bus stop shelter placement", "bike/roller/skate chronic",
-        "traffic", "illegal parking", "blocked driveway",
     ],
     "sanitation": [
         "dirty conditions", "unsanitary condition", "derelict vehicle",
@@ -71,10 +84,8 @@ COMPLAINT_CATEGORY_MAP = {
         "rodent", "bed bugs", "pest control", "animal in a park",
     ],
     "infrastructure": [
-        "street condition", "sidewalk condition", "pothole",
-        "curb condition", "broken muni meter", "fire hydrant",
         "water system", "sewer", "catch basin/inlet", "manhole",
-        "snow or ice",
+        "fire hydrant", "snow or ice",
     ],
     "development": [
         "building/use", "illegal conversion", "construction",

@@ -96,6 +96,7 @@ html, body {
   margin: 0; font-size: 15px; font-weight: 900;
   letter-spacing: -0.01em;
   text-transform: uppercase;
+  padding-right: 100px;
 }
 .sidebar-header .district-meta {
   font-size: 11px; color: var(--sd2); margin-top: 4px;

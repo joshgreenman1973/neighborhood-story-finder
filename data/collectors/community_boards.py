@@ -9,6 +9,7 @@ We fetch the /events/ page, parse JSON-LD for upcoming meetings, and extract
 committee names, meeting types, dates, and agenda links.
 """
 
+import html
 import re
 import json
 import requests
@@ -18,6 +19,16 @@ from datetime import datetime, timedelta
 import sys, os
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from config import CD_NAMES
+
+
+def clean_html(text):
+    """Strip HTML tags and decode entities from text."""
+    if not text:
+        return ""
+    text = html.unescape(text)
+    text = re.sub(r'<[^>]+>', ' ', text)
+    text = re.sub(r'\s+', ' ', text).strip()
+    return text
 
 
 # CB website URLs — WordPress sites with The Events Calendar
@@ -81,7 +92,7 @@ def _parse_json_ld_events(soup):
                         "name": item.get("name", ""),
                         "start": item.get("startDate", ""),
                         "end": item.get("endDate", ""),
-                        "description": (item.get("description") or "")[:300],
+                        "description": clean_html(item.get("description") or "")[:300],
                         "location": "",
                         "url": item.get("url", ""),
                     })
@@ -207,7 +218,7 @@ def fetch_cb_meetings(cd_code):
                 "date": start_date.strftime("%Y-%m-%d") if start_date else ev["start"][:10],
                 "location": ev.get("location", ""),
                 "url": ev.get("url", ""),
-                "description": ev.get("description", "")[:200],
+                "description": clean_html(ev.get("description", ""))[:200],
             }
 
             # Determine if upcoming or recent

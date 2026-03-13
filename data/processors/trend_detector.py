@@ -68,23 +68,30 @@ def detect_spikes(district_data):
             mean = sum(baseline) / len(baseline) if baseline else 0
             std = math.sqrt(sum((x - mean) ** 2 for x in baseline) / len(baseline)) if baseline else 0
 
-            # Check most recent week for spike
-            current_week = series[-1]
-            z = _z_score(current_week, mean, std)
-            pct = _pct_change(current_week, mean)
+            # Check last 4 weeks for spikes (most recent first)
+            # Track which complaint types already have a spike so we don't double-count
+            found_spike = False
+            for weeks_ago in range(4):
+                week_val = series[-(1 + weeks_ago)]
+                z = _z_score(week_val, mean, std)
+                pct = _pct_change(week_val, mean)
 
-            if abs(z) >= 1.8 and current_week >= 3:  # Meaningful spike threshold
-                spikes.append({
-                    "type": complaint_type,
-                    "z_score": round(z, 2),
-                    "current_week": current_week,
-                    "baseline_avg": round(mean, 1),
-                    "pct_change": pct,
-                    "severity": _severity(z),
-                    "direction": "up" if z > 0 else "down",
-                })
+                if abs(z) >= 1.8 and week_val >= 3:
+                    spikes.append({
+                        "type": complaint_type,
+                        "z_score": round(z, 2),
+                        "current_week": week_val,
+                        "baseline_avg": round(mean, 1),
+                        "pct_change": pct,
+                        "severity": _severity(z),
+                        "direction": "up" if z > 0 else "down",
+                        "weeks_ago": weeks_ago,
+                    })
+                    found_spike = True
+                    break  # report only the most recent spike per type
 
             # Check for sustained trend (last 4 weeks all above/below mean)
+            current_week = series[-1]
             if mean > 0 and all(w > mean * 1.2 for w in recent) and sum(recent) >= 8:
                 avg_recent = sum(recent) / len(recent)
                 sustained_pct = _pct_change(avg_recent, mean)
@@ -111,9 +118,11 @@ def detect_spikes(district_data):
 def compute_activity_scores(district_data, spikes):
     """
     Compute an activity score (0-100) for each district based on:
-    - Total complaint volume (relative to district average)
-    - Number and severity of spikes
-    - Variety of complaint types with activity
+    - Total complaint volume relative to city average (0-40)
+    - Number, severity, and recency of spikes (0-40) — this-week spikes
+      count at full weight; 2-week-old spikes at 0.7x; 3wk at 0.4x; 4wk at 0.2x
+    - Whether complaint volume is accelerating right now (0-10)
+    - Variety of complaint categories with activity (0-15)
     """
     scores = {}
 
@@ -132,15 +141,31 @@ def compute_activity_scores(district_data, spikes):
         volume_ratio = data["total"] / city_avg if city_avg > 0 else 0
         score += min(40, int(volume_ratio * 20))
 
-        # Spike component (0-40): how many and how severe?
+        # Spike component (0-40): how many, how severe, and how recent?
         cd_spikes = spikes.get(cd, [])
-        high_spikes = sum(1 for s in cd_spikes if s["severity"] == "high")
-        med_spikes = sum(1 for s in cd_spikes if s["severity"] == "medium")
-        score += min(40, high_spikes * 15 + med_spikes * 8 + len(cd_spikes) * 2)
+        spike_score = 0
+        for s in cd_spikes:
+            weeks_ago = s.get("weeks_ago", 0)
+            recency_mult = [1.0, 0.7, 0.4, 0.2][min(weeks_ago, 3)]
+            base = {"high": 15, "medium": 8}.get(s["severity"], 2)
+            spike_score += base * recency_mult
+        score += min(40, int(spike_score))
 
-        # Diversity component (0-20): how many categories have activity?
+        # Recency component (0-10): is complaint volume accelerating right now?
+        weekly = data.get("weekly", {})
+        w0 = sum(weekly.get("w0", {}).values())  # most recent week
+        w1 = sum(weekly.get("w1", {}).values())
+        w2 = sum(weekly.get("w2", {}).values())
+        w3 = sum(weekly.get("w3", {}).values())
+        recent_2w = w0 + w1
+        prior_2w = w2 + w3
+        if prior_2w > 0:
+            accel = (recent_2w - prior_2w) / prior_2w
+            score += min(10, max(0, int(accel * 15)))
+
+        # Diversity component (0-15): how many categories have activity?
         active_categories = len(data.get("by_category", {}))
-        score += min(20, active_categories * 3)
+        score += min(15, active_categories * 3)
 
         scores[cd] = min(100, max(0, score))
 

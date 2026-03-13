@@ -105,6 +105,58 @@ html, body {
   scrollbar-color: rgba(255,255,255,0.15) transparent;
 }
 
+/* ═══ ABOUT ═══ */
+.about-toggle {
+  position: absolute; top: 16px; right: 16px;
+  background: none; border: 1px solid var(--sl);
+  color: var(--sd2); font-size: 11px;
+  padding: 3px 10px; border-radius: 4px;
+  cursor: pointer; font-family: var(--font-primary);
+}
+.about-toggle:hover { color: var(--st); border-color: var(--vc-charcoal); }
+.sidebar-header { position: relative; }
+
+.about-panel {
+  flex-shrink: 0;
+  max-height: 70vh; overflow-y: auto;
+  padding: 20px;
+  border-bottom: 2px solid var(--vc-chartreuse);
+  background: var(--sd);
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255,255,255,0.15) transparent;
+}
+.about-panel h3 {
+  font-size: 13px; font-weight: 700;
+  color: var(--vc-chartreuse);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin: 18px 0 8px; font-family: var(--font-primary);
+}
+.about-panel h3:first-of-type { margin-top: 0; }
+.about-panel p {
+  font-size: 13px; line-height: 1.6;
+  color: var(--st); margin: 0 0 10px;
+  font-family: var(--font-secondary);
+}
+.about-sources {
+  display: flex; flex-direction: column; gap: 8px;
+}
+.about-source {
+  font-size: 12px; line-height: 1.5;
+  color: rgba(255,255,255,0.7);
+  padding-left: 10px;
+  border-left: 2px solid var(--sl);
+  font-family: var(--font-secondary);
+}
+.about-source strong { color: var(--st); }
+.about-close {
+  float: right; background: none; border: none;
+  color: var(--sd2); font-size: 11px;
+  cursor: pointer; font-family: var(--font-primary);
+  padding: 0;
+}
+.about-close:hover { color: var(--st); }
+
 /* ═══ FILTERS ═══ */
 .filters {
   padding: 12px 20px;
@@ -282,8 +334,32 @@ html, body {
   flex: 1; font-size: 12px; color: var(--st);
 }
 .spike-detail .spike-type { font-weight: 600; }
+.spike-age {
+  font-size: 10px; font-weight: 500;
+  color: var(--vc-chartreuse);
+  background: rgba(221,228,76,0.12);
+  padding: 1px 6px; border-radius: 3px;
+  margin-left: 6px;
+}
 .spike-detail .spike-pct {
   font-size: 11px; color: var(--sd2); margin-top: 1px;
+}
+
+/* ═══ RECENCY BADGES ═══ */
+.recency-badge {
+  font-size: 10px; font-weight: 600;
+  padding: 2px 7px; border-radius: 3px;
+  margin-left: 8px; vertical-align: middle;
+  text-transform: uppercase; letter-spacing: 0.03em;
+}
+.recency-this-week {
+  background: rgba(221,228,76,0.2); color: var(--vc-chartreuse);
+}
+.recency-last-2-weeks {
+  background: rgba(255,124,83,0.15); color: var(--vc-orange);
+}
+.recency-last-month, .recency-ongoing {
+  background: rgba(255,255,255,0.06); color: var(--sd2);
 }
 
 /* ═══ REDDIT POSTS ═══ */
@@ -314,6 +390,38 @@ html, body {
 .news-outlet {
   font-size: 10px; color: var(--vc-charcoal); margin-top: 3px;
 }
+
+/* ═══ TOP STORIES (overview) ═══ */
+.top-stories-section {
+  border-bottom: 2px solid var(--vc-chartreuse);
+  padding-bottom: 16px; margin-bottom: 4px;
+}
+.top-story-card {
+  padding: 10px 12px; margin-bottom: 6px;
+  background: var(--sm); border-radius: 8px;
+  border-left: 3px solid var(--vc-chartreuse);
+  cursor: pointer; transition: background 0.15s;
+}
+.top-story-card:hover { background: rgba(255,255,255,0.06); }
+.top-story-header {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-bottom: 4px;
+}
+.top-story-district {
+  font-size: 10px; font-weight: 600;
+  color: var(--vc-chartreuse);
+  text-transform: uppercase; letter-spacing: 0.04em;
+}
+.top-story-label {
+  font-size: 13px; font-weight: 700; color: var(--st);
+  margin-bottom: 3px;
+}
+.top-story-summary {
+  font-size: 12px; line-height: 1.5; color: rgba(255,255,255,0.7);
+  font-family: var(--font-secondary);
+  margin-bottom: 6px;
+}
+.top-story-meta { display: flex; gap: 6px; }
 
 /* ═══ HOT SPOTS LIST ═══ */
 .hotspot-item {

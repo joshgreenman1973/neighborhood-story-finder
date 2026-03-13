@@ -27,14 +27,17 @@ const SCORE_COLORS = [
 const CATEGORY_COLORS = {
   'housing':        '#ff7c53',
   'safety':         '#d2232a',
+  'noise':          '#c084fc',
   'transit':        '#217ebe',
-  'education':      '#9b59b6',
-  'quality-of-life':'#dde44c',
+  'sanitation':     '#dde44c',
+  'pests':          '#f59e0b',
   'development':    '#394882',
+  'infrastructure': '#707175',
   'environment':    '#57aa4a',
   'health':         '#e7466d',
+  'education':      '#9b59b6',
   'government':     '#9b9fbc',
-  'infrastructure': '#707175',
+  'quality-of-life':'#888',  // legacy fallback
 };
 
 // =============================================================================
@@ -282,21 +285,24 @@ function renderDistrictDetail(summary, detail) {
   // 311 Spikes
   const spikes = detail.complaints?.spikes || [];
   if (spikes.length) {
+    const ageLabels = ['this week', 'last week', '2 wk ago', '3 wk ago'];
     html += `<div class="section">
-      <div class="section-title">311 Anomalies</div>
-      ${spikes.slice(0, 6).map(s => `
+      <div class="section-title">311 Anomalies (vs 8-week baseline)</div>
+      ${spikes.slice(0, 6).map(s => {
+        const age = ageLabels[s.weeks_ago ?? 0] || 'recent';
+        return `
         <div class="spike-alert ${s.severity}">
           <div class="spike-direction ${s.direction}">${s.direction === 'up' ? '↑' : '↓'}</div>
           <div class="spike-detail">
-            <div class="spike-type">${s.type}</div>
+            <div class="spike-type">${s.type} <span class="spike-age">${age}</span></div>
             <div class="spike-pct">
-              ${s.pct_change > 0 ? '+' : ''}${s.pct_change}% vs baseline
-              · z-score: ${s.z_score}
-              ${s.sustained_weeks ? ` · sustained ${s.sustained_weeks}wk` : ''}
+              ${s.current_week} complaints vs ${s.baseline_avg} wkly avg
+              · ${s.pct_change > 0 ? '+' : ''}${s.pct_change}%
+              ${s.sustained_weeks ? ` · sustained ${s.sustained_weeks} wk` : ''}
             </div>
           </div>
-        </div>
-      `).join('')}
+        </div>`;
+      }).join('')}
     </div>`;
   }
 
@@ -326,7 +332,7 @@ function renderDistrictDetail(summary, detail) {
   const posts = detail.reddit_posts || [];
   if (posts.length) {
     html += `<div class="section">
-      <div class="section-title">Reddit Discussions (${posts.length})</div>
+      <div class="section-title">Reddit Discussions (${posts.length}, last 2 weeks)</div>
       ${posts.slice(0, 8).map(p => `
         <div class="reddit-post">
           <a href="${p.url}" target="_blank" rel="noopener">${escapeHtml(p.title)}</a>
@@ -345,7 +351,7 @@ function renderDistrictDetail(summary, detail) {
   const news = detail.news || [];
   if (news.length) {
     html += `<div class="section">
-      <div class="section-title">Local News (${news.length})</div>
+      <div class="section-title">Local News (${news.length}, last 2 weeks)</div>
       ${news.slice(0, 6).map(a => `
         <div class="news-article">
           <a href="${a.link}" target="_blank" rel="noopener">${escapeHtml(a.title)}</a>
@@ -437,7 +443,7 @@ function renderDistrictDetail(summary, detail) {
   const council = detail.council_services || {};
   if (council.total) {
     html += `<div class="section">
-      <div class="section-title">Council Constituent Cases (${council.total})</div>
+      <div class="section-title">Council Constituent Cases (${council.total}, 90 days)</div>
       ${(council.top_types || []).slice(0, 6).map(([type, count]) => `
         <div class="complaint-row">
           <div class="complaint-type">${type}</div>
@@ -521,9 +527,13 @@ function renderDistrictSummary(d) {
 
 function renderThemeCard(theme) {
   const ss = theme.story_score || {};
+  const recency = theme.recency || (ss.freshness === 'high' ? 'this week' : '');
   return `
     <div class="theme-card ${theme.intensity}">
-      <div class="theme-label">${escapeHtml(theme.label)}</div>
+      <div class="theme-label">
+        ${escapeHtml(theme.label)}
+        ${recency ? `<span class="recency-badge recency-${recency.replace(/\s+/g, '-')}">${recency}</span>` : ''}
+      </div>
       <div class="theme-summary">${escapeHtml(theme.summary || '')}</div>
       <div class="theme-meta">
         <span class="theme-tag">${theme.category}</span>
@@ -534,7 +544,6 @@ function renderThemeCard(theme) {
         <div class="story-score">
           ${ss.severity ? `<span class="score-badge severity-${ss.severity}">severity: ${ss.severity}</span>` : ''}
           ${ss.verifiability ? `<span class="score-badge verifiability-${ss.verifiability}">verify: ${ss.verifiability}</span>` : ''}
-          ${ss.freshness === 'high' ? `<span class="score-badge freshness-high">emerging</span>` : ''}
           ${ss.editorial_potential ? `<span class="score-badge ${ss.editorial_potential}">${ss.editorial_potential}</span>` : ''}
         </div>
       ` : ''}
@@ -564,6 +573,7 @@ function showOverview() {
   header.innerHTML = `
     <h2>NYC Neighborhood Story Finder</h2>
     <div class="district-meta">Click a district on the map to explore story leads</div>
+    <button class="about-toggle" onclick="toggleAbout()">About this tool</button>
   `;
 
   if (currentView === 'hotspots') {
@@ -583,15 +593,69 @@ function renderOverviewList() {
   let sorted = Object.entries(districtsData.districts)
     .sort((a, b) => b[1].activity_score - a[1].activity_score);
 
-  // Filter by search query — match name, borough, themes, top complaints
+  // Filter by search query — match name, borough, themes, complaints
+  // Synonym map: common terms → 311 official complaint type keywords
+  const SEARCH_SYNONYMS = {
+    'trash': 'dirty conditions sanitation litter missed collection overflowing',
+    'garbage': 'dirty conditions sanitation litter missed collection overflowing',
+    'litter': 'dirty conditions litter basket overflowing sanitation',
+    'dog': 'unsanitary condition animal sanitation dirty',
+    'poop': 'unsanitary condition sanitation dirty',
+    'waste': 'unsanitary condition sanitation dirty missed collection',
+    'dirty': 'dirty conditions sanitation unsanitary',
+    'filth': 'dirty conditions sanitation unsanitary',
+    'rat': 'rodent pest pests',
+    'rats': 'rodent pest pests',
+    'mice': 'rodent pest pests',
+    'mouse': 'rodent pest pests',
+    'roach': 'pest unsanitary pests',
+    'cockroach': 'pest unsanitary pests',
+    'bedbug': 'bed bugs pest pests',
+    'bedbugs': 'bed bugs pest pests',
+    'bugs': 'bed bugs pest pests rodent',
+    'vermin': 'rodent pest pests bed bugs',
+    'scaffold': 'scaffold safety construction',
+    'scaffolding': 'scaffold safety construction',
+    'construction': 'construction general construction building crane scaffold',
+    'pothole': 'pothole street condition',
+    'noise': 'noise residential commercial street sidewalk vehicle helicopter',
+    'parking': 'illegal parking blocked driveway broken parking meter',
+    'heat': 'heat hot water',
+    'water': 'water leak water system plumbing',
+    'homeless': 'homeless person assistance encampment',
+    'encampment': 'encampment homeless',
+    'tree': 'dead tree overgrown tree new tree request',
+    'graffiti': 'graffiti',
+    'bike': 'bike roller skate',
+    'sewer': 'sewer catch basin',
+    'sidewalk': 'sidewalk condition',
+    'elevator': 'elevator',
+    'mold': 'mold',
+    'lead': 'lead paint',
+    'air': 'air quality',
+    'food': 'food poisoning food establishment',
+  };
+
   if (query) {
+    // Expand query with synonyms
+    const expandedTerms = query.split(/\s+/).map(term => {
+      const syn = SEARCH_SYNONYMS[term];
+      return syn ? `${term} ${syn}` : term;
+    });
+
     sorted = sorted.filter(([cd, d]) => {
       const haystack = [
         d.name, d.borough, cd,
-        ...d.themes.map(t => `${t.label} ${t.category}`),
+        ...d.themes.map(t => `${t.label} ${t.summary || ''} ${t.category}`),
         ...(d.top_complaints || []).map(c => c.type),
+        ...(d.all_complaint_types || []),
       ].join(' ').toLowerCase();
-      return query.split(/\s+/).every(term => haystack.includes(term));
+      // Each original query term must match (either directly or via synonym expansion)
+      return query.split(/\s+/).every(term => {
+        const syn = SEARCH_SYNONYMS[term];
+        const candidates = syn ? [term, ...syn.split(' ')] : [term];
+        return candidates.some(c => haystack.includes(c));
+      });
     });
   }
 
@@ -599,7 +663,31 @@ function renderOverviewList() {
     ? `Search results (${sorted.length})`
     : `Districts by Activity (${sorted.length})`;
 
-  let html = `<div class="section">
+  let html = '';
+
+  // Top stories — only show on default view with no search active
+  if (!query && trendsData?.top_stories?.length) {
+    const recencyLabels = { 'this week': 'THIS WEEK', 'last 2 weeks': 'LAST 2 WK', 'last month': 'LAST MONTH', 'ongoing': 'ONGOING' };
+    html += `<div class="section top-stories-section">
+      <div class="section-title">What's Happening Now</div>
+      ${trendsData.top_stories.slice(0, 8).map(s => `
+        <div class="top-story-card" onclick="selectDistrict('${s.cd}')">
+          <div class="top-story-header">
+            <span class="top-story-district">${s.district_name}</span>
+            <span class="recency-badge recency-${(s.recency || 'ongoing').replace(/\s+/g, '-')}">${recencyLabels[s.recency] || s.recency || ''}</span>
+          </div>
+          <div class="top-story-label">${escapeHtml(s.label)}</div>
+          <div class="top-story-summary">${escapeHtml(s.summary)}</div>
+          <div class="top-story-meta">
+            <span class="theme-tag">${s.category}</span>
+            <span class="theme-tag severity-${s.intensity}">${s.intensity}</span>
+          </div>
+        </div>
+      `).join('')}
+    </div>`;
+  }
+
+  html += `<div class="section">
     <div class="section-title">${title}</div>
     ${sorted.length === 0 ? '<div class="empty-state"><p>No matching districts</p></div>' : ''}
     ${sorted.map(([cd, d], i) => `
@@ -713,6 +801,11 @@ function initControls() {
   searchInput.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') { searchInput.value = ''; renderOverviewList(); }
   });
+}
+
+function toggleAbout() {
+  const panel = document.getElementById('about-panel');
+  panel.style.display = panel.style.display === 'none' ? '' : 'none';
 }
 
 function updateMapColors() {

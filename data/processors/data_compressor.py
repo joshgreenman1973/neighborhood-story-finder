@@ -77,6 +77,9 @@ def generate_districts_json(district_311, spikes, activity_scores, themes, spark
                 if not best_story_score or _score_rank(ss) > _score_rank(best_story_score):
                     best_story_score = ss
 
+        # All complaint types that appear in this district (for search)
+        all_types = list(d311.get("by_type", {}).keys())
+
         districts[cd] = {
             "name": CD_NAMES.get(cd, f"District {cd}"),
             "borough": borough,
@@ -89,6 +92,7 @@ def generate_districts_json(district_311, spikes, activity_scores, themes, spark
                 {"type": s["type"], "count": s["total"], "sparkline": s["counts"]}
                 for s in cd_sparklines[:5]
             ],
+            "all_complaint_types": all_types,
             "spike_counts": spike_counts,
             "best_story_score": best_story_score,
         }
@@ -229,9 +233,35 @@ def generate_trends_json(spikes, activity_scores, themes):
             cat = t.get("category", "other")
             topic_counts[cat] = topic_counts.get(cat, 0) + 1
 
+    # Top stories: the most interesting individual leads across all districts
+    # Rank by recency first, then story quality score
+    recency_rank = {"this week": 0, "last 2 weeks": 1, "last month": 2, "ongoing": 3}
+    all_leads = []
+    for cd, cd_themes in themes.items():
+        for t in cd_themes:
+            ss = t.get("story_score", {})
+            recency = t.get("recency", "ongoing")
+            quality = _score_rank(ss)
+            all_leads.append({
+                "cd": cd,
+                "district_name": CD_NAMES.get(cd, f"District {cd}"),
+                "label": t.get("label", ""),
+                "summary": t.get("summary", ""),
+                "category": t.get("category", ""),
+                "intensity": t.get("intensity", ""),
+                "recency": recency,
+                "story_score": ss,
+                "evidence": t.get("evidence", [])[:2],
+                "_sort": (recency_rank.get(recency, 3), -quality),
+            })
+
+    all_leads.sort(key=lambda x: x["_sort"])
+    top_stories = [{k: v for k, v in lead.items() if k != "_sort"} for lead in all_leads[:10]]
+
     output = {
         "updated": datetime.utcnow().isoformat() + "Z",
         "hot_spots": hot_spots[:20],
+        "top_stories": top_stories,
         "trending_topics": sorted(topic_counts.items(), key=lambda x: -x[1]),
     }
 

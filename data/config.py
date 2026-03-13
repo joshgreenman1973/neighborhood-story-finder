@@ -29,57 +29,65 @@ CATEGORIES = [
     "housing",
     "safety",
     "transit",
-    "education",
-    "quality-of-life",
+    "sanitation",
+    "noise",
+    "pests",
     "development",
+    "infrastructure",
     "environment",
     "health",
+    "education",
     "government",
-    "infrastructure",
 ]
 
 # Map 311 complaint types to our categories
 COMPLAINT_CATEGORY_MAP = {
     "housing": [
         "heat/hot water", "plumbing", "paint/plaster", "water leak",
-        "elevator", "door/window", "electric", "general construction",
+        "elevator", "door/window", "electric",
         "lead", "mold", "appliance", "safety", "flooring/stairs",
     ],
     "safety": [
-        "noise - residential", "noise - commercial", "noise - street/sidewalk",
-        "noise - vehicle", "noise - helicopter", "illegal fireworks",
         "drug activity", "drinking", "panhandling", "homeless person assistance",
-        "non-emergency police matter", "animal abuse",
+        "non-emergency police matter", "animal abuse", "illegal fireworks",
+        "encampment",
+    ],
+    "noise": [
+        "noise", "noise - residential", "noise - commercial", "noise - street/sidewalk",
+        "noise - vehicle", "noise - helicopter", "noise survey",
     ],
     "transit": [
         "traffic signal condition", "street light condition", "broken parking meter",
         "bus stop shelter placement", "bike/roller/skate chronic",
         "traffic", "illegal parking", "blocked driveway",
     ],
-    "quality-of-life": [
-        "dirty conditions", "unsanitary condition", "rodent",
-        "derelict vehicle", "graffiti", "litter basket / request",
-        "missed collection (all materials)", "overflowing litter baskets",
-        "sanitation condition", "sweeping/inadequate",
+    "sanitation": [
+        "dirty conditions", "unsanitary condition", "derelict vehicle",
+        "graffiti", "litter basket / request", "overflowing litter baskets",
+        "missed collection (all materials)", "sanitation condition",
+        "sweeping/inadequate", "abandoned vehicle",
+    ],
+    "pests": [
+        "rodent", "bed bugs", "pest control", "animal in a park",
     ],
     "infrastructure": [
         "street condition", "sidewalk condition", "pothole",
         "curb condition", "broken muni meter", "fire hydrant",
         "water system", "sewer", "catch basin/inlet", "manhole",
+        "snow or ice",
     ],
     "development": [
         "building/use", "illegal conversion", "construction",
-        "crane/derrick", "scaffold safety", "building condition",
-        "vacant lot", "zoning/land use",
+        "general construction", "crane/derrick", "scaffold safety",
+        "building condition", "vacant lot", "zoning/land use",
     ],
     "environment": [
         "air quality", "asbestos", "hazardous material",
-        "industrial waste", "noise survey", "standing water",
+        "industrial waste", "standing water",
         "dead tree", "overgrown tree/branches", "new tree request",
     ],
     "health": [
         "food poisoning", "food establishment", "indoor air quality",
-        "bed bugs", "pest control",
     ],
 }
 

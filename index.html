@@ -34,19 +34,49 @@
     <div class="sidebar-header">
       <h2>NYC Neighborhood Story Finder</h2>
       <div class="district-meta">Click a district on the map to explore story leads</div>
+      <button class="about-toggle" onclick="toggleAbout()">About this tool</button>
+    </div>
+
+    <!-- About panel -->
+    <div class="about-panel" id="about-panel" style="display:none">
+      <button class="about-close" onclick="toggleAbout()">Close</button>
+      <h3>What this is</h3>
+      <p>An early-warning system for neighborhood-level stories across New York City. It scans nine data sources and synthesizes them into story leads for each of the city's 59 community districts.</p>
+      <p>The premise is simple: local stories don't appear out of nowhere. Before a neighborhood concern becomes a media story, it leaves traces across multiple city systems. This tool surfaces those traces.</p>
+
+      <h3>What each source tells you</h3>
+      <div class="about-sources">
+        <div class="about-source"><strong>311 complaints</strong> tell you what is being reported — the raw signal of resident frustration, tested for statistical anomalies.</div>
+        <div class="about-source"><strong>Council constituent cases</strong> tell you what is politically sticky — issues residents have escalated to their elected officials.</div>
+        <div class="about-source"><strong>CB budget requests</strong> tell you what districts keep asking the city to fund — the same request year after year means the problem hasn't been solved.</div>
+        <div class="about-source"><strong>Land use / ULURP applications</strong> tell you what is about to become a fight — rezonings, shelter sitings, street redesigns that haven't hit the news yet.</div>
+        <div class="about-source"><strong>DOB building permits</strong> tell you where the physical landscape is changing — spikes in new building or demolition filings signal development pressure.</div>
+        <div class="about-source"><strong>Community board meetings</strong> tell you what is becoming organized — when an issue gets on a committee agenda, someone is trying to do something about it.</div>
+        <div class="about-source"><strong>Reddit &amp; local news</strong> tell you what the public conversation looks like — whether an issue has broken through or is still simmering.</div>
+      </div>
+
+      <h3>The convergence signal</h3>
+      <p>The most valuable output is convergence. When 311 complaint spikes, community board committee topics, and council constituent cases all point at the same corner, corridor, school zone, or housing complex — that is often the moment before the issue graduates into a media story.</p>
+
+      <h3>How scoring works</h3>
+      <p>Each story lead is scored on severity, verifiability, freshness, human interest, data richness, and editorial potential. Leads that appear across multiple data sources get higher scores. Districts are colored by an activity score (0–100) combining complaint volume, spike severity, and category diversity.</p>
+
+      <h3>Sources</h3>
+      <p>311 complaints, CB budget requests, land use applications, council constituent cases, and DOB permits come from NYC Open Data (Socrata API). Community board meetings are scraped from nyc.gov. Reddit posts come from public subreddit feeds. Local news comes from RSS feeds of 11 outlets including THE CITY, Gothamist, Hell Gate, and City Limits. Every data point links back to its source.</p>
     </div>
 
     <!-- Category filters -->
     <div class="filters">
       <div class="filter-pill" data-category="housing">housing</div>
       <div class="filter-pill" data-category="safety">safety</div>
+      <div class="filter-pill" data-category="noise">noise</div>
       <div class="filter-pill" data-category="transit">transit</div>
-      <div class="filter-pill" data-category="education">education</div>
-      <div class="filter-pill" data-category="quality-of-life">quality of life</div>
+      <div class="filter-pill" data-category="sanitation">sanitation</div>
+      <div class="filter-pill" data-category="pests">pests</div>
       <div class="filter-pill" data-category="development">development</div>
+      <div class="filter-pill" data-category="infrastructure">infrastructure</div>
       <div class="filter-pill" data-category="environment">environment</div>
       <div class="filter-pill" data-category="health">health</div>
-      <div class="filter-pill" data-category="infrastructure">infrastructure</div>
     </div>
 
     <!-- Search -->

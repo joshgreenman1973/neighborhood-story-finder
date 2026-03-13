@@ -20,46 +20,51 @@ from config import CD_NAMES, CATEGORIES
 
 SYNTHESIS_PROMPT = """You are an editor at a NYC local news organization scanning for neighborhood-level stories. Given data from Community District {cd_code} ({cd_name}), identify emerging concerns worth investigating.
 
-DATA FROM THE LAST 2 WEEKS:
+IMPORTANT — RECENCY RULES:
+- Heavily prioritize issues that are NEW or ACCELERATING in the last 1-2 weeks over long-running patterns.
+- A spike from THIS WEEK is far more interesting than a spike from 3 weeks ago.
+- In every summary, state the timeframe explicitly: "this week", "over the past 2 weeks", "a 4-week sustained trend", etc. Never leave timing ambiguous.
+- When citing a spike, always include the comparator: "X complaints this week vs. Y weekly average over the prior 8 weeks."
 
-311 COMPLAINTS (top types by volume):
+311 COMPLAINTS (top types by volume, last 90 days):
 {complaints_text}
 
-311 SPIKES (statistically significant changes):
+311 SPIKES (statistically significant deviations from 8-week baseline):
 {spikes_text}
 
-REDDIT DISCUSSIONS:
+REDDIT DISCUSSIONS (recent posts geo-tagged to this district):
 {reddit_text}
 
-LOCAL NEWS MENTIONS:
+LOCAL NEWS MENTIONS (recent articles referencing this district):
 {news_text}
 
-COMMUNITY BOARD:
+COMMUNITY BOARD (meeting agendas and topics):
 {cb_text}
 
-COMMUNITY BOARD BUDGET REQUESTS (what the district keeps asking the city to fund):
+CB BUDGET REQUESTS (what the district repeatedly asks the city to fund — same request year after year means unsolved problem):
 {budget_text}
 
-LAND USE / ULURP APPLICATIONS (active rezonings and development proposals):
+LAND USE / ULURP APPLICATIONS (active rezonings and development proposals in the pipeline):
 {land_use_text}
 
-COUNCIL MEMBER CONSTITUENT SERVICES (issues escalated to elected officials):
+COUNCIL CONSTITUENT CASES (issues escalated to elected officials, last 90 days):
 {council_text}
 
-DOB BUILDING PERMITS (recent new buildings, demolitions, major alterations):
+DOB BUILDING PERMITS (new buildings, demolitions, major alterations filed in last 90 days):
 {dob_text}
 
 ---
 
-Respond with a JSON array of 3-5 story leads. For each, provide:
+Respond with a JSON array of 3-5 story leads, RANKED BY how recently the signal appeared (newest first). For each, provide:
 
 ```json
 [
   {{
     "label": "Short label (2-5 words)",
-    "summary": "One-sentence summary of the concern and why it matters.",
+    "summary": "One-sentence summary stating WHAT is happening, WHEN it started or accelerated, and WHY it matters. Always include specific numbers and timeframes.",
     "category": "one of: {categories}",
     "intensity": "low | medium | high",
+    "recency": "this week | last 2 weeks | last month | ongoing",
     "story_score": {{
       "severity": "low | medium | high — how serious is this for residents?",
       "verifiability": "low | medium | high — can this be fact-checked with public data?",
@@ -68,17 +73,18 @@ Respond with a JSON array of 3-5 story leads. For each, provide:
       "data_richness": "low | medium | high — how much quantitative evidence exists?",
       "editorial_potential": "brief | short | feature — what length story could this support?"
     }},
-    "evidence": ["Key data point 1", "Key data point 2", "Key data point 3"],
+    "evidence": ["Key data point 1 (include numbers and timeframe)", "Key data point 2", "Key data point 3"],
     "reporting_angles": ["Suggested angle 1", "Suggested angle 2"]
   }}
 ]
 ```
 
 Focus on:
-- Concerns that cross multiple data sources (e.g., 311 spike + Reddit discussion = stronger signal)
+- Concerns that are NEW or ACCELERATING this week or last week — these should rank highest
+- Convergence: 311 spike + community board topic + council constituent cases pointing at the same issue = strong signal
 - Statistical anomalies (z-scores above 2.0, sustained trends)
 - Issues with clear human impact
-- Patterns that would surprise readers or challenge assumptions
+- Always make comparisons explicit: "X this week vs Y weekly average" or "up Z% from 2 weeks ago"
 
 Return ONLY valid JSON, no other text."""
 
@@ -99,16 +105,19 @@ def _format_complaints(district_data):
 
 
 def _format_spikes(spikes):
-    """Format spike data for the prompt."""
+    """Format spike data for the prompt with explicit timeframes."""
     if not spikes:
         return "No statistically significant spikes detected"
 
+    age_labels = {0: "THIS WEEK", 1: "last week", 2: "2 weeks ago", 3: "3 weeks ago"}
     lines = []
     for s in spikes[:8]:
         direction = "UP" if s["direction"] == "up" else "DOWN"
         sustained = f" (sustained {s['sustained_weeks']} weeks)" if s.get("sustained_weeks") else ""
+        age = age_labels.get(s.get("weeks_ago", 0), "recent")
         lines.append(
-            f"- {s['type']}: {direction} {abs(s['pct_change'] or 0):.0f}% vs baseline "
+            f"- {s['type']}: {direction} {abs(s['pct_change'] or 0):.0f}% vs 8-week avg "
+            f"({s['current_week']} complaints {age} vs {s['baseline_avg']} avg) "
             f"(z-score: {s['z_score']}, severity: {s['severity']}){sustained}"
         )
 
@@ -254,28 +263,33 @@ def _fallback_themes(cd_code, district_311, spikes, reddit_posts, news_articles)
     themes = []
 
     # Theme from top complaint spikes
+    age_labels = {0: "this week", 1: "last week", 2: "2 weeks ago", 3: "3 weeks ago"}
+    recency_labels = {0: "this week", 1: "last 2 weeks", 2: "last month", 3: "last month"}
     for spike in (spikes or [])[:3]:
         if spike["severity"] in ("high", "medium"):
             direction_word = "surge" if spike["direction"] == "up" else "drop"
+            weeks_ago = spike.get("weeks_ago", 0)
+            age = age_labels.get(weeks_ago, "recently")
             themes.append({
                 "label": f"{spike['type']} {direction_word}",
                 "summary": (
-                    f"{spike['type']} complaints are {spike['direction']} "
-                    f"{abs(spike['pct_change'] or 0):.0f}% vs recent baseline "
-                    f"(z-score: {spike['z_score']})."
+                    f"{spike['type']} complaints spiked {age} — "
+                    f"{spike['current_week']} complaints vs {spike['baseline_avg']} weekly avg over prior 8 weeks "
+                    f"(up {abs(spike['pct_change'] or 0):.0f}%, z-score: {spike['z_score']})."
                 ),
                 "category": _guess_category(spike["type"]),
                 "intensity": spike["severity"],
+                "recency": recency_labels.get(weeks_ago, "ongoing"),
                 "story_score": {
                     "severity": spike["severity"],
                     "verifiability": "high",
-                    "freshness": "high" if not spike.get("sustained_weeks") else "medium",
+                    "freshness": "high" if weeks_ago <= 1 else "medium",
                     "human_interest": "medium",
                     "data_richness": "high",
                     "editorial_potential": "short" if spike["severity"] == "high" else "brief",
                 },
                 "evidence": [
-                    f"311 data: {spike['current_week']} complaints this week vs {spike['baseline_avg']} avg",
+                    f"311 data: {spike['current_week']} complaints {age} vs {spike['baseline_avg']} weekly avg (8-week baseline)",
                     f"Z-score: {spike['z_score']} ({spike['severity']} severity)",
                 ],
                 "reporting_angles": [],

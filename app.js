@@ -705,7 +705,7 @@ function renderOverviewList() {
   // Filter context banner
   if (activeCategory && !query) {
     html += `<div class="filter-banner">
-      <span>Showing districts with <strong>${activeCategory}</strong> complaints or activity. Map highlights these districts. Click the pill again to clear.</span>
+      <span>Filtering by <strong>${activeCategory}</strong> — districts with these complaints are highlighted on the map in color; others are dimmed. Click the pill again to clear.</span>
     </div>`;
   }
 
@@ -856,6 +856,45 @@ function toggleAbout() {
   panel.style.display = panel.style.display === 'none' ? '' : 'none';
 }
 
+// Map 311 complaint type names (lowercased) to our filter categories
+const COMPLAINT_TO_CATEGORY = {
+  'heat/hot water': 'heat/hot water',
+  'noise': 'noise', 'noise - residential': 'noise', 'noise - commercial': 'noise',
+  'noise - street/sidewalk': 'noise', 'noise - vehicle': 'noise', 'noise - helicopter': 'noise',
+  'illegal parking': 'parking', 'blocked driveway': 'parking', 'broken parking meter': 'parking',
+  'broken muni meter': 'parking',
+  'street condition': 'streets', 'sidewalk condition': 'streets', 'pothole': 'streets',
+  'curb condition': 'streets', 'street light condition': 'streets',
+  'plumbing': 'housing', 'paint/plaster': 'housing', 'water leak': 'housing',
+  'elevator': 'housing', 'door/window': 'housing', 'electric': 'housing',
+  'lead': 'housing', 'mold': 'housing', 'appliance': 'housing', 'flooring/stairs': 'housing',
+  'drug activity': 'safety', 'drinking': 'safety', 'panhandling': 'safety',
+  'homeless person assistance': 'safety', 'non-emergency police matter': 'safety',
+  'animal abuse': 'safety', 'illegal fireworks': 'safety', 'encampment': 'safety',
+  'traffic signal condition': 'transit', 'traffic': 'transit',
+  'bus stop shelter placement': 'transit', 'bike/roller/skate chronic': 'transit',
+  'dirty conditions': 'sanitation', 'unsanitary condition': 'sanitation',
+  'derelict vehicle': 'sanitation', 'graffiti': 'sanitation',
+  'missed collection (all materials)': 'sanitation', 'sanitation condition': 'sanitation',
+  'rodent': 'pests', 'bed bugs': 'pests', 'pest control': 'pests',
+  'water system': 'infrastructure', 'sewer': 'infrastructure', 'fire hydrant': 'infrastructure',
+  'building/use': 'development', 'illegal conversion': 'development', 'construction': 'development',
+  'general construction': 'development', 'scaffold safety': 'development',
+  'air quality': 'environment', 'asbestos': 'environment',
+  'dead tree': 'environment', 'new tree request': 'environment',
+  'food poisoning': 'health', 'food establishment': 'health',
+};
+
+function districtHasCategory(d, cat) {
+  // Check themes
+  if (d.themes.some(t => t.category === cat)) return true;
+  // Check actual complaint types
+  if (d.all_complaint_types) {
+    return d.all_complaint_types.some(t => COMPLAINT_TO_CATEGORY[t.toLowerCase()] === cat);
+  }
+  return false;
+}
+
 function updateMapColors() {
   if (!map.getLayer('district-fill') || !districtsData) return;
 
@@ -870,13 +909,11 @@ function updateMapColors() {
     return;
   }
 
-  // Color by whether district has themes in this category
-  // Build a match expression
+  // Color districts that have activity in this category
+  const catColor = CATEGORY_COLORS[activeCategory] || '#dde44c';
   const expression = ['match', ['get', 'cd_code']];
   for (const [cd, d] of Object.entries(districtsData.districts)) {
-    const hasCategory = d.themes.some(t => t.category === activeCategory);
-    const spikeInCategory = d.spike_counts?.high > 0; // simplified
-    expression.push(cd, hasCategory ? (CATEGORY_COLORS[activeCategory] || '#dde44c') : '#1a1a2e');
+    expression.push(cd, districtHasCategory(d, activeCategory) ? catColor : '#1a1a2e');
   }
   expression.push('#1a1a2e'); // default
 

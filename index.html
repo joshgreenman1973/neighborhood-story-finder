@@ -42,27 +42,32 @@
       <button class="about-close" onclick="toggleAbout()">Close</button>
       <h3>What this is</h3>
       <p>An early-warning system for neighborhood-level stories across New York City. It scans nine data sources and synthesizes them into story leads for each of the city's 59 community districts.</p>
-      <p>The premise is simple: local stories don't appear out of nowhere. Before a neighborhood concern becomes a media story, it leaves traces across multiple city systems. This tool surfaces those traces.</p>
+      <p>The premise is simple: local stories don't appear out of nowhere. Before a neighborhood concern becomes a media story, it leaves traces across multiple city systems — 311 call logs, community board agendas, council casework, building permits, land use filings, local Reddit threads, and news coverage. This tool surfaces those traces and highlights where they converge.</p>
 
-      <h3>What each source tells you</h3>
+      <h3>Data sources</h3>
       <div class="about-sources">
-        <div class="about-source"><strong>311 complaints</strong> tell you what is being reported — the raw signal of resident frustration, tested for statistical anomalies.</div>
-        <div class="about-source"><strong>Council constituent cases</strong> tell you what is politically sticky — issues residents have escalated to their elected officials.</div>
-        <div class="about-source"><strong>CB budget requests</strong> tell you what districts keep asking the city to fund — the same request year after year means the problem hasn't been solved.</div>
-        <div class="about-source"><strong>Land use / ULURP applications</strong> tell you what is about to become a fight — rezonings, shelter sitings, street redesigns that haven't hit the news yet.</div>
-        <div class="about-source"><strong>DOB building permits</strong> tell you where the physical landscape is changing — spikes in new building or demolition filings signal development pressure.</div>
-        <div class="about-source"><strong>Community board meetings</strong> tell you what is becoming organized — when an issue gets on a committee agenda, someone is trying to do something about it.</div>
-        <div class="about-source"><strong>Reddit &amp; local news</strong> tell you what the public conversation looks like — whether an issue has broken through or is still simmering.</div>
+        <div class="about-source"><strong>311 complaints</strong> (NYC Open Data, Socrata API) — the raw signal of resident frustration, tested for statistical anomalies against an 8-week rolling baseline. Covers 90 days of data, updated daily. Categories include housing, noise, sanitation, pests, safety, transit, infrastructure, and more.</div>
+        <div class="about-source"><strong>Community board meetings</strong> (scraped from 59 CB WordPress sites) — upcoming and recent meetings with committee classifications. Shows which committees are active (land use, public safety, housing, transportation, SLA/licensing, etc.) and what topics are on the agenda. When an issue reaches a CB committee, someone is trying to do something about it.</div>
+        <div class="about-source"><strong>CB budget requests</strong> (NYC Open Data) — what districts keep asking the city to fund. The same request year after year means the problem hasn't been solved.</div>
+        <div class="about-source"><strong>Council constituent cases</strong> (CouncilStat, NYC Open Data) — issues residents have escalated to their elected Council member. Tells you what is politically sticky — 90 days of casework by type.</div>
+        <div class="about-source"><strong>Land use / ULURP applications</strong> (ZAP, NYC Open Data) — rezonings, shelter sitings, special permits, and street redesigns in the pipeline. Tells you what is about to become a fight before it hits the news.</div>
+        <div class="about-source"><strong>DOB building permits</strong> (NYC Open Data) — new building, demolition, and alteration filings. Spikes in filing activity signal development pressure and a changing physical landscape.</div>
+        <div class="about-source"><strong>Reddit discussions</strong> (public JSON feeds from ~12 NYC subreddits) — r/nyc, r/Brooklyn, r/astoria, r/Queens, and neighborhood-specific subs. Mapped to community districts by neighborhood name extraction. Shows the public conversation — whether an issue has broken through or is still simmering.</div>
+        <div class="about-source"><strong>Local news</strong> (RSS feeds from 11+ outlets) — THE CITY, Gothamist, Hell Gate, City Limits, Bklyner, QNS, Bronx Times, Staten Island Advance, Patch NYC, Curbed, and amNewYork. Neighborhood mentions mapped to community districts.</div>
+        <div class="about-source"><strong>AI synthesis</strong> (Claude API) — combines signals from all sources above to identify 3-5 story leads per district, ranked by recency, severity, and convergence across data sources.</div>
       </div>
 
       <h3>The convergence signal</h3>
-      <p>The most valuable output is convergence. When 311 complaint spikes, community board committee topics, and council constituent cases all point at the same corner, corridor, school zone, or housing complex — that is often the moment before the issue graduates into a media story.</p>
+      <p>The most valuable output is convergence. When a 311 spike in noise complaints lines up with a community board SLA/licensing committee meeting, a council constituent casework trend, and Reddit threads about the same block — that is often the moment before the issue graduates into a media story. The tool highlights these multi-source patterns.</p>
 
       <h3>How scoring works</h3>
-      <p>Each story lead is scored on severity, verifiability, freshness, human interest, data richness, and editorial potential. Leads that appear across multiple data sources get higher scores. Districts are colored by an activity score (0–100) combining complaint volume, spike severity, and category diversity.</p>
+      <p>Districts are colored by an activity score (0-100) that heavily weights recency. This-week spikes count at full weight; last-week at 0.7x; two weeks ago at 0.4x; three weeks at 0.2x. The score also factors in whether complaint volume is accelerating right now (comparing the last 2 weeks to the prior 2 weeks) and how many different complaint categories are active. Story leads are scored on severity, verifiability, freshness, human interest, and data richness — leads appearing across multiple data sources score highest.</p>
 
-      <h3>Sources</h3>
-      <p>311 complaints, CB budget requests, land use applications, council constituent cases, and DOB permits come from NYC Open Data (Socrata API). Community board meetings are scraped from nyc.gov. Reddit posts come from public subreddit feeds. Local news comes from RSS feeds of 11 outlets including THE CITY, Gothamist, Hell Gate, and City Limits. Every data point links back to its source.</p>
+      <h3>Search</h3>
+      <p>The search bar maps common language to official 311 complaint types. Try "dog poop," "rats," "scaffolding," "noise," or "trash" — the tool expands these into the bureaucratic terms the city actually uses.</p>
+
+      <h3>Categories</h3>
+      <p>Filter by: housing, safety, noise, transit, sanitation, pests, development, infrastructure, environment, or health. Each maps to specific 311 complaint types and data signals from other sources.</p>
     </div>
 
     <!-- Category filters -->

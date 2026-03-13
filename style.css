@@ -177,6 +177,11 @@ html, body {
   background: var(--vc-chartreuse); color: var(--vc-black);
   border-color: var(--vc-chartreuse); font-weight: 600;
 }
+.filter-banner {
+  padding: 10px 20px; font-size: 12px; color: var(--vc-chartreuse);
+  background: rgba(221, 228, 76, 0.08); border-bottom: 1px solid rgba(221, 228, 76, 0.15);
+  line-height: 1.4;
+}
 
 .search-bar {
   padding: 8px 20px;

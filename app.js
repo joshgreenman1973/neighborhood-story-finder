@@ -694,12 +694,21 @@ function renderOverviewList() {
 
   const title = query
     ? `Search results (${sorted.length})`
-    : `Districts by Activity (${sorted.length})`;
+    : activeCategory
+      ? `Districts with "${activeCategory}" activity (${sorted.length})`
+      : `Districts by Activity (${sorted.length})`;
 
   let html = '';
 
+  // Filter context banner
+  if (activeCategory && !query) {
+    html += `<div class="filter-banner">
+      <span>Showing districts with <strong>${activeCategory}</strong> complaints or activity. Map highlights these districts. Click the pill again to clear.</span>
+    </div>`;
+  }
+
   // Top stories — only show on default view with no search active
-  if (!query && trendsData?.top_stories?.length) {
+  if (!query && !activeCategory && trendsData?.top_stories?.length) {
     const recencyLabels = { 'this week': 'THIS WEEK', 'last 2 weeks': 'LAST 2 WK', 'last month': 'LAST MONTH', 'ongoing': 'ONGOING' };
     html += `<div class="section top-stories-section">
       <div class="section-title">What's Happening Now</div>
@@ -806,6 +815,10 @@ function initControls() {
         pill.classList.add('active');
       }
       updateMapColors();
+      if (!selectedDistrict) {
+        if (currentView === 'hotspots') renderHotSpots();
+        else renderOverviewList();
+      }
     });
   });
 

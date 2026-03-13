@@ -213,10 +213,11 @@ html, body {
 }
 .view-btn:first-child { border-radius: 6px 0 0 6px; }
 .view-btn:last-child { border-radius: 0 6px 6px 0; }
-.view-btn:not(:first-child) { border-left: none; }
+.view-btn:not(:first-child) { margin-left: -1px; }
 .view-btn.active {
   background: var(--sm); color: var(--vc-chartreuse);
   border-color: var(--vc-chartreuse);
+  z-index: 1; position: relative;
 }
 
 /* ═══ SECTIONS ═══ */

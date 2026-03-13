@@ -153,8 +153,22 @@ def generate_district_detail(cd, district_311, spikes, themes, reddit_posts, new
         ],
         "community_board": {
             "url": cb_info_data.get("url", ""),
+            "events_url": cb_info_data.get("events_url", ""),
             "next_meeting": cb_info_data.get("next_meeting"),
             "topics": cb_info_data.get("topics", []),
+            "committees_active": cb_info_data.get("committees_active", []),
+            "meetings": [
+                {
+                    "title": m.get("title", "")[:100],
+                    "committee": m.get("committee", "other"),
+                    "date": m.get("date", ""),
+                    "location": m.get("location", "")[:80],
+                    "url": m.get("url", ""),
+                    "description": m.get("description", "")[:150],
+                    "days_away": m.get("days_away"),
+                }
+                for m in cb_info_data.get("meetings", [])[:10]
+            ],
         },
         "budget_requests": [
             {

@@ -363,13 +363,46 @@ function renderDistrictDetail(summary, detail) {
 
   // Community board
   const cb = detail.community_board;
-  if (cb && (cb.next_meeting || cb.topics.length || cb.url)) {
+  if (cb && (cb.next_meeting || cb.meetings?.length || cb.topics?.length || cb.url)) {
+    const meetings = cb.meetings || [];
+    const upcoming = meetings.filter(m => m.days_away != null && m.days_away >= 0);
+    const recent = meetings.filter(m => m.days_away != null && m.days_away < 0);
     html += `<div class="section">
-      <div class="section-title">Community Board</div>
+      <div class="section-title">Community Board Meetings</div>
       <div class="cb-info">
-        ${cb.next_meeting ? `<div>Next meeting: <span class="cb-meeting-date">${cb.next_meeting}</span></div>` : ''}
-        ${cb.topics.length ? `<div>Active topics: ${cb.topics.join(', ')}</div>` : ''}
-        ${cb.url ? `<div><a href="${cb.url}" target="_blank" rel="noopener">Visit CB page →</a></div>` : ''}
+        ${cb.committees_active?.length ? `<div class="cb-committees">Active committees: ${cb.committees_active.map(c => `<span class="theme-tag">${c}</span>`).join(' ')}</div>` : ''}
+        ${upcoming.length ? `
+          <div class="cb-upcoming-label">Upcoming</div>
+          ${upcoming.slice(0, 5).map(m => `
+            <div class="cb-meeting-item">
+              <div class="cb-meeting-title">
+                ${m.url ? `<a href="${m.url}" target="_blank" rel="noopener">${escapeHtml(m.title)}</a>` : escapeHtml(m.title)}
+              </div>
+              <div class="cb-meeting-meta">
+                <span class="cb-meeting-date">${m.date}</span>
+                <span class="theme-tag">${m.committee}</span>
+                ${m.days_away === 0 ? '<span class="recency-badge recency-this-week">today</span>' :
+                  m.days_away <= 7 ? '<span class="recency-badge recency-this-week">this week</span>' : ''}
+              </div>
+              ${m.location ? `<div class="cb-meeting-location">${escapeHtml(m.location)}</div>` : ''}
+              ${m.description ? `<div class="cb-meeting-desc">${escapeHtml(m.description)}</div>` : ''}
+            </div>
+          `).join('')}
+        ` : ''}
+        ${recent.length ? `
+          <div class="cb-upcoming-label">Recent</div>
+          ${recent.slice(0, 3).map(m => `
+            <div class="cb-meeting-item cb-meeting-past">
+              <div class="cb-meeting-title">${escapeHtml(m.title)}</div>
+              <div class="cb-meeting-meta">
+                <span class="cb-meeting-date">${m.date}</span>
+                <span class="theme-tag">${m.committee}</span>
+              </div>
+            </div>
+          `).join('')}
+        ` : ''}
+        ${cb.topics?.length ? `<div class="cb-topics">Topics in play: ${cb.topics.join(', ')}</div>` : ''}
+        ${cb.url ? `<div class="cb-link"><a href="${cb.events_url || cb.url}" target="_blank" rel="noopener">All meetings →</a></div>` : ''}
       </div>
     </div>`;
   }

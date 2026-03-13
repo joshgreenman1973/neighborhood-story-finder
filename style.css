@@ -458,6 +458,25 @@ html, body {
 .cb-meeting-date {
   font-weight: 600; color: var(--vc-chartreuse);
 }
+.cb-committees { margin-bottom: 8px; }
+.cb-committees .theme-tag { margin: 0 4px 4px 0; }
+.cb-upcoming-label {
+  font-size: 10px; text-transform: uppercase; letter-spacing: 0.05em;
+  color: var(--vc-charcoal); margin: 10px 0 4px; font-weight: 600;
+}
+.cb-meeting-item {
+  padding: 6px 0; border-bottom: 1px solid rgba(255,255,255,0.04);
+}
+.cb-meeting-item:last-child { border-bottom: none; }
+.cb-meeting-title { font-weight: 500; color: var(--vc-white); margin-bottom: 2px; }
+.cb-meeting-title a { color: var(--vc-cerulean); }
+.cb-meeting-meta { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
+.cb-meeting-meta .theme-tag { font-size: 10px; }
+.cb-meeting-location { font-size: 11px; color: var(--vc-charcoal); margin-top: 2px; }
+.cb-meeting-desc { font-size: 11px; color: var(--sd2); margin-top: 2px; }
+.cb-meeting-past { opacity: 0.6; }
+.cb-topics { margin-top: 8px; font-style: italic; color: var(--vc-charcoal); }
+.cb-link { margin-top: 8px; }
 
 /* ═══ BUDGET REQUESTS ═══ */
 .budget-request {

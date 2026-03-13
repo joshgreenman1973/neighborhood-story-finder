@@ -1,0 +1,10 @@
+{
+  "updated": "2026-03-13T15:28:36.808220Z",
+  "data_sources": {
+    "311_records": 979569,
+    "reddit_posts": 700,
+    "news_articles": 114,
+    "community_boards": 0
+  },
+  "districts_count": 59
+}

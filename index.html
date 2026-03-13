@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>NYC Neighborhood Story Finder</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+  <meta name="description" content="Scan NYC neighborhoods for emerging stories using 311 data, Reddit discussions, community board meetings, and local news." />
+
+  <script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
+  <link href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css" rel="stylesheet" />
+
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- Loading overlay -->
+  <div id="loading-overlay" class="loading-overlay">
+    <div class="loading-spinner"></div>
+    <div class="loading-text" id="loading-text">Loading neighborhood data...</div>
+  </div>
+
+  <!-- Map -->
+  <div id="map"></div>
+
+  <!-- Header -->
+  <div class="header">
+    <h1>NYC <span>Neighborhood Story Finder</span></h1>
+    <div class="subtitle">Emerging concerns by community district — 311, Reddit, local news, community boards</div>
+    <div class="updated"></div>
+  </div>
+
+  <!-- Sidebar -->
+  <div class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <h2>NYC Neighborhood Story Finder</h2>
+      <div class="district-meta">Click a district on the map to explore story leads</div>
+    </div>
+
+    <!-- Category filters -->
+    <div class="filters">
+      <div class="filter-pill" data-category="housing">housing</div>
+      <div class="filter-pill" data-category="safety">safety</div>
+      <div class="filter-pill" data-category="transit">transit</div>
+      <div class="filter-pill" data-category="education">education</div>
+      <div class="filter-pill" data-category="quality-of-life">quality of life</div>
+      <div class="filter-pill" data-category="development">development</div>
+      <div class="filter-pill" data-category="environment">environment</div>
+      <div class="filter-pill" data-category="health">health</div>
+      <div class="filter-pill" data-category="infrastructure">infrastructure</div>
+    </div>
+
+    <!-- Search -->
+    <div class="search-bar">
+      <input type="text" id="search-input" placeholder="Search districts, complaints, topics..." />
+    </div>
+
+    <!-- View toggle -->
+    <div class="view-toggle">
+      <button class="view-btn active" data-view="map">All Districts</button>
+      <button class="view-btn" data-view="hotspots">Hot Spots</button>
+    </div>
+
+    <!-- Scrollable content -->
+    <div class="sidebar-content">
+      <div class="empty-state">
+        <p>Loading data...</p>
+      </div>
+    </div>
+  </div>
+
+  <script src="lib/sparkline.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

@@ -128,6 +128,71 @@ def classify_topic(post):
     return topics[:3] if topics else ["quality-of-life"]
 
 
+# Filter out personal/lifestyle posts that aren't neighborhood news
+SKIP_PATTERNS = re.compile(
+    r'\b(moving to|should i move|best (bar|restaurant|coffee|brunch|pizza|bagel|gym|salon|haircut|dentist|doctor)s?'
+    r'|recommend(ation)?s? for|where (can i|to|should)|looking for a? ?(roommate|apartment|sublet)'
+    r'|is this (a )?(good|safe) (area|neighborhood)|how (safe )?is|what\'?s? it like (living|to live)'
+    r'|date (night|idea)|things to do|hidden gem|first time visit'
+    r'|selling|for sale|free stuff|giving away)\b',
+    re.IGNORECASE
+)
+
+# Boost posts that look like actual news/community issues
+NEWS_PATTERNS = re.compile(
+    r'\b(closed|closing|shut down|demolished|fire|shooting|stabbing|crash|accident'
+    r'|protest|rally|march|arrested|investigation|indicted|lawsuit|sued'
+    r'|rezoning|development|construction|new building|demolition|evict'
+    r'|flooding|power outage|blackout|water main|gas leak|collapse'
+    r'|school|hospital|clinic|shelter|library|park|playground'
+    r'|MTA|subway|bus|train|ferry|bike lane|congestion'
+    r'|DOB|DOT|DEP|NYPD|FDNY|SLA|liquor license|community board'
+    r'|budget|funding|cut|layoff|mayor|council|governor'
+    r'|rat|rodent|sanitation|garbage|trash|illegal dumping'
+    r'|crime|robbery|theft|assault|gun|weapon)\b',
+    re.IGNORECASE
+)
+
+
+def newsworthiness_score(post):
+    """Score a post for newsworthiness. Higher = more newsworthy."""
+    text = f"{post['title']} {post['selftext']}"
+    score = 0
+
+    # Engagement is the base signal
+    score += min(post["score"], 500)  # cap so a viral meme doesn't dominate
+    score += post["num_comments"] * 3  # comments indicate discussion, weight higher
+
+    # Boost news-like content
+    news_matches = len(NEWS_PATTERNS.findall(text))
+    score += news_matches * 20
+
+    # Boost posts with topic classifications (means they match our editorial categories)
+    if post.get("topics") and post["topics"] != ["quality-of-life"]:
+        score += 30
+
+    # Boost geo-specific posts (we can map them to a district)
+    if post.get("geo_confidence") == "high":
+        score += 25
+
+    # Penalize lifestyle/recommendation posts
+    if SKIP_PATTERNS.search(text):
+        score -= 100
+
+    # Penalize image-only posts with no text (usually memes/photos)
+    if not post["selftext"] and post.get("score", 0) > 50:
+        score -= 30
+
+    # Boost link posts to news sites
+    url = post.get("url", "")
+    if any(d in url for d in ["gothamist", "thecity", "nypost", "nydailynews",
+                               "nytimes", "ny1", "amny", "bklyner", "qns.com",
+                               "bronxtimes", "silive", "patch.com", "cityandstate"]):
+        score += 50
+
+    return score
+
+
 def collect():
     """Main entry point. Returns list of geo-mapped, classified posts."""
     print("[Reddit] Fetching posts from NYC subreddits...")
@@ -152,13 +217,19 @@ def collect():
     cutoff = time.time() - (14 * 86400)
     filtered = [
         p for p in all_posts
-        if p["created_utc"] > cutoff and (p["score"] >= 5 or p["num_comments"] >= 3)
+        if p["created_utc"] > cutoff and (p["score"] >= 10 or p["num_comments"] >= 5)
     ]
 
-    # Sort by engagement (score + comments) so the most-discussed posts surface first
-    filtered.sort(key=lambda p: p["score"] + p["num_comments"], reverse=True)
+    # Score for newsworthiness and sort
+    for post in filtered:
+        post["news_score"] = newsworthiness_score(post)
 
-    print(f"[Reddit] {len(filtered)} posts after filtering (14 days, min engagement)")
+    # Drop clearly non-newsy posts
+    filtered = [p for p in filtered if p["news_score"] > 0]
+
+    filtered.sort(key=lambda p: p["news_score"], reverse=True)
+
+    print(f"[Reddit] {len(filtered)} posts after filtering (14 days, newsworthiness)")
     return filtered
 
 

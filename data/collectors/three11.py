@@ -34,9 +34,19 @@ def fetch_311(days=90, batch_size=50000):
         }
 
         print(f"  Fetching 311 records (offset={offset})...")
-        resp = requests.get(url, params=params, timeout=60,
-                            headers={"User-Agent": "NYC-Neighborhood-Story-Finder/1.0"})
-        resp.raise_for_status()
+        for attempt in range(3):
+            try:
+                resp = requests.get(url, params=params, timeout=120,
+                                    headers={"User-Agent": "NYC-Neighborhood-Story-Finder/1.0"})
+                resp.raise_for_status()
+                break
+            except (requests.exceptions.Timeout, requests.exceptions.ConnectionError) as e:
+                if attempt < 2:
+                    wait = 10 * (attempt + 1)
+                    print(f"  Retry {attempt+1}/2 after {wait}s: {e}")
+                    time.sleep(wait)
+                else:
+                    raise
         data = resp.json()
 
         if not data:

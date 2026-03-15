@@ -387,7 +387,7 @@ function renderDistrictDetail(summary, detail) {
                   m.days_away <= 7 ? '<span class="recency-badge recency-this-week">this week</span>' : ''}
               </div>
               ${m.location ? `<div class="cb-meeting-location">${escapeHtml(m.location)}</div>` : ''}
-              ${m.description ? `<div class="cb-meeting-desc">${escapeHtml(m.description)}</div>` : ''}
+              ${m.description ? `<div class="cb-meeting-desc">${cleanDescription(m.description)}</div>` : ''}
             </div>
           `).join('')}
         ` : ''}
@@ -936,6 +936,16 @@ function escapeHtml(str) {
   const div = document.createElement('div');
   div.textContent = str;
   return div.innerHTML;
+}
+
+function cleanDescription(str) {
+  if (!str) return '';
+  // Decode HTML entities, strip tags, collapse whitespace
+  const div = document.createElement('div');
+  div.innerHTML = str;
+  let text = div.textContent || div.innerText || '';
+  text = text.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
+  return escapeHtml(text);
 }
 
 function hideLoading() {

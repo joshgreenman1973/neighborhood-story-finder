@@ -25,7 +25,8 @@ def clean_html(text):
     """Strip HTML tags and decode entities from text."""
     if not text:
         return ""
-    text = html.unescape(text)
+    # Decode twice to handle double-encoded entities (&amp;lt; -> &lt; -> <)
+    text = html.unescape(html.unescape(text))
     text = re.sub(r'<[^>]+>', ' ', text)
     text = re.sub(r'\s+', ' ', text).strip()
     return text

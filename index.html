@@ -180,6 +180,13 @@
     .kpi-delta.up { color: var(--vc-baddest-red); }
     .kpi-delta.down { color: var(--vc-goodest-green); }
     .kpi-delta.neutral { color: var(--muted); }
+    .kpi-note {
+      font-size: 0.65rem;
+      color: var(--vc-periwinkle);
+      margin-top: 0.3rem;
+      font-style: italic;
+      line-height: 1.2;
+    }
 
     /* ═══ CHART GRID ═══ */
     .grid {
@@ -415,7 +422,8 @@
 
     <footer>
       Data from <a href="https://opendata.cityofnewyork.us/" target="_blank">NYC Open Data</a> via Socrata API.
-      For district-level analysis, see the <a href="map.html">Neighborhood Story Finder</a>.
+      For district-level analysis, see the <a href="map.html">Neighborhood Story Finder</a>.<br>
+      *Shooting data uses NYPD's new split datasets (Feb 2026). Reporting may lag by 1–2 weeks.
     </footer>
   </main>
 
@@ -582,8 +590,8 @@
         { label: 'HPD Complaints', value: fmt(latest.hpd_complaints), prev: prev?.hpd_complaints, cur: latest.hpd_complaints, worse: 'up' },
         { label: 'Heat/HW %', value: latest.hpd_heat_pct + '%', prev: prev?.hpd_heat_pct, cur: latest.hpd_heat_pct, worse: 'up', pct: true },
         { label: 'Immediate Emergency', value: fmt(latest.hpd_immediate_emergency), prev: prev?.hpd_immediate_emergency, cur: latest.hpd_immediate_emergency, worse: 'up' },
-        { label: 'Shootings', value: latest.shooting_incidents, prev: prev?.shooting_incidents, worse: 'up' },
-        { label: 'Shot & Killed', value: latest.shooting_murders, prev: prev?.shooting_murders, worse: 'up' },
+        { label: 'Shootings*', value: latest.shooting_incidents, prev: prev?.shooting_incidents, worse: 'up', note: 'New dataset — may lag' },
+        { label: 'Shot & Killed*', value: latest.shooting_murders, prev: prev?.shooting_murders, worse: 'up', note: 'New dataset — may lag' },
       ];
 
       const kpiContainer = document.getElementById('kpis');
@@ -600,7 +608,8 @@
           const cls = diff === 0 ? 'neutral' : (diff > 0 && k.worse === 'up') || (diff < 0 && k.worse === 'down') ? 'up' : 'down';
           deltaHTML = `<div class="kpi-delta ${cls}">${arrow} ${Math.abs(pctChange)}% vs prior week</div>`;
         }
-        el.innerHTML = `<div class="kpi-label">${k.label}</div><div class="kpi-value">${k.value}</div>${deltaHTML}`;
+        const noteHTML = k.note ? `<div class="kpi-note">${k.note}</div>` : '';
+        el.innerHTML = `<div class="kpi-label">${k.label}</div><div class="kpi-value">${k.value}</div>${deltaHTML}${noteHTML}`;
         kpiContainer.appendChild(el);
       });
 

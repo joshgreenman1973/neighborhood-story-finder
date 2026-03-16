@@ -494,7 +494,7 @@ def generate_flags(row, existing_rows, collisions, hpd, vacates, restaurants, sh
     return flags
 
 
-def save_dashboard_json(rows, aggregates, flags=None, datasets=None):
+def save_dashboard_json(rows, aggregates, flags=None, datasets=None, detail=None):
     """Save JSON for the dashboard to consume."""
     json_path = os.path.join(OUTPUT_DIR, "weekly-trends.json")
     with open(json_path, "w") as f:
@@ -503,6 +503,7 @@ def save_dashboard_json(rows, aggregates, flags=None, datasets=None):
             "monthly": aggregates["monthly"],
             "ytd": aggregates["ytd"],
             "flags": flags or [],
+            "detail": detail or {},
             "datasets_updated": datasets or [],
             "generated": datetime.now().isoformat(),
         }, f)
@@ -571,7 +572,34 @@ def run_scan():
         icon = {"high": "!!", "medium": "!", "info": "-"}.get(f["severity"], " ")
         print(f"  [{icon}] {f['headline']}")
 
-    save_dashboard_json(existing, aggregates, flags, datasets)
+    # Build detail breakdowns for the dashboard
+    detail = {}
+    if collisions:
+        detail["crashes"] = {
+            "borough_breakdown": collisions.get("borough_breakdown", {}),
+            "top_factors": collisions.get("top_factors", {}),
+        }
+    if hpd:
+        detail["hpd"] = {
+            "borough_breakdown": hpd.get("borough_breakdown", {}),
+            "top_categories": hpd.get("top_categories", {}),
+            "status_breakdown": hpd.get("status_breakdown", {}),
+        }
+    if vacates:
+        detail["vacates"] = {
+            "reasons": vacates.get("reasons", {}),
+            "boroughs": vacates.get("boroughs", {}),
+        }
+    if restaurants:
+        detail["restaurants"] = {
+            "grade_distribution": restaurants.get("grade_distribution", {}),
+        }
+    if shootings:
+        detail["shootings"] = {
+            "borough_breakdown": shootings.get("borough_breakdown", {}),
+        }
+
+    save_dashboard_json(existing, aggregates, flags, datasets, detail)
 
     # Save updated datasets list
     datasets_path = os.path.join(OUTPUT_DIR, "updated-datasets.json")

@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>NYC Data Pulse — Citywide Weekly Trends</title>
   <meta name="description" content="Weekly trends across NYC Open Data — public safety, housing, health. Drill down into neighborhood-level stories." />
-  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+  <!-- No external chart libraries — custom canvas donuts + CSS bars -->
   <style>
     :root {
       --vc-black: #050507;
@@ -229,13 +229,7 @@
       margin-bottom: 0.15rem;
     }
 
-    /* ═══ CHART GRID ═══ */
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(540px, 1fr));
-      gap: 1.25rem;
-    }
-
+    /* ═══ CARDS ═══ */
     .card {
       background: var(--surface);
       border: 1px solid var(--border);
@@ -252,26 +246,209 @@
       letter-spacing: 0.04em;
     }
 
-    .card canvas {
-      width: 100% !important;
-      max-height: 260px;
-    }
-
     .full-width { grid-column: 1 / -1; }
 
-    .section-header {
-      grid-column: 1 / -1;
-      font-size: 0.75rem;
+    /* ═══ DATA STORY SECTIONS ═══ */
+    .story-section {
+      margin-bottom: 2.5rem;
+    }
+
+    .story-section-label {
+      font-size: 0.7rem;
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.08em;
       color: var(--vc-chartreuse);
-      padding: 1.5rem 0 0.25rem;
+      padding-bottom: 0.5rem;
       border-bottom: 1px solid var(--border);
-      margin-bottom: -0.25rem;
+      margin-bottom: 1.25rem;
     }
 
-    .section-header:first-child { padding-top: 0; }
+    .story-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+
+    .story-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1.5rem;
+    }
+
+    .story-card.wide { grid-column: 1 / -1; }
+
+    .story-card h3 {
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--muted);
+      margin-bottom: 1rem;
+    }
+
+    /* Big number + rate */
+    .big-stat {
+      display: flex;
+      align-items: baseline;
+      gap: 0.75rem;
+      margin-bottom: 0.75rem;
+    }
+    .big-stat-number {
+      font-size: 2.5rem;
+      font-weight: 900;
+      font-variant-numeric: tabular-nums;
+      line-height: 1;
+    }
+    .big-stat-context {
+      font-size: 0.85rem;
+      color: var(--muted);
+      font-family: 'Gascogne', Georgia, serif;
+    }
+    .big-stat-rate {
+      font-size: 1rem;
+      color: var(--vc-orange);
+      font-weight: 700;
+      margin-bottom: 0.75rem;
+    }
+
+    /* Sub-stats row */
+    .sub-stats {
+      display: flex;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+      margin-bottom: 1rem;
+    }
+    .sub-stat {
+      display: flex;
+      flex-direction: column;
+    }
+    .sub-stat-value {
+      font-size: 1.1rem;
+      font-weight: 800;
+      font-variant-numeric: tabular-nums;
+    }
+    .sub-stat-label {
+      font-size: 0.65rem;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    /* Borough breakdown bars */
+    .boro-bars { margin: 1rem 0 0.5rem; }
+    .boro-bar-row {
+      display: flex;
+      align-items: center;
+      margin-bottom: 0.35rem;
+      font-size: 0.75rem;
+    }
+    .boro-bar-label {
+      width: 85px;
+      flex-shrink: 0;
+      text-transform: uppercase;
+      font-size: 0.65rem;
+      letter-spacing: 0.03em;
+      color: var(--muted);
+    }
+    .boro-bar-track {
+      flex: 1;
+      height: 18px;
+      background: rgba(255,255,255,0.03);
+      border-radius: 3px;
+      overflow: hidden;
+      position: relative;
+    }
+    .boro-bar-fill {
+      height: 100%;
+      border-radius: 3px;
+      transition: width 0.6s ease;
+      min-width: 2px;
+    }
+    .boro-bar-value {
+      width: 50px;
+      text-align: right;
+      font-size: 0.7rem;
+      font-variant-numeric: tabular-nums;
+      color: var(--muted);
+      flex-shrink: 0;
+      margin-left: 0.5rem;
+    }
+    .boro-bar-pct {
+      font-size: 0.6rem;
+      color: var(--muted);
+      margin-left: 0.25rem;
+    }
+    /* Population benchmark tick */
+    .boro-bar-benchmark {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: rgba(255,255,255,0.3);
+      z-index: 2;
+    }
+
+    /* Composition ring */
+    .composition-container {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+    }
+    .composition-canvas {
+      flex-shrink: 0;
+    }
+    .composition-legend {
+      flex: 1;
+      font-size: 0.75rem;
+    }
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 0.35rem;
+    }
+    .legend-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+    .legend-label { color: var(--muted); flex: 1; }
+    .legend-value {
+      font-weight: 700;
+      font-variant-numeric: tabular-nums;
+      min-width: 35px;
+      text-align: right;
+    }
+
+    /* Narrative callout */
+    .narrative {
+      font-family: 'Gascogne', Georgia, serif;
+      font-size: 0.85rem;
+      color: var(--muted);
+      line-height: 1.6;
+      margin-top: 0.75rem;
+      border-left: 2px solid var(--vc-chartreuse);
+      padding-left: 0.75rem;
+    }
+    .narrative strong { color: var(--text); }
+
+    /* Sparkline (inline trend) */
+    .sparkline-container {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-top: 0.5rem;
+    }
+    .sparkline-canvas {
+      height: 24px;
+    }
+    .sparkline-label {
+      font-size: 0.65rem;
+      color: var(--muted);
+    }
 
     /* ═══ VIEW TOGGLE ═══ */
     .view-toggle {
@@ -345,12 +522,18 @@
       font-size: 1.1rem;
     }
 
+    @media (max-width: 840px) {
+      .story-grid { grid-template-columns: 1fr; }
+      .story-card.wide { grid-column: 1; }
+    }
+
     @media (max-width: 640px) {
       main { padding: 1rem; }
-      .grid { grid-template-columns: 1fr; }
       .kpi-row { grid-template-columns: repeat(2, 1fr); }
       .nav { padding: 0 1rem; }
       .nav-brand { margin-right: 1rem; font-size: 11px; }
+      .big-stat-number { font-size: 2rem; }
+      .composition-container { flex-direction: column; }
     }
   </style>
 </head>
@@ -398,58 +581,7 @@
         </div>
       </div>
 
-      <div class="grid">
-        <div class="section-header">Public Safety</div>
-
-        <div class="card full-width">
-          <h2>Motor Vehicle Crashes & Injuries</h2>
-          <canvas id="crashChart"></canvas>
-        </div>
-
-        <div class="card">
-          <h2>Persons Killed (Weekly)</h2>
-          <canvas id="fatalityChart"></canvas>
-        </div>
-
-        <div class="card">
-          <h2>Vulnerable Road Users — Pedestrians & Cyclists Injured</h2>
-          <canvas id="vuChart"></canvas>
-        </div>
-
-        <div class="card">
-          <h2>Shooting Incidents & Victims</h2>
-          <canvas id="shootingChart"></canvas>
-        </div>
-
-        <div class="section-header">Housing & Development</div>
-
-        <div class="card full-width">
-          <h2>HPD Housing Complaints</h2>
-          <canvas id="hpdChart"></canvas>
-        </div>
-
-        <div class="card">
-          <h2>Heat/Hot Water Complaints — Share of Total</h2>
-          <canvas id="heatChart"></canvas>
-        </div>
-
-        <div class="card">
-          <h2>Bronx Share of Housing Complaints</h2>
-          <canvas id="bronxChart"></canvas>
-        </div>
-
-        <div class="card">
-          <h2>HPD Vacate Orders</h2>
-          <canvas id="vacateChart"></canvas>
-        </div>
-
-        <div class="section-header">Health</div>
-
-        <div class="card">
-          <h2>Restaurant Inspections — Critical Violations & Closures</h2>
-          <canvas id="restaurantChart"></canvas>
-        </div>
-      </div>
+      <div id="story-sections"></div>
       </div><!-- /weekly-view -->
 
       <div id="monthly-view" style="display:none;">
@@ -476,12 +608,21 @@
   </main>
 
   <script>
-    // Inline fallback data (updated by weekly scan script)
+    // ═══════════════════════════════════════════
+    // NYC Data Pulse — Smart Trend Engine
+    // ═══════════════════════════════════════════
+
     const INLINE_DATA = [{"week_ending":"2026-03-13","crashes":924,"persons_injured":565,"persons_killed":5,"pedestrians_injured":108,"pedestrians_killed":2,"cyclists_injured":54,"shooting_incidents":0,"shooting_victims":0,"shooting_murders":0,"hpd_complaints":17969,"hpd_heat_hot_water":5822,"hpd_heat_pct":32.4,"hpd_bronx_pct":35.9,"hpd_open_pct":72.0,"hpd_immediate_emergency":717,"vacate_orders_new":20,"vacate_orders_active":12,"restaurant_inspections":126,"critical_violations":61,"restaurant_closures":5,"dob_filings":0,"dob_large_projects_over_1m":0}];
 
-    let TRENDS_DATA = [];
+    // NYC borough populations (2020 Census) for per-capita context
+    const BORO_POP = { BRONX: 1472654, BROOKLYN: 2736074, MANHATTAN: 1694263, QUEENS: 2405464, 'STATEN ISLAND': 495747 };
+    const BORO_COLORS = { BRONX: '#ff7c53', BROOKLYN: '#394882', MANHATTAN: '#dde44c', QUEENS: '#9b9fbc', 'STATEN ISLAND': '#217ebe', UNSPECIFIED: '#707175' };
+    const BORO_ORDER = ['BRONX', 'BROOKLYN', 'MANHATTAN', 'QUEENS', 'STATEN ISLAND'];
+    const CITY_POP = Object.values(BORO_POP).reduce((a,b) => a+b, 0);
 
-    let FLAGS_DATA = [];
+    let TRENDS_DATA = [], FLAGS_DATA = [], DETAIL_DATA = {};
+
+    function fmt(n) { return Number(n).toLocaleString(); }
 
     async function loadData() {
       try {
@@ -490,276 +631,51 @@
           const json = await resp.json();
           TRENDS_DATA = json.weekly || [];
           FLAGS_DATA = json.flags || [];
+          DETAIL_DATA = json.detail || {};
         }
       } catch (e) { /* fallback */ }
       if (!TRENDS_DATA.length) TRENDS_DATA = INLINE_DATA;
-
-      // If no flags from JSON, generate basic ones from the data
-      if (!FLAGS_DATA.length && TRENDS_DATA.length) {
-        FLAGS_DATA = generateClientFlags(TRENDS_DATA);
-      }
+      if (!FLAGS_DATA.length && TRENDS_DATA.length) FLAGS_DATA = generateClientFlags(TRENDS_DATA);
 
       if (!TRENDS_DATA.length) {
         document.getElementById('no-data').style.display = 'block';
         return;
       }
       document.getElementById('dashboard').style.display = '';
-      initCharts(TRENDS_DATA);
+      initHeader(TRENDS_DATA);
+      initKPIs(TRENDS_DATA);
+      initFlags(FLAGS_DATA);
+      initStories(TRENDS_DATA, DETAIL_DATA);
       initMonthly(TRENDS_DATA);
       initYTD(TRENDS_DATA);
-      initFlags(FLAGS_DATA);
       initViewToggle();
     }
 
-    function generateClientFlags(data) {
-      // Generate editorial flags client-side when no server-generated ones exist
-      const flags = [];
+    // ─── Header ───
+    function initHeader(data) {
       const latest = data[data.length - 1];
-      const prev = data.length > 1 ? data.slice(0, -1) : [];
-      const avg = (field) => {
-        const vals = prev.map(r => Number(r[field] || 0));
-        return vals.length ? vals.reduce((a,b) => a+b, 0) / vals.length : null;
-      };
-
-      // Crash context
-      const crashes = Number(latest.crashes || 0);
-      const crashAvg = avg('crashes');
-      if (crashes > 0) {
-        const context = crashAvg ? ` (avg: ${Math.round(crashAvg)}/week)` : '';
-        const killed = Number(latest.persons_killed || 0);
-        flags.push({
-          category: 'Public Safety', severity: killed >= 5 ? 'high' : 'medium',
-          headline: `${fmt(crashes)} crashes, ${killed} killed, ${fmt(Number(latest.persons_injured || 0))} injured`,
-          detail: `${fmt(Number(latest.pedestrians_injured || 0))} pedestrians and ${fmt(Number(latest.cyclists_injured || 0))} cyclists injured${context}. That's ${Math.round(crashes/7)} crashes/day and ${Math.round(Number(latest.pedestrians_injured || 0)/7)} pedestrians injured/day.`,
-        });
-      }
-
-      // HPD context
-      const hpd = Number(latest.hpd_complaints || 0);
-      const heatPct = Number(latest.hpd_heat_pct || 0);
-      const bronxPct = Number(latest.hpd_bronx_pct || 0);
-      if (hpd > 0) {
-        const hpdAvg = avg('hpd_complaints');
-        const context = hpdAvg ? ` (avg: ${fmt(Math.round(hpdAvg))}/week)` : '';
-        const month = new Date().getMonth() + 1;
-        let seasonNote = '';
-        if (month >= 3 && month <= 5 && heatPct > 25) seasonNote = ' Heating season should be winding down — suggests landlords cutting heat prematurely.';
-        flags.push({
-          category: 'Housing', severity: heatPct > 30 ? 'high' : 'medium',
-          headline: `${fmt(hpd)} HPD complaints — ${heatPct}% heat/hot water`,
-          detail: `${fmt(Number(latest.hpd_heat_hot_water || 0))} heat/hot water complaints${context}.${seasonNote}`,
-        });
-
-        if (bronxPct > 30) {
-          flags.push({
-            category: 'Housing', severity: 'high',
-            headline: `Bronx: ${bronxPct}% of housing complaints (14% of city population)`,
-            detail: `A ${(bronxPct / 14).toFixed(1)}x overrepresentation. The Bronx consistently bears a disproportionate share of the city's housing crisis.`,
-          });
-        }
-      }
-
-      // Shootings
-      const shootings = Number(latest.shooting_incidents || 0);
-      if (shootings === 0) {
-        flags.push({
-          category: 'Public Safety', severity: 'info',
-          headline: 'Shooting data: 0 incidents reported',
-          detail: 'NYPD restructured shooting datasets in Feb 2026 (now 3 separate datasets). Zero may reflect reporting lag rather than no incidents.',
-        });
-      } else {
-        flags.push({
-          category: 'Public Safety', severity: 'high',
-          headline: `${shootings} shooting incidents, ${Number(latest.shooting_murders || 0)} murders`,
-          detail: `${Number(latest.shooting_victims || 0)} total victims this week.`,
-        });
-      }
-
-      // Vacate orders
-      const vacates = Number(latest.vacate_orders_new || 0);
-      if (vacates > 0) {
-        flags.push({
-          category: 'Housing', severity: vacates >= 10 ? 'medium' : 'info',
-          headline: `${vacates} new vacate orders, ${Number(latest.vacate_orders_active || 0)} still active`,
-          detail: `Buildings ordered vacated or repaired this week.`,
-        });
-      }
-
-      // Restaurant closures
-      const closures = Number(latest.restaurant_closures || 0);
-      if (closures > 0) {
-        flags.push({
-          category: 'Health', severity: closures >= 5 ? 'medium' : 'info',
-          headline: `${closures} restaurant closures, ${Number(latest.critical_violations || 0)} critical violations`,
-          detail: `Out of ${fmt(Number(latest.restaurant_inspections || 0))} inspections this week.`,
-        });
-      }
-
-      // Sort by severity
-      const order = {high: 0, medium: 1, info: 2};
-      flags.sort((a, b) => (order[a.severity] || 3) - (order[b.severity] || 3));
-      return flags;
-    }
-
-    function initFlags(flags) {
-      if (!flags.length) return;
-      const section = document.getElementById('flags-section');
-      const container = document.getElementById('flags-container');
-      section.style.display = '';
-
-      container.innerHTML = flags.map(f => `
-        <div class="flag-item">
-          <div class="flag-severity ${f.severity || 'info'}"></div>
-          <div class="flag-body">
-            <div class="flag-category">${f.category || ''}</div>
-            <div class="flag-headline">${f.headline}</div>
-            <div class="flag-detail">${f.detail}</div>
-          </div>
-        </div>
-      `).join('');
-    }
-
-    loadData();
-
-    function initViewToggle() {
-      document.querySelectorAll('#viewToggle button').forEach(btn => {
-        btn.addEventListener('click', () => {
-          document.querySelectorAll('#viewToggle button').forEach(b => b.classList.remove('active'));
-          btn.classList.add('active');
-          const v = btn.dataset.view;
-          document.getElementById('weekly-view').style.display = v === 'weekly' ? '' : 'none';
-          document.getElementById('monthly-view').style.display = v === 'monthly' ? '' : 'none';
-          document.getElementById('ytd-view').style.display = v === 'ytd' ? '' : 'none';
-        });
-      });
-    }
-
-    function initMonthly(data) {
-      const months = {};
-      data.forEach(row => {
-        const mk = row.week_ending.substring(0, 7);
-        if (!months[mk]) months[mk] = { weeks: 0, crashes: 0, killed: 0, injured: 0, ped_injured: 0, cyc_injured: 0, shootings: 0, sh_victims: 0, sh_murders: 0, hpd: 0, heat_hw: 0, vacates: 0, closures: 0 };
-        const m = months[mk];
-        m.weeks++;
-        m.crashes += Number(row.crashes || 0);
-        m.killed += Number(row.persons_killed || 0);
-        m.injured += Number(row.persons_injured || 0);
-        m.ped_injured += Number(row.pedestrians_injured || 0);
-        m.cyc_injured += Number(row.cyclists_injured || 0);
-        m.shootings += Number(row.shooting_incidents || 0);
-        m.sh_victims += Number(row.shooting_victims || 0);
-        m.sh_murders += Number(row.shooting_murders || 0);
-        m.hpd += Number(row.hpd_complaints || 0);
-        m.heat_hw += Number(row.hpd_heat_hot_water || 0);
-        m.vacates += Number(row.vacate_orders_new || 0);
-        m.closures += Number(row.restaurant_closures || 0);
-      });
-
-      const container = document.getElementById('monthly-table-container');
-      const keys = Object.keys(months).sort();
-      if (!keys.length) {
-        container.innerHTML = '<p style="color:var(--muted);font-size:0.85rem;">Accumulating data. Monthly view will populate as more weeks are scanned.</p>';
-        return;
-      }
-
-      let html = `<table class="summary-table"><thead><tr>
-        <th>Month</th><th class="num">Wks</th><th class="num">Crashes</th><th class="num">Killed</th>
-        <th class="num">Ped Inj</th><th class="num">Cyc Inj</th><th class="num">Shootings</th>
-        <th class="num">HPD Comp</th><th class="num">Heat/HW</th><th class="num">Vacates</th>
-      </tr></thead><tbody>`;
-
-      keys.forEach(mk => {
-        const m = months[mk];
-        const label = new Date(mk + '-15').toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
-        const heatPct = m.hpd > 0 ? (m.heat_hw / m.hpd * 100).toFixed(0) : 0;
-        html += `<tr>
-          <td>${label}</td><td class="num">${m.weeks}</td><td class="num">${fmt(m.crashes)}</td><td class="num">${m.killed}</td>
-          <td class="num">${fmt(m.ped_injured)}</td><td class="num">${fmt(m.cyc_injured)}</td><td class="num">${m.shootings}</td>
-          <td class="num">${fmt(m.hpd)}</td><td class="num">${fmt(m.heat_hw)} (${heatPct}%)</td><td class="num">${m.vacates}</td>
-        </tr>`;
-      });
-      html += '</tbody></table>';
-      container.innerHTML = html;
-    }
-
-    function initYTD(data) {
-      const year = new Date().getFullYear().toString();
-      const ytdRows = data.filter(r => r.week_ending.startsWith(year));
-      const container = document.getElementById('ytd-kpis');
-      const detail = document.getElementById('ytd-detail');
-
-      if (!ytdRows.length) {
-        detail.innerHTML = '<p style="color:var(--muted);font-size:0.85rem;">No data for the current year yet.</p>';
-        return;
-      }
-
-      const sum = (field) => ytdRows.reduce((s, r) => s + Number(r[field] || 0), 0);
-      const ytd = {
-        weeks: ytdRows.length,
-        crashes: sum('crashes'), killed: sum('persons_killed'), injured: sum('persons_injured'),
-        ped_injured: sum('pedestrians_injured'), ped_killed: sum('pedestrians_killed'),
-        cyc_injured: sum('cyclists_injured'),
-        shootings: sum('shooting_incidents'), sh_victims: sum('shooting_victims'), sh_murders: sum('shooting_murders'),
-        hpd: sum('hpd_complaints'), heat_hw: sum('hpd_heat_hot_water'),
-        vacates: sum('vacate_orders_new'), closures: sum('restaurant_closures'),
-      };
-
-      const kpis = [
-        { label: `Crashes (${ytd.weeks} wks)`, value: fmt(ytd.crashes) },
-        { label: 'Total Killed', value: ytd.killed },
-        { label: 'Ped Injured', value: fmt(ytd.ped_injured) },
-        { label: 'Cyclists Injured', value: fmt(ytd.cyc_injured) },
-        { label: 'Shooting Incidents', value: ytd.shootings },
-        { label: 'HPD Complaints', value: fmt(ytd.hpd) },
-        { label: 'Heat/HW Complaints', value: fmt(ytd.heat_hw) },
-        { label: 'Vacate Orders', value: ytd.vacates },
-      ];
-
-      kpis.forEach(k => {
-        const el = document.createElement('div');
-        el.className = 'kpi';
-        el.innerHTML = `<div class="kpi-label">${k.label}</div><div class="kpi-value">${k.value}</div>`;
-        container.appendChild(el);
-      });
-
-      const avgCrashes = Math.round(ytd.crashes / ytd.weeks);
-      const avgHPD = Math.round(ytd.hpd / ytd.weeks);
-      const heatPct = ytd.hpd > 0 ? (ytd.heat_hw / ytd.hpd * 100).toFixed(1) : 0;
-      detail.innerHTML = `<p style="color:var(--muted);font-size:0.85rem;line-height:1.6;margin-top:0.5rem;">
-        Based on <strong style="color:var(--text)">${ytd.weeks} week${ytd.weeks > 1 ? 's' : ''}</strong> of data in ${year}.<br>
-        Weekly averages: <strong style="color:var(--text)">${fmt(avgCrashes)}</strong> crashes,
-        <strong style="color:var(--text)">${fmt(avgHPD)}</strong> HPD complaints,
-        <strong style="color:var(--text)">${heatPct}%</strong> heat/hot water.
-      </p>`;
-    }
-
-    function initCharts(data) {
-      const latest = data[data.length - 1];
-      const prev = data.length > 1 ? data[data.length - 2] : null;
-      const labels = data.map(d => {
-        const dt = new Date(d.week_ending + 'T12:00:00');
-        return dt.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
-      });
-
-      const start = new Date(data[0].week_ending + 'T12:00:00');
       const end = new Date(latest.week_ending + 'T12:00:00');
       const weeks = data.length;
       document.getElementById('subtitle').textContent = weeks === 1
         ? `Week of ${end.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })} — 1 week tracked`
-        : `${start.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })} – ${end.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })} — ${weeks} weeks tracked`;
+        : `${new Date(data[0].week_ending + 'T12:00:00').toLocaleDateString('en-US', { month: 'short', day: 'numeric' })} – ${end.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })} — ${weeks} weeks tracked`;
+    }
 
+    // ─── KPIs ───
+    function initKPIs(data) {
+      const latest = data[data.length - 1];
+      const prev = data.length > 1 ? data[data.length - 2] : null;
       const kpis = [
         { label: 'Crashes', value: latest.crashes, prev: prev?.crashes, worse: 'up' },
         { label: 'Killed', value: latest.persons_killed, prev: prev?.persons_killed, worse: 'up' },
         { label: 'Ped. Injured', value: latest.pedestrians_injured, prev: prev?.pedestrians_injured, worse: 'up' },
         { label: 'HPD Complaints', value: fmt(latest.hpd_complaints), prev: prev?.hpd_complaints, cur: latest.hpd_complaints, worse: 'up' },
-        { label: 'Heat/HW %', value: latest.hpd_heat_pct + '%', prev: prev?.hpd_heat_pct, cur: latest.hpd_heat_pct, worse: 'up', pct: true },
+        { label: 'Heat/HW %', value: latest.hpd_heat_pct + '%', prev: prev?.hpd_heat_pct, cur: latest.hpd_heat_pct, worse: 'up' },
         { label: 'Immediate Emergency', value: fmt(latest.hpd_immediate_emergency), prev: prev?.hpd_immediate_emergency, cur: latest.hpd_immediate_emergency, worse: 'up' },
         { label: 'Shootings*', value: latest.shooting_incidents, prev: prev?.shooting_incidents, worse: 'up', note: 'New dataset — may lag' },
         { label: 'Shot & Killed*', value: latest.shooting_murders, prev: prev?.shooting_murders, worse: 'up', note: 'New dataset — may lag' },
       ];
-
-      const kpiContainer = document.getElementById('kpis');
+      const container = document.getElementById('kpis');
       kpis.forEach(k => {
         const el = document.createElement('div');
         el.className = 'kpi';
@@ -775,141 +691,407 @@
         }
         const noteHTML = k.note ? `<div class="kpi-note">${k.note}</div>` : '';
         el.innerHTML = `<div class="kpi-label">${k.label}</div><div class="kpi-value">${k.value}</div>${deltaHTML}${noteHTML}`;
-        kpiContainer.appendChild(el);
-      });
-
-      Chart.defaults.color = 'rgba(255,255,255,0.45)';
-      Chart.defaults.borderColor = 'rgba(255,255,255,0.06)';
-      Chart.defaults.font.family = "'Halyard', 'Helvetica Neue', Arial, sans-serif";
-      const gridOpts = { grid: { color: 'rgba(255,255,255,0.04)' } };
-      const noLegend = { plugins: { legend: { display: false } } };
-
-      new Chart(document.getElementById('crashChart'), {
-        type: 'bar',
-        data: {
-          labels,
-          datasets: [
-            { label: 'Crashes', data: data.map(d => d.crashes), backgroundColor: '#39488280', borderColor: '#394882', borderWidth: 1 },
-            { label: 'Persons Injured', data: data.map(d => d.persons_injured), backgroundColor: '#ff7c5360', borderColor: '#ff7c53', borderWidth: 1 },
-          ]
-        },
-        options: { responsive: true, scales: { x: gridOpts, y: gridOpts } }
-      });
-
-      new Chart(document.getElementById('fatalityChart'), {
-        type: 'bar',
-        data: {
-          labels,
-          datasets: [
-            { label: 'Killed', data: data.map(d => d.persons_killed), backgroundColor: '#d2232a80', borderColor: '#d2232a', borderWidth: 1, borderRadius: 4 },
-          ]
-        },
-        options: { responsive: true, ...noLegend, scales: { x: gridOpts, y: { ...gridOpts, beginAtZero: true } } }
-      });
-
-      new Chart(document.getElementById('vuChart'), {
-        type: 'line',
-        data: {
-          labels,
-          datasets: [
-            { label: 'Pedestrians Injured', data: data.map(d => d.pedestrians_injured), borderColor: '#e7466d', backgroundColor: '#e7466d20', fill: true, tension: 0.3 },
-            { label: 'Cyclists Injured', data: data.map(d => d.cyclists_injured), borderColor: '#217ebe', backgroundColor: '#217ebe20', fill: true, tension: 0.3 },
-          ]
-        },
-        options: { responsive: true, scales: { x: gridOpts, y: { ...gridOpts, beginAtZero: true } } }
-      });
-
-      new Chart(document.getElementById('shootingChart'), {
-        type: 'bar',
-        data: {
-          labels,
-          datasets: [
-            { label: 'Incidents', data: data.map(d => d.shooting_incidents), backgroundColor: '#d2232a60', borderColor: '#d2232a', borderWidth: 1, borderRadius: 4 },
-            { label: 'Victims', data: data.map(d => d.shooting_victims), backgroundColor: '#ff7c5360', borderColor: '#ff7c53', borderWidth: 1, borderRadius: 4 },
-            { label: 'Murders', data: data.map(d => d.shooting_murders), backgroundColor: '#e7466d80', borderColor: '#e7466d', borderWidth: 1, borderRadius: 4 },
-          ]
-        },
-        options: { responsive: true, scales: { x: gridOpts, y: { ...gridOpts, beginAtZero: true } } }
-      });
-
-      new Chart(document.getElementById('hpdChart'), {
-        type: 'bar',
-        data: {
-          labels,
-          datasets: [
-            { label: 'Heat/Hot Water', data: data.map(d => d.hpd_heat_hot_water), backgroundColor: '#ff7c5360', borderColor: '#ff7c53', borderWidth: 1 },
-            { label: 'Other Complaints', data: data.map(d => d.hpd_complaints - d.hpd_heat_hot_water), backgroundColor: '#39488240', borderColor: '#394882', borderWidth: 1 },
-          ]
-        },
-        options: { responsive: true, scales: { x: { ...gridOpts, stacked: true }, y: { ...gridOpts, stacked: true } } }
-      });
-
-      new Chart(document.getElementById('heatChart'), {
-        type: 'line',
-        data: {
-          labels,
-          datasets: [{
-            label: 'Heat/HW % of Total',
-            data: data.map(d => d.hpd_heat_pct),
-            borderColor: '#ff7c53',
-            backgroundColor: '#ff7c5320',
-            fill: true, tension: 0.3, pointRadius: 5, pointBackgroundColor: '#ff7c53',
-          }]
-        },
-        options: {
-          responsive: true, ...noLegend,
-          scales: { x: gridOpts, y: { ...gridOpts, min: 0, max: 50, ticks: { callback: v => v + '%' } } },
-          plugins: { tooltip: { callbacks: { label: ctx => ctx.parsed.y + '%' } } }
-        }
-      });
-
-      new Chart(document.getElementById('bronxChart'), {
-        type: 'line',
-        data: {
-          labels,
-          datasets: [{
-            label: 'Bronx % of Complaints',
-            data: data.map(d => d.hpd_bronx_pct),
-            borderColor: '#9b9fbc',
-            backgroundColor: '#9b9fbc20',
-            fill: true, tension: 0.3, pointRadius: 5, pointBackgroundColor: '#9b9fbc',
-          }]
-        },
-        options: {
-          responsive: true, ...noLegend,
-          scales: { x: gridOpts, y: { ...gridOpts, min: 0, max: 50, ticks: { callback: v => v + '%' } } },
-          plugins: { tooltip: { callbacks: { label: ctx => ctx.parsed.y + '%' } } }
-        }
-      });
-
-      new Chart(document.getElementById('vacateChart'), {
-        type: 'bar',
-        data: {
-          labels,
-          datasets: [
-            { label: 'New Orders', data: data.map(d => d.vacate_orders_new), backgroundColor: '#d2232a60', borderColor: '#d2232a', borderWidth: 1, borderRadius: 4 },
-            { label: 'Active Orders', data: data.map(d => d.vacate_orders_active), backgroundColor: '#dde44c60', borderColor: '#dde44c', borderWidth: 1, borderRadius: 4 },
-          ]
-        },
-        options: { responsive: true, scales: { x: gridOpts, y: { ...gridOpts, beginAtZero: true } } }
-      });
-
-      new Chart(document.getElementById('restaurantChart'), {
-        type: 'bar',
-        data: {
-          labels,
-          datasets: [
-            { label: 'Critical Violations', data: data.map(d => d.critical_violations), backgroundColor: '#dde44c60', borderColor: '#dde44c', borderWidth: 1, borderRadius: 4 },
-            { label: 'Closures', data: data.map(d => d.restaurant_closures), backgroundColor: '#d2232a60', borderColor: '#d2232a', borderWidth: 1, borderRadius: 4 },
-          ]
-        },
-        options: { responsive: true, scales: { x: gridOpts, y: { ...gridOpts, beginAtZero: true } } }
+        container.appendChild(el);
       });
     }
 
-    function fmt(n) {
-      return Number(n).toLocaleString();
+    // ─── Flags ───
+    function generateClientFlags(data) {
+      const flags = [];
+      const latest = data[data.length - 1];
+      const crashes = Number(latest.crashes || 0);
+      const killed = Number(latest.persons_killed || 0);
+      if (crashes > 0) flags.push({ category: 'Public Safety', severity: killed >= 5 ? 'high' : 'medium', headline: `${fmt(crashes)} crashes, ${killed} killed, ${fmt(Number(latest.persons_injured || 0))} injured`, detail: `${fmt(Number(latest.pedestrians_injured || 0))} pedestrians and ${fmt(Number(latest.cyclists_injured || 0))} cyclists injured. That's ${Math.round(crashes/7)} crashes/day.` });
+      const hpd = Number(latest.hpd_complaints || 0);
+      const heatPct = Number(latest.hpd_heat_pct || 0);
+      if (hpd > 0) { flags.push({ category: 'Housing', severity: heatPct > 30 ? 'high' : 'medium', headline: `${fmt(hpd)} HPD complaints — ${heatPct}% heat/hot water`, detail: `${fmt(Number(latest.hpd_heat_hot_water || 0))} heat/hot water complaints. Heating season should be winding down.` }); }
+      if (Number(latest.hpd_bronx_pct || 0) > 30) flags.push({ category: 'Housing', severity: 'high', headline: `Bronx: ${latest.hpd_bronx_pct}% of housing complaints (14% of population)`, detail: `A ${(latest.hpd_bronx_pct / 14).toFixed(1)}x overrepresentation.` });
+      if (Number(latest.shooting_incidents || 0) === 0) flags.push({ category: 'Public Safety', severity: 'info', headline: 'Shooting data: 0 incidents reported', detail: 'NYPD restructured datasets Feb 2026. Zero may reflect reporting lag.' });
+      if (Number(latest.vacate_orders_new || 0) > 0) flags.push({ category: 'Housing', severity: 'medium', headline: `${latest.vacate_orders_new} new vacate orders, ${latest.vacate_orders_active} active`, detail: 'Buildings ordered vacated or repaired this week.' });
+      if (Number(latest.restaurant_closures || 0) > 0) flags.push({ category: 'Health', severity: 'medium', headline: `${latest.restaurant_closures} restaurant closures, ${latest.critical_violations} critical violations`, detail: `Out of ${fmt(Number(latest.restaurant_inspections || 0))} inspections.` });
+      flags.sort((a, b) => ({high:0,medium:1,info:2}[a.severity]||3) - ({high:0,medium:1,info:2}[b.severity]||3));
+      return flags;
     }
+
+    function initFlags(flags) {
+      if (!flags.length) return;
+      document.getElementById('flags-section').style.display = '';
+      document.getElementById('flags-container').innerHTML = flags.map(f => `
+        <div class="flag-item">
+          <div class="flag-severity ${f.severity || 'info'}"></div>
+          <div class="flag-body">
+            <div class="flag-category">${f.category || ''}</div>
+            <div class="flag-headline">${f.headline}</div>
+            <div class="flag-detail">${f.detail}</div>
+          </div>
+        </div>`).join('');
+    }
+
+    // ─── Borough Bars ───
+    function renderBoroBars(breakdown, opts = {}) {
+      const { color, showBenchmark, perCapita } = opts;
+      const total = Object.values(breakdown).reduce((a,b) => a+b, 0);
+      const maxVal = Math.max(...BORO_ORDER.map(b => breakdown[b] || 0));
+
+      return BORO_ORDER.map(boro => {
+        const val = breakdown[boro] || 0;
+        const pct = total > 0 ? (val / total * 100) : 0;
+        const widthPct = maxVal > 0 ? (val / maxVal * 100) : 0;
+        const popShare = (BORO_POP[boro] / CITY_POP * 100);
+        const benchmarkHTML = showBenchmark ? `<div class="boro-bar-benchmark" style="left:${popShare}%" title="Population share: ${popShare.toFixed(0)}%"></div>` : '';
+        const fillColor = color || BORO_COLORS[boro] || '#707175';
+        const rateHTML = perCapita ? ` <span style="color:var(--vc-chartreuse);font-size:0.6rem;">(${(val / BORO_POP[boro] * 100000).toFixed(0)}/100K)</span>` : '';
+
+        return `<div class="boro-bar-row">
+          <span class="boro-bar-label">${boro.slice(0,3)}</span>
+          <div class="boro-bar-track">${benchmarkHTML}<div class="boro-bar-fill" style="width:${widthPct}%;background:${fillColor};"></div></div>
+          <span class="boro-bar-value">${fmt(val)} <span class="boro-bar-pct">${pct.toFixed(0)}%</span>${rateHTML}</span>
+        </div>`;
+      }).join('');
+    }
+
+    // ─── Donut Chart ───
+    function renderDonut(canvasId, items, size = 120) {
+      const canvas = document.getElementById(canvasId);
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      canvas.width = size * 2; canvas.height = size * 2;
+      canvas.style.width = size + 'px'; canvas.style.height = size + 'px';
+      const cx = size, cy = size, r = size * 0.8, inner = size * 0.5;
+      const total = items.reduce((a, i) => a + i.value, 0);
+      let angle = -Math.PI / 2;
+      items.forEach(item => {
+        const sweep = (item.value / total) * Math.PI * 2;
+        ctx.beginPath();
+        ctx.arc(cx, cy, r, angle, angle + sweep);
+        ctx.arc(cx, cy, inner, angle + sweep, angle, true);
+        ctx.closePath();
+        ctx.fillStyle = item.color;
+        ctx.fill();
+        angle += sweep;
+      });
+    }
+
+    // ─── Data Story Cards ───
+    function initStories(data, detail) {
+      const latest = data[data.length - 1];
+      const container = document.getElementById('story-sections');
+      let html = '';
+
+      // ═══ PUBLIC SAFETY ═══
+      html += `<div class="story-section">
+        <div class="story-section-label">Public Safety</div>
+        <div class="story-grid">`;
+
+      // Crashes card
+      const crashes = Number(latest.crashes || 0);
+      const killed = Number(latest.persons_killed || 0);
+      const injured = Number(latest.persons_injured || 0);
+      const pedInj = Number(latest.pedestrians_injured || 0);
+      const cycInj = Number(latest.cyclists_injured || 0);
+      const pedKilled = Number(latest.pedestrians_killed || 0);
+      const crashBoro = detail?.crashes?.borough_breakdown || {};
+      const crashFactors = detail?.crashes?.top_factors || {};
+
+      html += `<div class="story-card wide">
+        <h3>Motor Vehicle Crashes</h3>
+        <div class="big-stat">
+          <span class="big-stat-number">${fmt(crashes)}</span>
+          <span class="big-stat-context">crashes this week</span>
+        </div>
+        <div class="big-stat-rate">${Math.round(crashes/7)} crashes per day &middot; ${killed} killed &middot; ${fmt(injured)} injured</div>
+        <div class="sub-stats">
+          <div class="sub-stat"><span class="sub-stat-value" style="color:var(--vc-magenta)">${fmt(pedInj)}</span><span class="sub-stat-label">Pedestrians Injured</span></div>
+          <div class="sub-stat"><span class="sub-stat-value" style="color:var(--vc-cerulean)">${fmt(cycInj)}</span><span class="sub-stat-label">Cyclists Injured</span></div>
+          <div class="sub-stat"><span class="sub-stat-value" style="color:var(--vc-baddest-red)">${pedKilled}</span><span class="sub-stat-label">Pedestrians Killed</span></div>
+          <div class="sub-stat"><span class="sub-stat-value">${Math.round(pedInj/7)}/day</span><span class="sub-stat-label">Ped Injury Rate</span></div>
+        </div>`;
+
+      if (Object.keys(crashBoro).length) {
+        html += `<div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-top:1rem;">
+          <div>
+            <div style="font-size:0.7rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.04em;margin-bottom:0.5rem;">By Borough <span style="font-size:0.6rem;opacity:0.6;">(thin line = pop. share)</span></div>
+            <div class="boro-bars">${renderBoroBars(crashBoro, { showBenchmark: true, perCapita: true })}</div>
+          </div>
+          <div>
+            <div style="font-size:0.7rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.04em;margin-bottom:0.5rem;">Top Causes</div>
+            <div id="crash-factors-donut" class="composition-container">
+              <canvas id="crashFactorsCanvas" class="composition-canvas"></canvas>
+              <div class="composition-legend" id="crashFactorsLegend"></div>
+            </div>
+          </div>
+        </div>`;
+      }
+
+      const month = new Date().getMonth() + 1;
+      const springNote = (month >= 3 && month <= 5) ? ' Spring brings more pedestrians and cyclists — injury rates typically climb.' : '';
+      html += `<div class="narrative"><strong>${Math.round(pedInj/7)} pedestrians injured per day</strong> heading into ${month >= 3 && month <= 5 ? 'spring' : 'the season'}.${springNote} Driver inattention remains the top cause.</div>`;
+      html += `</div>`;
+
+      // Shootings card
+      const shootings = Number(latest.shooting_incidents || 0);
+      html += `<div class="story-card">
+        <h3>Shooting Incidents*</h3>
+        <div class="big-stat">
+          <span class="big-stat-number">${shootings}</span>
+          <span class="big-stat-context">incidents reported</span>
+        </div>`;
+      if (shootings === 0) {
+        html += `<div class="narrative">NYPD restructured shooting datasets in Feb 2026, splitting from 2 to 3 datasets. <strong>Zero likely reflects reporting lag</strong>, not absence of shootings.</div>`;
+      } else {
+        const shBoro = detail?.shootings?.borough_breakdown || {};
+        if (Object.keys(shBoro).length) {
+          html += `<div class="boro-bars" style="margin-top:0.75rem;">${renderBoroBars(shBoro, { color: 'var(--vc-baddest-red)', perCapita: true })}</div>`;
+        }
+      }
+      html += `</div>`;
+
+      // Vulnerable road users card (visual breakdown)
+      html += `<div class="story-card">
+        <h3>Who's Getting Hurt</h3>
+        <div id="vu-donut-container" class="composition-container">
+          <canvas id="vuDonut" class="composition-canvas"></canvas>
+          <div class="composition-legend" id="vuLegend"></div>
+        </div>
+        <div class="narrative" style="margin-top:1rem;">Pedestrians and cyclists account for <strong>${Math.round((pedInj + cycInj) / injured * 100)}%</strong> of all injuries despite being the most vulnerable road users.</div>
+      </div>`;
+
+      html += `</div></div>`; // close story-grid, story-section
+
+      // ═══ HOUSING ═══
+      html += `<div class="story-section">
+        <div class="story-section-label">Housing & Development</div>
+        <div class="story-grid">`;
+
+      const hpdTotal = Number(latest.hpd_complaints || 0);
+      const heatHW = Number(latest.hpd_heat_hot_water || 0);
+      const heatPct = Number(latest.hpd_heat_pct || 0);
+      const bronxPct = Number(latest.hpd_bronx_pct || 0);
+      const openPct = Number(latest.hpd_open_pct || 0);
+      const hpdBoro = detail?.hpd?.borough_breakdown || {};
+      const hpdCats = detail?.hpd?.top_categories || {};
+
+      // HPD main card
+      html += `<div class="story-card wide">
+        <h3>HPD Housing Complaints</h3>
+        <div class="big-stat">
+          <span class="big-stat-number">${fmt(hpdTotal)}</span>
+          <span class="big-stat-context">complaints this week</span>
+        </div>
+        <div class="big-stat-rate">${fmt(Math.round(hpdTotal/7))} per day &middot; ${openPct}% still open &middot; ${fmt(Number(latest.hpd_immediate_emergency || 0))} immediate emergencies</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-top:1rem;">
+          <div>
+            <div style="font-size:0.7rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.04em;margin-bottom:0.5rem;">By Borough <span style="font-size:0.6rem;opacity:0.6;">(thin line = pop. share)</span></div>
+            <div class="boro-bars">${renderBoroBars(hpdBoro, { showBenchmark: true, perCapita: true })}</div>
+          </div>
+          <div>
+            <div style="font-size:0.7rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.04em;margin-bottom:0.5rem;">Top Complaint Types</div>
+            <div id="hpd-cats-container" class="composition-container">
+              <canvas id="hpdCatsCanvas" class="composition-canvas"></canvas>
+              <div class="composition-legend" id="hpdCatsLegend"></div>
+            </div>
+          </div>
+        </div>`;
+
+      const bronxCount = hpdBoro['BRONX'] || 0;
+      const bronxPopPct = (BORO_POP.BRONX / CITY_POP * 100).toFixed(0);
+      const seasonNote = (month >= 3 && month <= 5) ? `In mid-March, <strong>${heatPct}% of complaints are still about heat/hot water</strong> — suggesting landlords shutting down boilers as heating season ends, or chronic systems that never got fixed.` : `<strong>${heatPct}%</strong> of complaints are about heat/hot water.`;
+      html += `<div class="narrative">The Bronx accounts for <strong>${bronxPct}%</strong> of complaints with ${bronxPopPct}% of the population — a <strong>${(bronxPct / Number(bronxPopPct)).toFixed(1)}x overrepresentation</strong>. ${seasonNote}</div>`;
+      html += `</div>`;
+
+      // Heat/HW gauge card
+      html += `<div class="story-card">
+        <h3>Heat / Hot Water</h3>
+        <div class="big-stat">
+          <span class="big-stat-number" style="color:var(--vc-orange)">${heatPct}%</span>
+          <span class="big-stat-context">of all complaints</span>
+        </div>
+        <div class="sub-stats">
+          <div class="sub-stat"><span class="sub-stat-value">${fmt(heatHW)}</span><span class="sub-stat-label">Heat/HW Complaints</span></div>
+          <div class="sub-stat"><span class="sub-stat-value">${fmt(hpdTotal - heatHW)}</span><span class="sub-stat-label">All Other Types</span></div>
+        </div>
+        <div style="height:20px;background:rgba(255,255,255,0.05);border-radius:10px;overflow:hidden;margin-top:0.5rem;">
+          <div style="height:100%;width:${heatPct}%;background:linear-gradient(90deg,var(--vc-orange),var(--vc-baddest-red));border-radius:10px;transition:width 0.6s;"></div>
+        </div>
+        <div style="display:flex;justify-content:space-between;font-size:0.65rem;color:var(--muted);margin-top:0.25rem;">
+          <span>0%</span><span>Typical winter: 40-50%</span><span>50%</span>
+        </div>
+      </div>`;
+
+      // Vacate orders card
+      const vacNew = Number(latest.vacate_orders_new || 0);
+      const vacActive = Number(latest.vacate_orders_active || 0);
+      const vacReasons = detail?.vacates?.reasons || {};
+      const vacBoros = detail?.vacates?.boroughs || {};
+      html += `<div class="story-card">
+        <h3>Vacate / Repair Orders</h3>
+        <div class="big-stat">
+          <span class="big-stat-number">${vacNew}</span>
+          <span class="big-stat-context">new orders</span>
+        </div>
+        <div class="big-stat-rate">${vacActive} still active (residents displaced)</div>`;
+      if (Object.keys(vacReasons).length) {
+        const reasonColors = ['#ff7c53','#394882','#dde44c','#9b9fbc','#e7466d'];
+        html += `<div style="margin-top:0.75rem;">`;
+        Object.entries(vacReasons).forEach(([reason, count], i) => {
+          const pct = vacNew > 0 ? (count / vacNew * 100).toFixed(0) : 0;
+          html += `<div style="display:flex;align-items:center;gap:0.5rem;margin-bottom:0.3rem;font-size:0.75rem;">
+            <div style="width:8px;height:8px;border-radius:50%;background:${reasonColors[i % reasonColors.length]};flex-shrink:0;"></div>
+            <span style="flex:1;color:var(--muted)">${reason}</span>
+            <span style="font-weight:700;">${count}</span>
+          </div>`;
+        });
+        html += `</div>`;
+      }
+      if (Object.keys(vacBoros).length) {
+        const topBoro = Object.entries(vacBoros).sort((a,b) => b[1]-a[1])[0];
+        html += `<div class="narrative">${topBoro[0]} leads with <strong>${topBoro[1]} of ${vacNew}</strong> vacate orders.</div>`;
+      }
+      html += `</div>`;
+
+      html += `</div></div>`; // close story-grid, story-section
+
+      // ═══ HEALTH ═══
+      html += `<div class="story-section">
+        <div class="story-section-label">Health</div>
+        <div class="story-grid">`;
+
+      const inspections = Number(latest.restaurant_inspections || 0);
+      const critViol = Number(latest.critical_violations || 0);
+      const closures = Number(latest.restaurant_closures || 0);
+      const grades = detail?.restaurants?.grade_distribution || {};
+
+      html += `<div class="story-card">
+        <h3>Restaurant Inspections</h3>
+        <div class="big-stat">
+          <span class="big-stat-number">${fmt(inspections)}</span>
+          <span class="big-stat-context">inspections</span>
+        </div>
+        <div class="big-stat-rate">${critViol} critical violations &middot; ${closures} closures</div>`;
+      if (Object.keys(grades).length) {
+        html += `<div id="grade-container" class="composition-container" style="margin-top:1rem;">
+          <canvas id="gradeDonut" class="composition-canvas"></canvas>
+          <div class="composition-legend" id="gradeLegend"></div>
+        </div>`;
+      }
+      const closureRate = inspections > 0 ? (closures / inspections * 100).toFixed(1) : 0;
+      html += `<div class="narrative"><strong>${closureRate}% closure rate</strong> this week. ${critViol} critical violations found across ${inspections} inspections — primarily temperature control failures and pest evidence.</div>`;
+      html += `</div>`;
+
+      html += `</div></div>`; // close story-grid, story-section
+
+      container.innerHTML = html;
+
+      // ─── Render donuts after DOM is ready ───
+      requestAnimationFrame(() => {
+        // Crash factors donut
+        if (Object.keys(crashFactors).length) {
+          const factorColors = ['#ff7c53','#394882','#dde44c','#e7466d','#217ebe','#9b9fbc','#57aa4a','#d2232a','#707175','#dde44c80'];
+          const factorItems = Object.entries(crashFactors)
+            .filter(([k]) => k !== 'Unspecified')
+            .slice(0, 6)
+            .map(([k, v], i) => ({ label: k, value: v, color: factorColors[i] }));
+          const unspecified = crashFactors['Unspecified'] || 0;
+          if (unspecified > 0) factorItems.push({ label: 'Unspecified', value: unspecified, color: '#333' });
+          renderDonut('crashFactorsCanvas', factorItems, 70);
+          const factorTotal = factorItems.reduce((a, i) => a + i.value, 0);
+          document.getElementById('crashFactorsLegend').innerHTML = factorItems.filter(i => i.label !== 'Unspecified').map(i =>
+            `<div class="legend-item"><div class="legend-dot" style="background:${i.color}"></div><span class="legend-label">${i.label}</span><span class="legend-value">${(i.value / factorTotal * 100).toFixed(0)}%</span></div>`
+          ).join('');
+        }
+
+        // VU donut (who's getting hurt)
+        const motoristInj = injured - pedInj - cycInj;
+        renderDonut('vuDonut', [
+          { label: 'Motorists', value: motoristInj, color: '#394882' },
+          { label: 'Pedestrians', value: pedInj, color: '#e7466d' },
+          { label: 'Cyclists', value: cycInj, color: '#217ebe' },
+        ], 70);
+        document.getElementById('vuLegend').innerHTML = [
+          { label: 'Motorists', value: motoristInj, color: '#394882' },
+          { label: 'Pedestrians', value: pedInj, color: '#e7466d' },
+          { label: 'Cyclists', value: cycInj, color: '#217ebe' },
+        ].map(i => `<div class="legend-item"><div class="legend-dot" style="background:${i.color}"></div><span class="legend-label">${i.label}</span><span class="legend-value">${fmt(i.value)}</span></div>`).join('');
+
+        // HPD categories donut
+        if (Object.keys(hpdCats).length) {
+          const catColors = ['#ff7c53','#394882','#dde44c','#e7466d','#217ebe','#9b9fbc','#57aa4a','#d2232a'];
+          const catItems = Object.entries(hpdCats).slice(0, 7).map(([k, v], i) => ({ label: k, value: v, color: catColors[i % catColors.length] }));
+          const catRest = hpdTotal - catItems.reduce((a, i) => a + i.value, 0);
+          if (catRest > 0) catItems.push({ label: 'Other', value: catRest, color: '#333' });
+          renderDonut('hpdCatsCanvas', catItems, 70);
+          document.getElementById('hpdCatsLegend').innerHTML = catItems.filter(i => i.label !== 'Other').slice(0, 6).map(i =>
+            `<div class="legend-item"><div class="legend-dot" style="background:${i.color}"></div><span class="legend-label">${i.label.toLowerCase().replace(/\b\w/g, l => l.toUpperCase())}</span><span class="legend-value">${fmt(i.value)}</span></div>`
+          ).join('');
+        }
+
+        // Grade donut
+        if (Object.keys(grades).length) {
+          const gradeColors = { A: '#57aa4a', B: '#dde44c', C: '#ff7c53', Z: '#394882', 'No Grade': '#333', P: '#9b9fbc' };
+          const gradeItems = Object.entries(grades).map(([k, v]) => ({ label: k === 'Z' ? 'Grade Pending' : k === 'No Grade' ? 'No Grade' : `Grade ${k}`, value: v, color: gradeColors[k] || '#707175' }));
+          renderDonut('gradeDonut', gradeItems, 70);
+          document.getElementById('gradeLegend').innerHTML = gradeItems.map(i =>
+            `<div class="legend-item"><div class="legend-dot" style="background:${i.color}"></div><span class="legend-label">${i.label}</span><span class="legend-value">${i.value}</span></div>`
+          ).join('');
+        }
+      });
+    }
+
+    // ─── Monthly ───
+    function initMonthly(data) {
+      const months = {};
+      data.forEach(row => {
+        const mk = row.week_ending.substring(0, 7);
+        if (!months[mk]) months[mk] = { weeks: 0, crashes: 0, killed: 0, injured: 0, ped_injured: 0, cyc_injured: 0, shootings: 0, hpd: 0, heat_hw: 0, vacates: 0, closures: 0 };
+        const m = months[mk]; m.weeks++;
+        m.crashes += Number(row.crashes || 0); m.killed += Number(row.persons_killed || 0); m.injured += Number(row.persons_injured || 0);
+        m.ped_injured += Number(row.pedestrians_injured || 0); m.cyc_injured += Number(row.cyclists_injured || 0);
+        m.shootings += Number(row.shooting_incidents || 0); m.hpd += Number(row.hpd_complaints || 0);
+        m.heat_hw += Number(row.hpd_heat_hot_water || 0); m.vacates += Number(row.vacate_orders_new || 0); m.closures += Number(row.restaurant_closures || 0);
+      });
+      const container = document.getElementById('monthly-table-container');
+      const keys = Object.keys(months).sort();
+      if (!keys.length) { container.innerHTML = '<p style="color:var(--muted);font-size:0.85rem;">Accumulating data.</p>'; return; }
+      let html = `<table class="summary-table"><thead><tr><th>Month</th><th class="num">Wks</th><th class="num">Crashes</th><th class="num">Killed</th><th class="num">Ped Inj</th><th class="num">Cyc Inj</th><th class="num">Shootings</th><th class="num">HPD</th><th class="num">Heat/HW</th><th class="num">Vacates</th></tr></thead><tbody>`;
+      keys.forEach(mk => {
+        const m = months[mk]; const label = new Date(mk + '-15').toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
+        html += `<tr><td>${label}</td><td class="num">${m.weeks}</td><td class="num">${fmt(m.crashes)}</td><td class="num">${m.killed}</td><td class="num">${fmt(m.ped_injured)}</td><td class="num">${fmt(m.cyc_injured)}</td><td class="num">${m.shootings}</td><td class="num">${fmt(m.hpd)}</td><td class="num">${fmt(m.heat_hw)}</td><td class="num">${m.vacates}</td></tr>`;
+      });
+      container.innerHTML = html + '</tbody></table>';
+    }
+
+    // ─── YTD ───
+    function initYTD(data) {
+      const year = new Date().getFullYear().toString();
+      const ytdRows = data.filter(r => r.week_ending.startsWith(year));
+      const container = document.getElementById('ytd-kpis');
+      const detailEl = document.getElementById('ytd-detail');
+      if (!ytdRows.length) { detailEl.innerHTML = '<p style="color:var(--muted);font-size:0.85rem;">No data yet.</p>'; return; }
+      const sum = (f) => ytdRows.reduce((s, r) => s + Number(r[f] || 0), 0);
+      const ytd = { weeks: ytdRows.length, crashes: sum('crashes'), killed: sum('persons_killed'), ped_injured: sum('pedestrians_injured'), cyc_injured: sum('cyclists_injured'), shootings: sum('shooting_incidents'), hpd: sum('hpd_complaints'), heat_hw: sum('hpd_heat_hot_water'), vacates: sum('vacate_orders_new'), closures: sum('restaurant_closures') };
+      [{ label: `Crashes (${ytd.weeks} wks)`, value: fmt(ytd.crashes) }, { label: 'Total Killed', value: ytd.killed }, { label: 'Ped Injured', value: fmt(ytd.ped_injured) }, { label: 'Cyclists Injured', value: fmt(ytd.cyc_injured) }, { label: 'Shooting Incidents', value: ytd.shootings }, { label: 'HPD Complaints', value: fmt(ytd.hpd) }, { label: 'Heat/HW', value: fmt(ytd.heat_hw) }, { label: 'Vacate Orders', value: ytd.vacates }].forEach(k => {
+        const el = document.createElement('div'); el.className = 'kpi';
+        el.innerHTML = `<div class="kpi-label">${k.label}</div><div class="kpi-value">${k.value}</div>`;
+        container.appendChild(el);
+      });
+      detailEl.innerHTML = `<p style="color:var(--muted);font-size:0.85rem;line-height:1.6;margin-top:0.5rem;">Based on <strong style="color:var(--text)">${ytd.weeks} week${ytd.weeks>1?'s':''}</strong> of data. Weekly averages: <strong style="color:var(--text)">${fmt(Math.round(ytd.crashes/ytd.weeks))}</strong> crashes, <strong style="color:var(--text)">${fmt(Math.round(ytd.hpd/ytd.weeks))}</strong> HPD complaints.</p>`;
+    }
+
+    // ─── View Toggle ───
+    function initViewToggle() {
+      document.querySelectorAll('#viewToggle button').forEach(btn => {
+        btn.addEventListener('click', () => {
+          document.querySelectorAll('#viewToggle button').forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          const v = btn.dataset.view;
+          document.getElementById('weekly-view').style.display = v === 'weekly' ? '' : 'none';
+          document.getElementById('monthly-view').style.display = v === 'monthly' ? '' : 'none';
+          document.getElementById('ytd-view').style.display = v === 'ytd' ? '' : 'none';
+        });
+      });
+    }
+
+    loadData();
   </script>
 </body>
 </html>

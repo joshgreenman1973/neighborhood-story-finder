@@ -188,6 +188,47 @@
       line-height: 1.2;
     }
 
+    /* ═══ FLAGS ═══ */
+    .flag-item {
+      padding: 0.75rem 0;
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+      display: flex;
+      gap: 0.75rem;
+      align-items: flex-start;
+    }
+    .flag-item:last-child { border-bottom: none; }
+    .flag-severity {
+      flex-shrink: 0;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      margin-top: 0.5rem;
+    }
+    .flag-severity.high { background: var(--vc-baddest-red); box-shadow: 0 0 6px var(--vc-baddest-red); }
+    .flag-severity.medium { background: var(--vc-orange); }
+    .flag-severity.info { background: var(--vc-periwinkle); }
+    .flag-body { flex: 1; }
+    .flag-headline {
+      font-size: 0.85rem;
+      font-weight: 700;
+      line-height: 1.3;
+    }
+    .flag-detail {
+      font-size: 0.8rem;
+      color: var(--muted);
+      line-height: 1.5;
+      margin-top: 0.15rem;
+      font-family: 'Gascogne', Georgia, serif;
+    }
+    .flag-category {
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--vc-chartreuse);
+      font-weight: 600;
+      margin-bottom: 0.15rem;
+    }
+
     /* ═══ CHART GRID ═══ */
     .grid {
       display: grid;
@@ -350,6 +391,13 @@
       <div id="weekly-view">
       <div class="kpi-row" id="kpis"></div>
 
+      <div id="flags-section" style="display:none;">
+        <div class="card full-width" style="margin-bottom:1.25rem;border-left:3px solid var(--vc-chartreuse);">
+          <h2>What's Notable This Week</h2>
+          <div id="flags-container"></div>
+        </div>
+      </div>
+
       <div class="grid">
         <div class="section-header">Public Safety</div>
 
@@ -433,15 +481,23 @@
 
     let TRENDS_DATA = [];
 
+    let FLAGS_DATA = [];
+
     async function loadData() {
       try {
         const resp = await fetch('data/output/weekly-trends.json');
         if (resp.ok) {
           const json = await resp.json();
           TRENDS_DATA = json.weekly || [];
+          FLAGS_DATA = json.flags || [];
         }
       } catch (e) { /* fallback */ }
       if (!TRENDS_DATA.length) TRENDS_DATA = INLINE_DATA;
+
+      // If no flags from JSON, generate basic ones from the data
+      if (!FLAGS_DATA.length && TRENDS_DATA.length) {
+        FLAGS_DATA = generateClientFlags(TRENDS_DATA);
+      }
 
       if (!TRENDS_DATA.length) {
         document.getElementById('no-data').style.display = 'block';
@@ -451,7 +507,116 @@
       initCharts(TRENDS_DATA);
       initMonthly(TRENDS_DATA);
       initYTD(TRENDS_DATA);
+      initFlags(FLAGS_DATA);
       initViewToggle();
+    }
+
+    function generateClientFlags(data) {
+      // Generate editorial flags client-side when no server-generated ones exist
+      const flags = [];
+      const latest = data[data.length - 1];
+      const prev = data.length > 1 ? data.slice(0, -1) : [];
+      const avg = (field) => {
+        const vals = prev.map(r => Number(r[field] || 0));
+        return vals.length ? vals.reduce((a,b) => a+b, 0) / vals.length : null;
+      };
+
+      // Crash context
+      const crashes = Number(latest.crashes || 0);
+      const crashAvg = avg('crashes');
+      if (crashes > 0) {
+        const context = crashAvg ? ` (avg: ${Math.round(crashAvg)}/week)` : '';
+        const killed = Number(latest.persons_killed || 0);
+        flags.push({
+          category: 'Public Safety', severity: killed >= 5 ? 'high' : 'medium',
+          headline: `${fmt(crashes)} crashes, ${killed} killed, ${fmt(Number(latest.persons_injured || 0))} injured`,
+          detail: `${fmt(Number(latest.pedestrians_injured || 0))} pedestrians and ${fmt(Number(latest.cyclists_injured || 0))} cyclists injured${context}. That's ${Math.round(crashes/7)} crashes/day and ${Math.round(Number(latest.pedestrians_injured || 0)/7)} pedestrians injured/day.`,
+        });
+      }
+
+      // HPD context
+      const hpd = Number(latest.hpd_complaints || 0);
+      const heatPct = Number(latest.hpd_heat_pct || 0);
+      const bronxPct = Number(latest.hpd_bronx_pct || 0);
+      if (hpd > 0) {
+        const hpdAvg = avg('hpd_complaints');
+        const context = hpdAvg ? ` (avg: ${fmt(Math.round(hpdAvg))}/week)` : '';
+        const month = new Date().getMonth() + 1;
+        let seasonNote = '';
+        if (month >= 3 && month <= 5 && heatPct > 25) seasonNote = ' Heating season should be winding down — suggests landlords cutting heat prematurely.';
+        flags.push({
+          category: 'Housing', severity: heatPct > 30 ? 'high' : 'medium',
+          headline: `${fmt(hpd)} HPD complaints — ${heatPct}% heat/hot water`,
+          detail: `${fmt(Number(latest.hpd_heat_hot_water || 0))} heat/hot water complaints${context}.${seasonNote}`,
+        });
+
+        if (bronxPct > 30) {
+          flags.push({
+            category: 'Housing', severity: 'high',
+            headline: `Bronx: ${bronxPct}% of housing complaints (14% of city population)`,
+            detail: `A ${(bronxPct / 14).toFixed(1)}x overrepresentation. The Bronx consistently bears a disproportionate share of the city's housing crisis.`,
+          });
+        }
+      }
+
+      // Shootings
+      const shootings = Number(latest.shooting_incidents || 0);
+      if (shootings === 0) {
+        flags.push({
+          category: 'Public Safety', severity: 'info',
+          headline: 'Shooting data: 0 incidents reported',
+          detail: 'NYPD restructured shooting datasets in Feb 2026 (now 3 separate datasets). Zero may reflect reporting lag rather than no incidents.',
+        });
+      } else {
+        flags.push({
+          category: 'Public Safety', severity: 'high',
+          headline: `${shootings} shooting incidents, ${Number(latest.shooting_murders || 0)} murders`,
+          detail: `${Number(latest.shooting_victims || 0)} total victims this week.`,
+        });
+      }
+
+      // Vacate orders
+      const vacates = Number(latest.vacate_orders_new || 0);
+      if (vacates > 0) {
+        flags.push({
+          category: 'Housing', severity: vacates >= 10 ? 'medium' : 'info',
+          headline: `${vacates} new vacate orders, ${Number(latest.vacate_orders_active || 0)} still active`,
+          detail: `Buildings ordered vacated or repaired this week.`,
+        });
+      }
+
+      // Restaurant closures
+      const closures = Number(latest.restaurant_closures || 0);
+      if (closures > 0) {
+        flags.push({
+          category: 'Health', severity: closures >= 5 ? 'medium' : 'info',
+          headline: `${closures} restaurant closures, ${Number(latest.critical_violations || 0)} critical violations`,
+          detail: `Out of ${fmt(Number(latest.restaurant_inspections || 0))} inspections this week.`,
+        });
+      }
+
+      // Sort by severity
+      const order = {high: 0, medium: 1, info: 2};
+      flags.sort((a, b) => (order[a.severity] || 3) - (order[b.severity] || 3));
+      return flags;
+    }
+
+    function initFlags(flags) {
+      if (!flags.length) return;
+      const section = document.getElementById('flags-section');
+      const container = document.getElementById('flags-container');
+      section.style.display = '';
+
+      container.innerHTML = flags.map(f => `
+        <div class="flag-item">
+          <div class="flag-severity ${f.severity || 'info'}"></div>
+          <div class="flag-body">
+            <div class="flag-category">${f.category || ''}</div>
+            <div class="flag-headline">${f.headline}</div>
+            <div class="flag-detail">${f.detail}</div>
+          </div>
+        </div>
+      `).join('');
     }
 
     loadData();

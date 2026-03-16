@@ -311,7 +311,190 @@ def compute_aggregates(rows):
     return {"monthly": monthly, "ytd": ytd}
 
 
-def save_dashboard_json(rows, aggregates):
+def generate_flags(row, existing_rows, collisions, hpd, vacates, restaurants, shootings, datasets):
+    """Generate editorial flags — anomalies, context, and things worth investigating."""
+    flags = []
+    prev_rows = [r for r in existing_rows if r["week_ending"] != row["week_ending"]]
+
+    # Helper: compute average of a field from previous weeks
+    def avg(field):
+        vals = [float(r.get(field, 0) or 0) for r in prev_rows]
+        return sum(vals) / len(vals) if vals else None
+
+    def pct_change(current, baseline):
+        if not baseline or baseline == 0:
+            return None
+        return round((current - baseline) / baseline * 100, 1)
+
+    # --- Crash anomalies ---
+    if collisions:
+        crash_avg = avg("crashes")
+        killed = int(row.get("persons_killed", 0))
+        killed_avg = avg("persons_killed")
+        ped_inj = int(row.get("pedestrians_injured", 0))
+        ped_avg = avg("pedestrians_injured")
+
+        if crash_avg and pct_change(int(row["crashes"]), crash_avg) and abs(pct_change(int(row["crashes"]), crash_avg)) > 15:
+            chg = pct_change(int(row["crashes"]), crash_avg)
+            direction = "up" if chg > 0 else "down"
+            flags.append({
+                "category": "Public Safety",
+                "severity": "high" if abs(chg) > 25 else "medium",
+                "headline": f"Crashes {'spike' if chg > 0 else 'drop'}: {int(row['crashes'])} this week",
+                "detail": f"{'Up' if chg > 0 else 'Down'} {abs(chg)}% vs {int(crash_avg)}/week average. {int(row['persons_injured'])} injured, {killed} killed.",
+                "direction": direction,
+            })
+
+        if killed >= 5:
+            context = f" (avg: {killed_avg:.1f}/week)" if killed_avg else ""
+            flags.append({
+                "category": "Public Safety",
+                "severity": "high",
+                "headline": f"{killed} killed in traffic this week",
+                "detail": f"{killed} people killed in {int(row['crashes'])} crashes{context}. {int(row.get('pedestrians_killed', 0))} were pedestrians.",
+                "direction": "up",
+            })
+
+        if ped_avg and ped_inj > ped_avg * 1.2:
+            flags.append({
+                "category": "Public Safety",
+                "severity": "medium",
+                "headline": f"Pedestrian injuries elevated: {ped_inj}",
+                "detail": f"Up from {ped_avg:.0f}/week average. That's {ped_inj / 7:.0f}/day heading into {'spring' if datetime.now().month in (3,4,5) else 'the season'} when foot traffic increases.",
+                "direction": "up",
+            })
+
+        # Top contributing factor
+        if collisions.get("top_factors"):
+            top_factor = max(collisions["top_factors"].items(), key=lambda x: x[1] if x[0] != "Unspecified" else 0)
+            if top_factor[0] != "Unspecified":
+                pct = round(top_factor[1] / collisions["total_crashes"] * 100, 1)
+                flags.append({
+                    "category": "Public Safety",
+                    "severity": "info",
+                    "headline": f"Top crash cause: {top_factor[0]}",
+                    "detail": f"Accounts for {pct}% of this week's {collisions['total_crashes']} crashes ({top_factor[1]} incidents).",
+                    "direction": "neutral",
+                })
+
+    # --- HPD anomalies ---
+    if hpd:
+        hpd_total = hpd["total_complaints"]
+        hpd_avg = avg("hpd_complaints")
+        heat_pct = float(row.get("hpd_heat_pct", 0))
+        bronx_pct = float(row.get("hpd_bronx_pct", 0))
+
+        if hpd_avg and pct_change(hpd_total, hpd_avg) and abs(pct_change(hpd_total, hpd_avg)) > 15:
+            chg = pct_change(hpd_total, hpd_avg)
+            flags.append({
+                "category": "Housing",
+                "severity": "high" if abs(chg) > 25 else "medium",
+                "headline": f"HPD complaints {'surge' if chg > 0 else 'drop'}: {hpd_total:,}",
+                "detail": f"{'Up' if chg > 0 else 'Down'} {abs(chg)}% vs {int(hpd_avg):,}/week average.",
+                "direction": "up" if chg > 0 else "down",
+            })
+
+        # Heat/hot water in context
+        month = datetime.now().month
+        season_note = ""
+        if month in (3, 4, 5):
+            season_note = " Heating season should be winding down — this suggests landlords cutting heat prematurely or chronic system failures."
+        elif month in (10, 11):
+            season_note = " Heating season is starting — watch for buildings slow to fire up boilers."
+        if heat_pct > 25:
+            flags.append({
+                "category": "Housing",
+                "severity": "high" if heat_pct > 35 else "medium",
+                "headline": f"Heat/hot water at {heat_pct}% of complaints",
+                "detail": f"{int(row.get('hpd_heat_hot_water', 0)):,} heat/hot water complaints out of {hpd_total:,} total.{season_note}",
+                "direction": "up",
+            })
+
+        # Bronx disproportionality
+        if bronx_pct > 30:
+            flags.append({
+                "category": "Housing",
+                "severity": "high" if bronx_pct > 35 else "medium",
+                "headline": f"Bronx: {bronx_pct}% of housing complaints (14% of population)",
+                "detail": f"The Bronx accounts for {bronx_pct}% of all HPD complaints with only 14% of the city's population — a {bronx_pct / 14:.1f}x overrepresentation.",
+                "direction": "up",
+            })
+
+    # --- Vacate orders ---
+    if vacates and vacates["new_orders"] > 0:
+        vac_avg = avg("vacate_orders_new")
+        detail_parts = []
+        if vacates.get("reasons"):
+            top_reason = max(vacates["reasons"].items(), key=lambda x: x[1])
+            detail_parts.append(f"Top reason: {top_reason[0]}")
+        if vacates.get("boroughs"):
+            top_boro = max(vacates["boroughs"].items(), key=lambda x: x[1])
+            detail_parts.append(f"{top_boro[0]} leads with {top_boro[1]}")
+        context = f" (avg: {vac_avg:.0f}/week)" if vac_avg else ""
+        flags.append({
+            "category": "Housing",
+            "severity": "medium" if vacates["new_orders"] >= 10 else "info",
+            "headline": f"{vacates['new_orders']} new vacate orders, {vacates['still_active']} active",
+            "detail": f"{vacates['new_orders']} buildings ordered vacated or repaired this week{context}. {'. '.join(detail_parts)}.",
+            "direction": "neutral",
+        })
+
+    # --- Shootings ---
+    if shootings and shootings["total_incidents"] > 0:
+        sh_avg = avg("shooting_incidents")
+        context = f" (avg: {sh_avg:.0f}/week)" if sh_avg else ""
+        boro_detail = ""
+        if shootings.get("borough_breakdown"):
+            top_boro = max(shootings["borough_breakdown"].items(), key=lambda x: x[1])
+            boro_detail = f" {top_boro[0]} leads with {top_boro[1]} incidents."
+        flags.append({
+            "category": "Public Safety",
+            "severity": "high",
+            "headline": f"{shootings['total_incidents']} shooting incidents, {shootings['murders']} murders",
+            "detail": f"{shootings['total_victims']} victims this week{context}.{boro_detail}",
+            "direction": "up",
+        })
+    elif shootings and shootings["total_incidents"] == 0:
+        flags.append({
+            "category": "Public Safety",
+            "severity": "info",
+            "headline": "Shooting data: 0 incidents reported",
+            "detail": "NYPD restructured shooting datasets in Feb 2026 (now 3 separate datasets). Zero may reflect reporting lag rather than no incidents.",
+            "direction": "neutral",
+        })
+
+    # --- Restaurant inspections ---
+    if restaurants and restaurants["closures"] > 0:
+        flags.append({
+            "category": "Health",
+            "severity": "medium" if restaurants["closures"] >= 5 else "info",
+            "headline": f"{restaurants['closures']} restaurant closures, {restaurants['critical_violations']} critical violations",
+            "detail": f"Out of {restaurants['total_inspections']} inspections this week.",
+            "direction": "neutral",
+        })
+
+    # --- Dataset catalog flags ---
+    if datasets:
+        high_interest_agencies = {"NYPD", "HPD", "DOB", "DOHMH", "DEP", "DOE", "ACS", "DHS"}
+        notable = [d for d in datasets if d["agency"] in high_interest_agencies and d.get("views_last_week", 0) > 100]
+        if notable:
+            names = [d["name"] for d in sorted(notable, key=lambda x: x.get("views_last_week", 0), reverse=True)[:5]]
+            flags.append({
+                "category": "Data Updates",
+                "severity": "info",
+                "headline": f"{len(datasets)} datasets updated this week",
+                "detail": f"High-traffic updates: {', '.join(names[:3])}{'...' if len(names) > 3 else ''}",
+                "direction": "neutral",
+            })
+
+    # Sort: high severity first
+    severity_order = {"high": 0, "medium": 1, "info": 2}
+    flags.sort(key=lambda f: severity_order.get(f["severity"], 3))
+
+    return flags
+
+
+def save_dashboard_json(rows, aggregates, flags=None, datasets=None):
     """Save JSON for the dashboard to consume."""
     json_path = os.path.join(OUTPUT_DIR, "weekly-trends.json")
     with open(json_path, "w") as f:
@@ -319,6 +502,8 @@ def save_dashboard_json(rows, aggregates):
             "weekly": rows,
             "monthly": aggregates["monthly"],
             "ytd": aggregates["ytd"],
+            "flags": flags or [],
+            "datasets_updated": datasets or [],
             "generated": datetime.now().isoformat(),
         }, f)
     print(f"  Saved dashboard JSON to {json_path}")
@@ -377,7 +562,16 @@ def run_scan():
     save_csv(existing)
 
     aggregates = compute_aggregates(existing)
-    save_dashboard_json(existing, aggregates)
+
+    # Generate editorial flags
+    print("\n[Flags] Generating editorial intelligence...")
+    flags = generate_flags(row, existing, collisions, hpd, vacates, restaurants, shootings, datasets)
+    print(f"  Generated {len(flags)} flags ({sum(1 for f in flags if f['severity']=='high')} high, {sum(1 for f in flags if f['severity']=='medium')} medium)")
+    for f in flags:
+        icon = {"high": "!!", "medium": "!", "info": "-"}.get(f["severity"], " ")
+        print(f"  [{icon}] {f['headline']}")
+
+    save_dashboard_json(existing, aggregates, flags, datasets)
 
     # Save updated datasets list
     datasets_path = os.path.join(OUTPUT_DIR, "updated-datasets.json")

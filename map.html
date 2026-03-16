@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>NYC Data Pulse — Neighborhood Map</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+  <meta name="description" content="Scan NYC neighborhoods for emerging stories using 311 data, Reddit discussions, community board meetings, and local news." />
+
+  <script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
+  <link href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css" rel="stylesheet" />
+
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    .map-nav {
+      display: flex; align-items: center; gap: 0;
+      padding: 0 2rem; height: 48px;
+      background: var(--sd); border-bottom: 1px solid var(--sl);
+      position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+    }
+    .map-nav-brand {
+      font-size: 13px; font-weight: 900; text-transform: uppercase;
+      letter-spacing: -0.01em; margin-right: 2rem;
+      color: var(--st); text-decoration: none;
+    }
+    .map-nav-brand span { color: var(--vc-chartreuse); }
+    .map-nav-links { display: flex; gap: 0; height: 100%; }
+    .map-nav-link {
+      display: flex; align-items: center; padding: 0 1rem;
+      font-size: 12px; font-weight: 600; text-transform: uppercase;
+      letter-spacing: 0.04em; color: var(--sd2); text-decoration: none;
+      border-bottom: 2px solid transparent; transition: color 0.15s;
+    }
+    .map-nav-link:hover { color: var(--st); }
+    .map-nav-link.active { color: var(--vc-chartreuse); border-bottom-color: var(--vc-chartreuse); }
+    #map { top: 48px; height: calc(100vh - 48px); }
+    .header { top: 48px; }
+    .sidebar { height: calc(100vh - 48px); margin-top: 48px; }
+    .loading-overlay { top: 48px; height: calc(100vh - 48px); }
+  </style>
+</head>
+<body>
+
+  <nav class="map-nav">
+    <a href="index.html" class="map-nav-brand">NYC <span>Data Pulse</span></a>
+    <div class="map-nav-links">
+      <a href="index.html" class="map-nav-link">Citywide Trends</a>
+      <a href="map.html" class="map-nav-link active">Neighborhood Map</a>
+    </div>
+  </nav>
+
+  <!-- Loading overlay -->
+  <div id="loading-overlay" class="loading-overlay">
+    <div class="loading-spinner"></div>
+    <div class="loading-text" id="loading-text">Loading neighborhood data...</div>
+    <div class="loading-brand"><img src="assets/vc-logo-black.png" alt="Vital City" /></div>
+  </div>
+
+  <!-- Map -->
+  <div id="map"></div>
+
+  <!-- Header -->
+  <div class="header">
+    <h1>NYC <span>Neighborhood Story Finder</span></h1>
+    <div class="subtitle">Emerging concerns by community district — 311, Reddit, local news, community boards</div>
+    <div class="updated"></div>
+  </div>
+
+  <!-- Sidebar -->
+  <div class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <h2>NYC Neighborhood Story Finder</h2>
+      <div class="district-meta">Click a district on the map to explore story leads</div>
+      <button class="about-toggle" onclick="toggleAbout()">About this tool</button>
+    </div>
+
+    <!-- About panel -->
+    <div class="about-panel" id="about-panel" style="display:none">
+      <button class="about-close" onclick="toggleAbout()">Close</button>
+      <h3>What this is</h3>
+      <p>An early-warning system for neighborhood-level stories across New York City. It scans nine data sources and synthesizes them into story leads for each of the city's 59 community districts.</p>
+      <p>The premise is simple: local stories don't appear out of nowhere. Before a neighborhood concern becomes a media story, it leaves traces across multiple city systems — 311 call logs, community board agendas, council casework, building permits, land use filings, local Reddit threads, and news coverage. This tool surfaces those traces and highlights where they converge.</p>
+
+      <h3>Data sources</h3>
+      <div class="about-sources">
+        <div class="about-source"><strong>311 complaints</strong> (NYC Open Data, Socrata API) — the raw signal of resident frustration, tested for statistical anomalies against an 8-week rolling baseline. Covers 90 days of data, updated daily. Categories include housing, noise, sanitation, pests, safety, transit, infrastructure, and more.</div>
+        <div class="about-source"><strong>Community board meetings</strong> (scraped from 59 CB WordPress sites) — upcoming and recent meetings with committee classifications. Shows which committees are active (land use, public safety, housing, transportation, SLA/licensing, etc.) and what topics are on the agenda. When an issue reaches a CB committee, someone is trying to do something about it.</div>
+        <div class="about-source"><strong>CB budget requests</strong> (NYC Open Data) — what districts keep asking the city to fund. The same request year after year means the problem hasn't been solved.</div>
+        <div class="about-source"><strong>Council constituent cases</strong> (CouncilStat, NYC Open Data) — issues residents have escalated to their elected Council member. Tells you what is politically sticky — 90 days of casework by type.</div>
+        <div class="about-source"><strong>Land use / ULURP applications</strong> (ZAP, NYC Open Data) — rezonings, shelter sitings, special permits, and street redesigns in the pipeline. Tells you what is about to become a fight before it hits the news.</div>
+        <div class="about-source"><strong>DOB building permits</strong> (NYC Open Data) — new building, demolition, and alteration filings. Spikes in filing activity signal development pressure and a changing physical landscape.</div>
+        <div class="about-source"><strong>Reddit discussions</strong> (public JSON feeds from ~12 NYC subreddits) — r/nyc, r/Brooklyn, r/astoria, r/Queens, and neighborhood-specific subs. Mapped to community districts by neighborhood name extraction. Shows the public conversation — whether an issue has broken through or is still simmering.</div>
+        <div class="about-source"><strong>Local news</strong> (RSS feeds from 11+ outlets) — THE CITY, Gothamist, Hell Gate, City Limits, Bklyner, QNS, Bronx Times, Staten Island Advance, Patch NYC, Curbed, and amNewYork. Neighborhood mentions mapped to community districts.</div>
+        <div class="about-source"><strong>AI synthesis</strong> (Claude API) — combines signals from all sources above to identify 3-5 story leads per district, ranked by recency, severity, and convergence across data sources.</div>
+      </div>
+
+      <h3>The convergence signal</h3>
+      <p>The most valuable output is convergence. When a 311 spike in noise complaints lines up with a community board SLA/licensing committee meeting, a council constituent casework trend, and Reddit threads about the same block — that is often the moment before the issue graduates into a media story. The tool highlights these multi-source patterns.</p>
+
+      <h3>How scoring works</h3>
+      <p>Districts are colored by an activity score (0-100) that heavily weights recency. This-week spikes count at full weight; last-week at 0.7x; two weeks ago at 0.4x; three weeks at 0.2x. The score also factors in whether complaint volume is accelerating right now (comparing the last 2 weeks to the prior 2 weeks) and how many different complaint categories are active. Story leads are scored on severity, verifiability, freshness, human interest, and data richness — leads appearing across multiple data sources score highest.</p>
+
+      <h3>Search</h3>
+      <p>The search bar maps common language to official 311 complaint types. Try "dog poop," "rats," "scaffolding," "noise," or "trash" — the tool expands these into the bureaucratic terms the city actually uses.</p>
+
+      <h3>Categories</h3>
+      <p>The most common complaint types get their own filters: heat/hot water, noise, parking (illegal parking, blocked driveways), and streets (potholes, sidewalk conditions). Broader categories — housing, safety, transit, sanitation, pests, development, infrastructure, environment, health — group related complaint types together.</p>
+    </div>
+
+    <!-- Category filters -->
+    <div class="filters">
+      <div class="filter-pill" data-category="heat/hot water">heat/hot water</div>
+      <div class="filter-pill" data-category="noise">noise</div>
+      <div class="filter-pill" data-category="parking">parking</div>
+      <div class="filter-pill" data-category="streets">streets</div>
+      <div class="filter-pill" data-category="sanitation">sanitation</div>
+      <div class="filter-pill" data-category="pests">pests</div>
+      <div class="filter-pill" data-category="housing">housing</div>
+      <div class="filter-pill" data-category="safety">safety</div>
+      <div class="filter-pill" data-category="transit">transit</div>
+      <div class="filter-pill" data-category="development">development</div>
+      <div class="filter-pill" data-category="infrastructure">infrastructure</div>
+      <div class="filter-pill" data-category="environment">environment</div>
+      <div class="filter-pill" data-category="health">health</div>
+    </div>
+
+    <!-- Search -->
+    <div class="search-bar">
+      <input type="text" id="search-input" placeholder="Search districts, complaints, topics..." />
+    </div>
+
+    <!-- View toggle -->
+    <div class="view-toggle">
+      <button class="view-btn active" data-view="map">All Districts</button>
+      <button class="view-btn" data-view="hotspots">Hot Spots</button>
+    </div>
+
+    <!-- Scrollable content -->
+    <div class="sidebar-content">
+      <div class="empty-state">
+        <p>Loading data...</p>
+      </div>
+    </div>
+
+    <!-- VC Footer -->
+    <div class="vc-footer">
+      <a href="https://www.vitalcitynyc.org" target="_blank" rel="noopener"><img class="vc-footer-logo" src="assets/vc-logo-black.png" alt="Vital City" /></a>
+      <span class="vc-footer-text">Data-driven NYC journalism</span>
+    </div>
+  </div>
+
+  <script src="lib/sparkline.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

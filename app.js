@@ -940,10 +940,16 @@ function escapeHtml(str) {
 
 function cleanDescription(str) {
   if (!str) return '';
-  // Decode HTML entities, strip tags, collapse whitespace
+  // Decode HTML entities repeatedly to handle double/triple encoding
   const div = document.createElement('div');
-  div.innerHTML = str;
-  let text = div.textContent || div.innerText || '';
+  let text = str;
+  for (let i = 0; i < 3; i++) {
+    div.innerHTML = text;
+    const decoded = div.textContent || div.innerText || '';
+    if (decoded === text) break;
+    text = decoded;
+  }
+  // Strip any remaining HTML tags, collapse whitespace
   text = text.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
   return escapeHtml(text);
 }

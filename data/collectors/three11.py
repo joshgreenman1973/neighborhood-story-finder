@@ -26,7 +26,7 @@ def fetch_311(days=90, batch_size=50000):
 
     while True:
         params = {
-            "$select": "created_date,complaint_type,descriptor,community_board,borough,latitude,longitude,status",
+            "$select": "created_date,complaint_type,descriptor,community_board,borough,latitude,longitude,status,council_district,police_precinct",
             "$where": f"created_date > '{cutoff}' AND community_board IS NOT NULL",
             "$order": "created_date DESC",
             "$limit": batch_size,
@@ -114,6 +114,8 @@ def aggregate_311(records):
         "by_category": defaultdict(int),
         "weekly": defaultdict(lambda: defaultdict(int)),  # week_key → type → count
         "recent_descriptors": [],
+        "council_districts": defaultdict(int),  # council district → complaint count
+        "precincts": defaultdict(int),  # police precinct → complaint count
     })
 
     now = datetime.now()
@@ -131,6 +133,14 @@ def aggregate_311(records):
         district["total"] += 1
         district["by_type"][complaint_type] += 1
         district["by_category"][category] += 1
+
+        # Track council districts and precincts that overlap this CD
+        council_dist = r.get("council_district")
+        if council_dist:
+            district["council_districts"][council_dist] += 1
+        precinct = r.get("police_precinct")
+        if precinct:
+            district["precincts"][precinct] += 1
 
         # Weekly bucketing
         try:

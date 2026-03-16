@@ -217,15 +217,15 @@ def collect():
     cutoff = time.time() - (14 * 86400)
     filtered = [
         p for p in all_posts
-        if p["created_utc"] > cutoff and (p["score"] >= 10 or p["num_comments"] >= 5)
+        if p["created_utc"] > cutoff and (p["score"] >= 20 or p["num_comments"] >= 10)
     ]
 
     # Score for newsworthiness and sort
     for post in filtered:
         post["news_score"] = newsworthiness_score(post)
 
-    # Drop clearly non-newsy posts
-    filtered = [p for p in filtered if p["news_score"] > 0]
+    # Drop clearly non-newsy posts — raise the bar so only real stories surface
+    filtered = [p for p in filtered if p["news_score"] > 30]
 
     filtered.sort(key=lambda p: p["news_score"], reverse=True)
 

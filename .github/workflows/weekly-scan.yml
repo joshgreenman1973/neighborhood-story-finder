@@ -1,0 +1,33 @@
+name: Weekly Open Data scan
+
+on:
+  schedule:
+    - cron: '0 14 * * 1'    # Mondays at 2pm UTC (9am ET)
+  workflow_dispatch: {}      # Manual trigger
+
+permissions:
+  contents: write
+
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: pip install requests
+
+      - name: Run weekly scan
+        run: python data/scanners/weekly_scan.py
+
+      - name: Commit updated trends
+        run: |
+          git config user.name "github-actions"
+          git config user.email "actions@github.com"
+          git add data/output/weekly-trends.csv data/output/weekly-trends.json data/output/updated-datasets.json
+          git diff --cached --quiet || git commit -m "Weekly scan $(date -u +%Y-%m-%dT%H:%M:%SZ)"
+          git push

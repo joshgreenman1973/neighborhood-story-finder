@@ -225,71 +225,6 @@
 
     .section-header:first-child { padding-top: 0; }
 
-    /* ═══ VIEW TOGGLE ═══ */
-    .view-toggle {
-      display: flex;
-      gap: 0;
-      margin-bottom: 1.5rem;
-      border-bottom: 1px solid var(--border);
-    }
-    .view-toggle button {
-      background: none;
-      border: none;
-      color: var(--muted);
-      font-family: inherit;
-      font-size: 0.8rem;
-      font-weight: 600;
-      padding: 0.6rem 1rem;
-      cursor: pointer;
-      text-transform: uppercase;
-      letter-spacing: 0.04em;
-      border-bottom: 2px solid transparent;
-      transition: all 0.15s;
-    }
-    .view-toggle button:hover { color: var(--text); }
-    .view-toggle button.active {
-      color: var(--vc-chartreuse);
-      border-bottom-color: var(--vc-chartreuse);
-    }
-
-    /* ═══ SUMMARY TABLE ═══ */
-    .summary-table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 0.8rem;
-      font-variant-numeric: tabular-nums;
-    }
-    .summary-table th {
-      text-align: left;
-      padding: 0.6rem 0.75rem;
-      font-size: 0.7rem;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      color: var(--muted);
-      border-bottom: 1px solid var(--border);
-      font-weight: 600;
-    }
-    .summary-table th.num { text-align: right; }
-    .summary-table td {
-      padding: 0.6rem 0.75rem;
-      border-bottom: 1px solid rgba(255,255,255,0.04);
-    }
-    .summary-table td.num { text-align: right; font-variant-numeric: tabular-nums; }
-    .summary-table tr:last-child td { border-bottom: none; }
-    .summary-table .ytd-row { font-weight: 700; background: rgba(221,228,76,0.05); }
-
-    footer {
-      margin-top: 3rem;
-      padding: 1.5rem 0;
-      border-top: 1px solid var(--border);
-      color: var(--muted);
-      font-size: 0.75rem;
-      text-align: center;
-      font-family: 'Gascogne', Georgia, serif;
-    }
-    footer a { color: var(--vc-chartreuse); text-decoration: none; }
-    footer a:hover { text-decoration: underline; }
-
     #no-data {
       text-align: center;
       padding: 4rem 2rem;
@@ -334,13 +269,6 @@
     <div id="no-data" style="display:none;">No trend data found. The weekly scan will populate this dashboard.</div>
 
     <div id="dashboard" style="display:none;">
-      <div class="view-toggle" id="viewToggle">
-        <button class="active" data-view="weekly">Weekly</button>
-        <button data-view="monthly">Monthly</button>
-        <button data-view="ytd">Year to Date</button>
-      </div>
-
-      <div id="weekly-view">
       <div class="kpi-row" id="kpis"></div>
 
       <div class="grid">
@@ -395,172 +323,20 @@
           <canvas id="restaurantChart"></canvas>
         </div>
       </div>
-      </div><!-- /weekly-view -->
-
-      <div id="monthly-view" style="display:none;">
-        <div class="card full-width">
-          <h2>Monthly Summary</h2>
-          <div id="monthly-table-container"></div>
-        </div>
-      </div>
-
-      <div id="ytd-view" style="display:none;">
-        <div class="kpi-row" id="ytd-kpis"></div>
-        <div class="card full-width">
-          <h2>Year-to-Date Totals</h2>
-          <div id="ytd-detail"></div>
-        </div>
-      </div>
     </div>
-
-    <footer>
-      Data from <a href="https://opendata.cityofnewyork.us/" target="_blank">NYC Open Data</a> via Socrata API.
-      For district-level analysis, see the <a href="map.html">Neighborhood Story Finder</a>.
-    </footer>
   </main>
 
   <script>
-    // Inline fallback data (updated by weekly scan script)
-    const INLINE_DATA = [{"week_ending":"2026-03-13","crashes":924,"persons_injured":565,"persons_killed":5,"pedestrians_injured":108,"pedestrians_killed":2,"cyclists_injured":54,"shooting_incidents":0,"shooting_victims":0,"shooting_murders":0,"hpd_complaints":17969,"hpd_heat_hot_water":5822,"hpd_heat_pct":32.4,"hpd_bronx_pct":35.9,"hpd_open_pct":72.0,"hpd_immediate_emergency":717,"vacate_orders_new":20,"vacate_orders_active":12,"restaurant_inspections":126,"critical_violations":61,"restaurant_closures":5,"dob_filings":0,"dob_large_projects_over_1m":0}];
+    const TRENDS_DATA = [{"week_ending":"2026-03-13","crashes":924,"persons_injured":565,"persons_killed":5,"pedestrians_injured":108,"pedestrians_killed":2,"cyclists_injured":54,"shooting_incidents":0,"shooting_victims":0,"shooting_murders":0,"hpd_complaints":17969,"hpd_heat_hot_water":5822,"hpd_heat_pct":32.4,"hpd_bronx_pct":35.9,"hpd_open_pct":72.0,"hpd_immediate_emergency":717,"vacate_orders_new":20,"vacate_orders_active":12,"restaurant_inspections":126,"critical_violations":61,"restaurant_closures":5,"dob_filings":0,"dob_large_projects_over_1m":0}];
 
-    let TRENDS_DATA = [];
-
-    async function loadData() {
-      try {
-        const resp = await fetch('data/output/weekly-trends.json');
-        if (resp.ok) {
-          const json = await resp.json();
-          TRENDS_DATA = json.weekly || [];
-        }
-      } catch (e) { /* fallback */ }
-      if (!TRENDS_DATA.length) TRENDS_DATA = INLINE_DATA;
-
-      if (!TRENDS_DATA.length) {
-        document.getElementById('no-data').style.display = 'block';
-        return;
-      }
+    if (!TRENDS_DATA.length) {
+      document.getElementById('no-data').style.display = 'block';
+    } else {
       document.getElementById('dashboard').style.display = '';
-      initCharts(TRENDS_DATA);
-      initMonthly(TRENDS_DATA);
-      initYTD(TRENDS_DATA);
-      initViewToggle();
+      init(TRENDS_DATA);
     }
 
-    loadData();
-
-    function initViewToggle() {
-      document.querySelectorAll('#viewToggle button').forEach(btn => {
-        btn.addEventListener('click', () => {
-          document.querySelectorAll('#viewToggle button').forEach(b => b.classList.remove('active'));
-          btn.classList.add('active');
-          const v = btn.dataset.view;
-          document.getElementById('weekly-view').style.display = v === 'weekly' ? '' : 'none';
-          document.getElementById('monthly-view').style.display = v === 'monthly' ? '' : 'none';
-          document.getElementById('ytd-view').style.display = v === 'ytd' ? '' : 'none';
-        });
-      });
-    }
-
-    function initMonthly(data) {
-      const months = {};
-      data.forEach(row => {
-        const mk = row.week_ending.substring(0, 7);
-        if (!months[mk]) months[mk] = { weeks: 0, crashes: 0, killed: 0, injured: 0, ped_injured: 0, cyc_injured: 0, shootings: 0, sh_victims: 0, sh_murders: 0, hpd: 0, heat_hw: 0, vacates: 0, closures: 0 };
-        const m = months[mk];
-        m.weeks++;
-        m.crashes += Number(row.crashes || 0);
-        m.killed += Number(row.persons_killed || 0);
-        m.injured += Number(row.persons_injured || 0);
-        m.ped_injured += Number(row.pedestrians_injured || 0);
-        m.cyc_injured += Number(row.cyclists_injured || 0);
-        m.shootings += Number(row.shooting_incidents || 0);
-        m.sh_victims += Number(row.shooting_victims || 0);
-        m.sh_murders += Number(row.shooting_murders || 0);
-        m.hpd += Number(row.hpd_complaints || 0);
-        m.heat_hw += Number(row.hpd_heat_hot_water || 0);
-        m.vacates += Number(row.vacate_orders_new || 0);
-        m.closures += Number(row.restaurant_closures || 0);
-      });
-
-      const container = document.getElementById('monthly-table-container');
-      const keys = Object.keys(months).sort();
-      if (!keys.length) {
-        container.innerHTML = '<p style="color:var(--muted);font-size:0.85rem;">Accumulating data. Monthly view will populate as more weeks are scanned.</p>';
-        return;
-      }
-
-      let html = `<table class="summary-table"><thead><tr>
-        <th>Month</th><th class="num">Wks</th><th class="num">Crashes</th><th class="num">Killed</th>
-        <th class="num">Ped Inj</th><th class="num">Cyc Inj</th><th class="num">Shootings</th>
-        <th class="num">HPD Comp</th><th class="num">Heat/HW</th><th class="num">Vacates</th>
-      </tr></thead><tbody>`;
-
-      keys.forEach(mk => {
-        const m = months[mk];
-        const label = new Date(mk + '-15').toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
-        const heatPct = m.hpd > 0 ? (m.heat_hw / m.hpd * 100).toFixed(0) : 0;
-        html += `<tr>
-          <td>${label}</td><td class="num">${m.weeks}</td><td class="num">${fmt(m.crashes)}</td><td class="num">${m.killed}</td>
-          <td class="num">${fmt(m.ped_injured)}</td><td class="num">${fmt(m.cyc_injured)}</td><td class="num">${m.shootings}</td>
-          <td class="num">${fmt(m.hpd)}</td><td class="num">${fmt(m.heat_hw)} (${heatPct}%)</td><td class="num">${m.vacates}</td>
-        </tr>`;
-      });
-      html += '</tbody></table>';
-      container.innerHTML = html;
-    }
-
-    function initYTD(data) {
-      const year = new Date().getFullYear().toString();
-      const ytdRows = data.filter(r => r.week_ending.startsWith(year));
-      const container = document.getElementById('ytd-kpis');
-      const detail = document.getElementById('ytd-detail');
-
-      if (!ytdRows.length) {
-        detail.innerHTML = '<p style="color:var(--muted);font-size:0.85rem;">No data for the current year yet.</p>';
-        return;
-      }
-
-      const sum = (field) => ytdRows.reduce((s, r) => s + Number(r[field] || 0), 0);
-      const ytd = {
-        weeks: ytdRows.length,
-        crashes: sum('crashes'), killed: sum('persons_killed'), injured: sum('persons_injured'),
-        ped_injured: sum('pedestrians_injured'), ped_killed: sum('pedestrians_killed'),
-        cyc_injured: sum('cyclists_injured'),
-        shootings: sum('shooting_incidents'), sh_victims: sum('shooting_victims'), sh_murders: sum('shooting_murders'),
-        hpd: sum('hpd_complaints'), heat_hw: sum('hpd_heat_hot_water'),
-        vacates: sum('vacate_orders_new'), closures: sum('restaurant_closures'),
-      };
-
-      const kpis = [
-        { label: `Crashes (${ytd.weeks} wks)`, value: fmt(ytd.crashes) },
-        { label: 'Total Killed', value: ytd.killed },
-        { label: 'Ped Injured', value: fmt(ytd.ped_injured) },
-        { label: 'Cyclists Injured', value: fmt(ytd.cyc_injured) },
-        { label: 'Shooting Incidents', value: ytd.shootings },
-        { label: 'HPD Complaints', value: fmt(ytd.hpd) },
-        { label: 'Heat/HW Complaints', value: fmt(ytd.heat_hw) },
-        { label: 'Vacate Orders', value: ytd.vacates },
-      ];
-
-      kpis.forEach(k => {
-        const el = document.createElement('div');
-        el.className = 'kpi';
-        el.innerHTML = `<div class="kpi-label">${k.label}</div><div class="kpi-value">${k.value}</div>`;
-        container.appendChild(el);
-      });
-
-      const avgCrashes = Math.round(ytd.crashes / ytd.weeks);
-      const avgHPD = Math.round(ytd.hpd / ytd.weeks);
-      const heatPct = ytd.hpd > 0 ? (ytd.heat_hw / ytd.hpd * 100).toFixed(1) : 0;
-      detail.innerHTML = `<p style="color:var(--muted);font-size:0.85rem;line-height:1.6;margin-top:0.5rem;">
-        Based on <strong style="color:var(--text)">${ytd.weeks} week${ytd.weeks > 1 ? 's' : ''}</strong> of data in ${year}.<br>
-        Weekly averages: <strong style="color:var(--text)">${fmt(avgCrashes)}</strong> crashes,
-        <strong style="color:var(--text)">${fmt(avgHPD)}</strong> HPD complaints,
-        <strong style="color:var(--text)">${heatPct}%</strong> heat/hot water.
-      </p>`;
-    }
-
-    function initCharts(data) {
+    function init(data) {
       const latest = data[data.length - 1];
       const prev = data.length > 1 ? data[data.length - 2] : null;
       const labels = data.map(d => {

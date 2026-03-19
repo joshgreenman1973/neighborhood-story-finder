@@ -494,12 +494,231 @@ def generate_flags(row, existing_rows, collisions, hpd, vacates, restaurants, sh
     return flags
 
 
-def save_dashboard_json(rows, aggregates, flags=None, datasets=None, detail=None):
+def compute_baselines(week_ending_str):
+    """Compute 2025 annual averages and same-week-prior-year data for YoY comparison."""
+    print("\n[Baselines] Querying prior-year data for comparison...")
+
+    prior_year = str(int(week_ending_str[:4]) - 1)
+    # Same week last year: 7-day window ending on same date minus 1 year
+    we = datetime.strptime(week_ending_str, "%Y-%m-%d")
+    prior_we = we.replace(year=we.year - 1)
+    prior_start = (prior_we - timedelta(days=6)).strftime("%Y-%m-%d")
+    prior_end = prior_we.strftime("%Y-%m-%d")
+
+    baselines = {"annual_prev_year": {}, "same_week_prior_year": {}, "diverging_trends": []}
+
+    # --- Annual averages (full prior year) ---
+    try:
+        r = fetch_json(f"{BASE}/h9gi-nx95.json", {
+            "$where": f"crash_date between '{prior_year}-01-01' and '{prior_year}-12-31'",
+            "$select": "count(*) as total, sum(number_of_persons_killed) as killed, "
+                       "sum(number_of_pedestrians_injured) as ped_inj, "
+                       "sum(number_of_cyclist_injured) as cyc_inj",
+        })
+        if r and r[0].get("total"):
+            total = int(r[0]["total"])
+            baselines["annual_prev_year"]["crashes_per_week"] = round(total / 52)
+            baselines["annual_prev_year"]["persons_killed_per_week"] = round(int(r[0].get("killed", 0) or 0) / 52, 1)
+            baselines["annual_prev_year"]["pedestrians_injured_per_week"] = round(int(r[0].get("ped_inj", 0) or 0) / 52)
+            baselines["annual_prev_year"]["cyclists_injured_per_week"] = round(int(r[0].get("cyc_inj", 0) or 0) / 52)
+            print(f"  Crashes {prior_year}: {total}/yr = {total//52}/wk")
+    except Exception as e:
+        print(f"  [warn] Crash baseline failed: {e}")
+
+    try:
+        r = fetch_json(f"{BASE}/ygpa-z7cr.json", {
+            "$where": f"receiveddate between '{prior_year}-01-01T00:00:00' and '{prior_year}-12-31T23:59:59'",
+            "$select": "count(*) as total",
+        })
+        if r and r[0].get("total"):
+            total = int(r[0]["total"])
+            baselines["annual_prev_year"]["hpd_complaints_per_week"] = round(total / 52)
+            print(f"  HPD {prior_year}: {total}/yr = {total//52}/wk")
+        r2 = fetch_json(f"{BASE}/ygpa-z7cr.json", {
+            "$where": f"receiveddate between '{prior_year}-01-01T00:00:00' and '{prior_year}-12-31T23:59:59'"
+                       f" AND upper(majorcategory)='HEAT/HOT WATER'",
+            "$select": "count(*) as total",
+        })
+        if r2 and r2[0].get("total"):
+            hw = int(r2[0]["total"])
+            baselines["annual_prev_year"]["hpd_heat_hw_per_week"] = round(hw / 52)
+            if total:
+                baselines["annual_prev_year"]["hpd_heat_pct"] = round(hw / total * 100, 1)
+    except Exception as e:
+        print(f"  [warn] HPD baseline failed: {e}")
+
+    try:
+        r = fetch_json(f"{BASE}/5ucz-vwe8.json", {
+            "$where": f"occur_date between '{prior_year}-01-01' and '{prior_year}-12-31'",
+            "$select": "count(*) as total",
+        })
+        if r and r[0].get("total"):
+            baselines["annual_prev_year"]["shooting_incidents_per_week"] = round(int(r[0]["total"]) / 52, 1)
+    except Exception as e:
+        print(f"  [warn] Shooting baseline failed: {e}")
+
+    try:
+        r = fetch_json(f"{BASE}/tb8q-a3ar.json", {
+            "$where": f"vacate_effective_date between '{prior_year}-01-01' and '{prior_year}-12-31'",
+            "$select": "count(*) as total",
+        })
+        if r and r[0].get("total"):
+            baselines["annual_prev_year"]["vacate_orders_per_week"] = round(int(r[0]["total"]) / 52)
+    except Exception as e:
+        print(f"  [warn] Vacate baseline failed: {e}")
+
+    try:
+        r = fetch_json(f"{BASE}/43nn-pn8j.json", {
+            "$where": f"inspection_date between '{prior_year}-01-01T00:00:00' and '{prior_year}-12-31T23:59:59'"
+                       f" AND action like 'Establishment Closed%25'",
+            "$select": "count(*) as total",
+        })
+        if r and r[0].get("total"):
+            baselines["annual_prev_year"]["restaurant_closures_per_week"] = round(int(r[0]["total"]) / 52)
+    except Exception as e:
+        print(f"  [warn] Restaurant baseline failed: {e}")
+
+    # --- Same week prior year ---
+    print(f"  Querying same-week {prior_year} ({prior_start} to {prior_end})...")
+    sw = baselines["same_week_prior_year"]
+    sw["week_ending"] = prior_end
+
+    try:
+        rows = fetch_json(f"{BASE}/h9gi-nx95.json", {
+            "$where": f"crash_date between '{prior_start}' and '{prior_end}'",
+            "$select": "count(*) as total, sum(number_of_persons_killed) as killed, "
+                       "sum(number_of_pedestrians_injured) as ped_inj, "
+                       "sum(number_of_cyclist_injured) as cyc_inj",
+        })
+        if rows and rows[0].get("total"):
+            sw["crashes"] = int(rows[0]["total"])
+            sw["persons_killed"] = int(rows[0].get("killed", 0) or 0)
+            sw["pedestrians_injured"] = int(rows[0].get("ped_inj", 0) or 0)
+            sw["cyclists_injured"] = int(rows[0].get("cyc_inj", 0) or 0)
+    except Exception as e:
+        print(f"  [warn] Same-week crash query failed: {e}")
+
+    try:
+        r = fetch_json(f"{BASE}/ygpa-z7cr.json", {
+            "$where": f"receiveddate between '{prior_start}T00:00:00' and '{prior_end}T23:59:59'",
+            "$select": "count(*) as total",
+        })
+        if r and r[0].get("total"):
+            sw["hpd_complaints"] = int(r[0]["total"])
+        r2 = fetch_json(f"{BASE}/ygpa-z7cr.json", {
+            "$where": f"receiveddate between '{prior_start}T00:00:00' and '{prior_end}T23:59:59'"
+                       f" AND upper(majorcategory)='HEAT/HOT WATER'",
+            "$select": "count(*) as total",
+        })
+        if r2 and r2[0].get("total"):
+            sw["hpd_heat_hot_water"] = int(r2[0]["total"])
+            if sw.get("hpd_complaints"):
+                sw["hpd_heat_pct"] = round(sw["hpd_heat_hot_water"] / sw["hpd_complaints"] * 100, 1)
+    except Exception as e:
+        print(f"  [warn] Same-week HPD query failed: {e}")
+
+    try:
+        r = fetch_json(f"{BASE}/5ucz-vwe8.json", {
+            "$where": f"occur_date between '{prior_start}' and '{prior_end}'",
+            "$select": "count(*) as total",
+        })
+        if r and r[0].get("total"):
+            sw["shooting_incidents"] = int(r[0]["total"])
+    except Exception as e:
+        print(f"  [warn] Same-week shooting query failed: {e}")
+
+    try:
+        r = fetch_json(f"{BASE}/43nn-pn8j.json", {
+            "$where": f"inspection_date between '{prior_start}T00:00:00' and '{prior_end}T23:59:59'"
+                       f" AND action like 'Establishment Closed%25'",
+            "$select": "count(*) as total",
+        })
+        if r and r[0].get("total"):
+            sw["restaurant_closures"] = int(r[0]["total"])
+    except Exception as e:
+        print(f"  [warn] Same-week restaurant query failed: {e}")
+
+    try:
+        r = fetch_json(f"{BASE}/tb8q-a3ar.json", {
+            "$where": f"vacate_effective_date between '{prior_start}' and '{prior_end}'",
+            "$select": "count(*) as total",
+        })
+        if r and r[0].get("total"):
+            sw["vacate_orders_new"] = int(r[0]["total"])
+    except Exception as e:
+        print(f"  [warn] Same-week vacate query failed: {e}")
+
+    print(f"  Baselines computed: {len(baselines['annual_prev_year'])} annual, {len(sw)-1} same-week")
+    return baselines
+
+
+def compute_diverging_trends(current_row, baselines):
+    """Flag metrics that are diverging significantly from prior year patterns."""
+    diverging = []
+    ann = baselines.get("annual_prev_year", {})
+    sw = baselines.get("same_week_prior_year", {})
+
+    comparisons = [
+        ("Crashes", float(current_row.get("crashes", 0)), sw.get("crashes"), ann.get("crashes_per_week")),
+        ("Killed in traffic", float(current_row.get("persons_killed", 0)), sw.get("persons_killed"), ann.get("persons_killed_per_week")),
+        ("Pedestrian injuries", float(current_row.get("pedestrians_injured", 0)), sw.get("pedestrians_injured"), ann.get("pedestrians_injured_per_week")),
+        ("Cyclist injuries", float(current_row.get("cyclists_injured", 0)), sw.get("cyclists_injured"), ann.get("cyclists_injured_per_week")),
+        ("HPD complaints", float(current_row.get("hpd_complaints", 0)), sw.get("hpd_complaints"), ann.get("hpd_complaints_per_week")),
+        ("Shooting incidents", float(current_row.get("shooting_incidents", 0)), sw.get("shooting_incidents"), ann.get("shooting_incidents_per_week")),
+        ("Restaurant closures", float(current_row.get("restaurant_closures", 0)), sw.get("restaurant_closures"), ann.get("restaurant_closures_per_week")),
+        ("Vacate orders", float(current_row.get("vacate_orders_new", 0)), sw.get("vacate_orders_new"), ann.get("vacate_orders_per_week")),
+    ]
+
+    for metric, this_week, same_week, avg_week in comparisons:
+        if same_week is None and avg_week is None:
+            continue
+        yoy_pct = round((this_week - same_week) / same_week * 100, 1) if same_week and same_week > 0 else None
+        vs_avg_pct = round((this_week - avg_week) / avg_week * 100, 1) if avg_week and avg_week > 0 else None
+        # Flag if >15% YoY change OR >20% vs annual avg
+        if (yoy_pct is not None and abs(yoy_pct) > 15) or (vs_avg_pct is not None and abs(vs_avg_pct) > 20):
+            direction = "up" if (yoy_pct or 0) > 0 else "down"
+            note = _divergence_note(metric, this_week, same_week, avg_week, yoy_pct, vs_avg_pct, direction)
+            diverging.append({
+                "metric": metric,
+                "this_week": this_week,
+                "same_week_prior_year": same_week,
+                "annual_avg_prior_year": avg_week,
+                "yoy_pct": yoy_pct,
+                "vs_avg_pct": vs_avg_pct,
+                "direction": direction,
+                "note": note,
+            })
+
+    # Sort by absolute YoY change
+    diverging.sort(key=lambda d: abs(d.get("yoy_pct") or 0), reverse=True)
+    return diverging
+
+
+def _divergence_note(metric, this_week, same_week, avg_week, yoy_pct, vs_avg_pct, direction):
+    """Generate a human-readable note about a diverging trend."""
+    m = metric.lower()
+    if yoy_pct is not None and abs(yoy_pct) > 40:
+        if direction == "down":
+            return f"{metric} down sharply vs same week last year — possible data lag or genuine improvement"
+        return f"{metric} well above same week last year — worth investigating"
+    if yoy_pct is not None and vs_avg_pct is not None:
+        if (yoy_pct > 0) != (vs_avg_pct > 0):
+            return f"{metric} diverging: {'above' if yoy_pct > 0 else 'below'} same week last year but {'above' if vs_avg_pct > 0 else 'below'} annual average"
+        if direction == "up":
+            return f"{metric} trending above both last year and annual average"
+        return f"{metric} trending below both last year and annual average"
+    if yoy_pct is not None:
+        return f"{metric} {'up' if direction == 'up' else 'down'} {abs(yoy_pct):.0f}% vs same week last year"
+    return f"{metric} {'above' if direction == 'up' else 'below'} annual average by {abs(vs_avg_pct):.0f}%"
+
+
+def save_dashboard_json(rows, aggregates, flags=None, datasets=None, detail=None, baselines=None):
     """Save JSON for the dashboard to consume."""
     json_path = os.path.join(OUTPUT_DIR, "weekly-trends.json")
     with open(json_path, "w") as f:
         json.dump({
             "weekly": rows,
+            "baselines": baselines or {},
             "monthly": aggregates["monthly"],
             "ytd": aggregates["ytd"],
             "flags": flags or [],
@@ -599,7 +818,17 @@ def run_scan():
             "borough_breakdown": shootings.get("borough_breakdown", {}),
         }
 
-    save_dashboard_json(existing, aggregates, flags, datasets, detail)
+    # Compute prior-year baselines and diverging trends
+    baselines = compute_baselines(week_ending)
+    diverging = compute_diverging_trends(row, baselines)
+    baselines["diverging_trends"] = diverging
+    print(f"\n[Diverging] {len(diverging)} metrics diverging from prior year:")
+    for d in diverging:
+        arrow = "↑" if d["direction"] == "up" else "↓"
+        yoy = f"{d['yoy_pct']:+.0f}% YoY" if d.get("yoy_pct") is not None else ""
+        print(f"  {arrow} {d['metric']}: {yoy} — {d['note']}")
+
+    save_dashboard_json(existing, aggregates, flags, datasets, detail, baselines)
 
     # Save updated datasets list
     datasets_path = os.path.join(OUTPUT_DIR, "updated-datasets.json")

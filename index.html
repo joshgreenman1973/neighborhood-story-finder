@@ -379,6 +379,7 @@ canvas.spark { display: block; margin: 6px auto 0; }
     <button class="nav-tab" data-view="housing">Housing</button>
     <button class="nav-tab" data-view="quality">Quality of Life</button>
     <button class="nav-tab" data-view="ops">Operations</button>
+    <a class="nav-tab" href="map.html" style="text-decoration:none">Neighborhood Map</a>
   </div>
   <div class="nav-status">
     <span id="statusText"><span class="status-dot loading"></span>Loading data&#8230;</span>
@@ -398,7 +399,7 @@ canvas.spark { display: block; margin: 6px auto 0; }
   <!-- KPI RAIL -->
   <div class="kpi-rail" id="kpiRail">
     <div class="kpi" id="kpi-shelter"><div class="kpi-label">People in Shelter</div><div class="kpi-value loading-val">&#8230;</div></div>
-    <div class="kpi" id="kpi-felonies"><div class="kpi-label">Felonies (3 mo)</div><div class="kpi-value loading-val">&#8230;</div></div>
+    <div class="kpi" id="kpi-felonies"><div class="kpi-label">Felonies (YTD)</div><div class="kpi-value loading-val">&#8230;</div></div>
     <div class="kpi" id="kpi-crashes"><div class="kpi-label">Crashes / Week</div><div class="kpi-value loading-val">&#8230;</div></div>
     <div class="kpi" id="kpi-killed"><div class="kpi-label">Traffic Deaths / Wk</div><div class="kpi-value loading-val">&#8230;</div></div>
     <div class="kpi" id="kpi-hpd"><div class="kpi-label">HPD Complaints / Wk</div><div class="kpi-value loading-val">&#8230;</div></div>
@@ -965,36 +966,40 @@ async function loadShelter() {
 
 async function loadCrime() {
   try {
-    const [latest] = await q('5uac-w243','$select=max(cmplnt_fr_dt) as latest&$limit=1');
-    const endDate = latest?.latest || '2025-12-31';
-    const end = new Date(endDate);
-    const sp = new Date(end); sp.setMonth(end.getMonth()-3);
-    const pp = new Date(sp); pp.setMonth(sp.getMonth()-3);
-    const periodStart = sp.toISOString().slice(0,10);
-    const priorStart = pp.toISOString().slice(0,10);
-    const periodEnd = end.toISOString().slice(0,10);
+    // Find latest data year, then do YTD vs same YTD prior year
+    const [latestRec] = await q('5uac-w243','$select=max(cmplnt_fr_dt) as latest&$limit=1');
+    const latestDate = new Date(latestRec?.latest || '2025-12-31');
+    const dataYear = latestDate.getFullYear();
+    const now = new Date();
+    // Use today's month/day as the YTD cutoff, but in the data year
+    const cutoffMD = now.toISOString().slice(5,10); // e.g. "03-19"
+    const ytdStart = dataYear + '-01-01';
+    const ytdEnd = dataYear + '-' + cutoffMD;
+    const priorYtdStart = (dataYear-1) + '-01-01';
+    const priorYtdEnd = (dataYear-1) + '-' + cutoffMD;
 
-    const [felonies, [priorFel], byBoro, monthlyTrend] = await Promise.all([
-      q('5uac-w243',`$select=ofns_desc,count(*) as cnt&$where=law_cat_cd='FELONY' AND cmplnt_fr_dt>='${periodStart}' AND cmplnt_fr_dt<='${periodEnd}'&$group=ofns_desc&$order=cnt DESC&$limit=10`),
-      q('5uac-w243',`$select=count(*) as cnt&$where=law_cat_cd='FELONY' AND cmplnt_fr_dt>='${priorStart}' AND cmplnt_fr_dt<'${periodStart}'`),
-      q('5uac-w243',`$select=boro_nm as boro,count(*) as cnt&$where=law_cat_cd='FELONY' AND cmplnt_fr_dt>='${periodStart}' AND cmplnt_fr_dt<='${periodEnd}' AND boro_nm IS NOT NULL AND boro_nm != '(null)'&$group=boro_nm&$order=cnt DESC`),
-      q('5uac-w243',`$select=date_trunc_ym(cmplnt_fr_dt) as month,count(*) as cnt&$where=law_cat_cd='FELONY' AND cmplnt_fr_dt>='${new Date(end.getFullYear()-1, end.getMonth(), end.getDate()).toISOString().slice(0,10)}'&$group=month&$order=month`),
+    // Current YTD from current-year dataset; prior YTD from historical dataset (qgea-i56i)
+    const [felonies, [priorYtdFel], byBoro, monthlyTrend] = await Promise.all([
+      q('5uac-w243',`$select=ofns_desc,count(*) as cnt&$where=law_cat_cd='FELONY' AND cmplnt_fr_dt>='${ytdStart}' AND cmplnt_fr_dt<='${ytdEnd}'&$group=ofns_desc&$order=cnt DESC&$limit=10`),
+      q('qgea-i56i',`$select=count(*) as cnt&$where=law_cat_cd='FELONY' AND cmplnt_fr_dt>='${priorYtdStart}' AND cmplnt_fr_dt<='${priorYtdEnd}'`),
+      q('5uac-w243',`$select=boro_nm as boro,count(*) as cnt&$where=law_cat_cd='FELONY' AND cmplnt_fr_dt>='${ytdStart}' AND cmplnt_fr_dt<='${ytdEnd}' AND boro_nm IS NOT NULL AND boro_nm != '(null)'&$group=boro_nm&$order=cnt DESC`),
+      q('5uac-w243',`$select=date_trunc_ym(cmplnt_fr_dt) as month,count(*) as cnt&$where=law_cat_cd='FELONY' AND cmplnt_fr_dt>='${ytdStart}'&$group=month&$order=month`),
     ]);
 
     const totalFelonies = felonies.reduce((s,r)=>s+Number(r.cnt),0);
-    const priorTotal = priorFel ? Number(priorFel.cnt) : null;
+    const priorTotal = priorYtdFel ? Number(priorYtdFel.cnt) : null;
 
     // KPI
     setKPI('kpi-felonies', fmt(totalFelonies),
-      priorTotal ? compBadge(totalFelonies, priorTotal, false, 'vs prior 3mo') : null
+      priorTotal ? compBadge(totalFelonies, priorTotal, false, `vs \u2019${String(dataYear-1).slice(2)} YTD`) : null
     );
 
-    setBadge('crime-badge', `through ${fmtShort(endDate)}`);
-    const periodLabel = `${fmtShort(periodStart)}\u2013${fmtShort(periodEnd)}`;
-    let html = `<div class="big-stat"><div class="big-number" style="color:var(--orange)">${fmt(totalFelonies)}</div><div class="big-label">felonies (${periodLabel})</div></div>`;
+    const ytdLabel = `Jan 1\u2013${fmtShort(ytdEnd)}`;
+    setBadge('crime-badge', `${dataYear} YTD`);
+    let html = `<div class="big-stat"><div class="big-number" style="color:var(--orange)">${fmt(totalFelonies)}</div><div class="big-label">felonies (${ytdLabel}, ${dataYear})</div></div>`;
 
     if (priorTotal) {
-      const comp = compBadge(totalFelonies, priorTotal, false, 'vs prior 3 months');
+      const comp = compBadge(totalFelonies, priorTotal, false, `vs same period ${dataYear-1}`);
       if (comp) html += `<div style="text-align:center;margin:-2px 0 8px"><span class="comp ${comp.class}" style="font-size:0.7rem">${comp.text}</span></div>`;
     }
 
@@ -1064,8 +1069,9 @@ async function loadEMS() {
       html += row(labels[code]||`Seg ${code}`, secToMin(r.avg_resp),
         priorMap[code] ? compBadge(Number(r.avg_resp), priorMap[code], false, 'vs prior mo') : null);
     });
-    const heldPct = heldStats ? (Number(heldStats.held)/Number(heldStats.total)*100) : null;
-    if (heldPct !== null) {
+    const heldPct = (heldStats && heldStats.held != null && heldStats.total > 0)
+      ? (Number(heldStats.held)/Number(heldStats.total)*100) : null;
+    if (heldPct !== null && !isNaN(heldPct)) {
       html += row('Calls Held (delayed)', fmtPct(heldPct),
         {text: heldPct > 5 ? '\u26A0 High' : '\u2713', class: heldPct > 5 ? 'up-bad' : 'flat'});
     }
@@ -1073,8 +1079,8 @@ async function loadEMS() {
 
     // Fire section
     html += '<div style="margin-top:0.5rem"><div style="font-size:0.62rem;text-transform:uppercase;letter-spacing:0.05em;color:var(--muted);margin-bottom:0.3rem;font-weight:700">FDNY Fire Response</div>';
-    if (fireCur?.[0]) {
-      const comp = firePrior?.[0] ? compBadge(Number(fireCur[0].avg_resp), Number(firePrior[0].avg_resp), false, 'vs prior mo') : null;
+    if (fireCur?.[0]?.avg_resp) {
+      const comp = firePrior?.[0]?.avg_resp ? compBadge(Number(fireCur[0].avg_resp), Number(firePrior[0].avg_resp), false, 'vs prior mo') : null;
       html += row('Structural Fire Response', secToMin(fireCur[0].avg_resp), comp);
     }
     fireByType.forEach(r => {
@@ -1496,16 +1502,24 @@ async function loadCapital() {
 //  NAV TABS (section filtering)
 // ============================================================
 function initNavTabs() {
-  document.querySelectorAll('.nav-tab').forEach(tab => {
+  document.querySelectorAll('.nav-tab[data-view]').forEach(tab => {
     tab.addEventListener('click', () => {
       document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
       tab.classList.add('active');
       const view = tab.dataset.view;
+      const kpiRail = document.getElementById('kpiRail');
+      const divSection = document.getElementById('divergingSection');
+      const header = document.querySelector('.page-header');
       if (view === 'overview') {
-        document.querySelectorAll('.domain').forEach(d => d.style.display = '');
-        document.getElementById('divergingSection').style.display =
+        header.style.display = '';
+        kpiRail.style.display = '';
+        divSection.style.display =
           (scannerData?.baselines?.diverging_trends?.length) ? '' : 'none';
+        document.querySelectorAll('.domain').forEach(d => d.style.display = '');
       } else {
+        header.style.display = 'none';
+        kpiRail.style.display = 'none';
+        divSection.style.display = 'none';
         const map = {
           safety: 'domain-safety',
           housing: 'domain-housing',
@@ -1515,8 +1529,8 @@ function initNavTabs() {
         document.querySelectorAll('.domain').forEach(d => {
           d.style.display = d.id === map[view] ? '' : 'none';
         });
-        document.getElementById('divergingSection').style.display = 'none';
       }
+      window.scrollTo(0, 0);
     });
   });
 }

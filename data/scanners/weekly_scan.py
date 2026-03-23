@@ -94,35 +94,35 @@ def scan_hpd_complaints(days=7):
     """HPD Housing Maintenance Complaints (ygpa-z7cr)"""
     since = (datetime.now() - timedelta(days=days)).strftime("%Y-%m-%d")
     rows = fetch_json(f"{BASE}/ygpa-z7cr.json", {
-        "$where": f"receiveddate>='{since}'",
+        "$where": f"received_date>='{since}'",
         "$select": "count(*) as total",
     })
     total = int(rows[0]["total"]) if rows else 0
     types = fetch_json(f"{BASE}/ygpa-z7cr.json", {
-        "$where": f"receiveddate>='{since}'",
-        "$select": "majorcategory, count(*) as cnt",
-        "$group": "majorcategory",
+        "$where": f"received_date>='{since}'",
+        "$select": "major_category, count(*) as cnt",
+        "$group": "major_category",
         "$order": "cnt DESC",
         "$limit": 10,
     })
     boroughs = fetch_json(f"{BASE}/ygpa-z7cr.json", {
-        "$where": f"receiveddate>='{since}'",
+        "$where": f"received_date>='{since}'",
         "$select": "borough, count(*) as cnt",
         "$group": "borough",
         "$order": "cnt DESC",
     })
     # Status breakdown
     statuses = fetch_json(f"{BASE}/ygpa-z7cr.json", {
-        "$where": f"receiveddate>='{since}'",
-        "$select": "status, count(*) as cnt",
-        "$group": "status",
+        "$where": f"received_date>='{since}'",
+        "$select": "complaint_status, count(*) as cnt",
+        "$group": "complaint_status",
         "$order": "cnt DESC",
     })
     return {
         "total_complaints": total,
-        "top_categories": {r["majorcategory"]: int(r["cnt"]) for r in types},
+        "top_categories": {r["major_category"]: int(r["cnt"]) for r in types},
         "borough_breakdown": {r["borough"]: int(r["cnt"]) for r in boroughs},
-        "status_breakdown": {r["status"]: int(r["cnt"]) for r in statuses},
+        "status_breakdown": {r["complaint_status"]: int(r["cnt"]) for r in statuses},
     }
 
 
@@ -527,7 +527,7 @@ def compute_baselines(week_ending_str):
 
     try:
         r = fetch_json(f"{BASE}/ygpa-z7cr.json", {
-            "$where": f"receiveddate between '{prior_year}-01-01T00:00:00' and '{prior_year}-12-31T23:59:59'",
+            "$where": f"received_date between '{prior_year}-01-01T00:00:00' and '{prior_year}-12-31T23:59:59'",
             "$select": "count(*) as total",
         })
         if r and r[0].get("total"):
@@ -535,8 +535,8 @@ def compute_baselines(week_ending_str):
             baselines["annual_prev_year"]["hpd_complaints_per_week"] = round(total / 52)
             print(f"  HPD {prior_year}: {total}/yr = {total//52}/wk")
         r2 = fetch_json(f"{BASE}/ygpa-z7cr.json", {
-            "$where": f"receiveddate between '{prior_year}-01-01T00:00:00' and '{prior_year}-12-31T23:59:59'"
-                       f" AND upper(majorcategory)='HEAT/HOT WATER'",
+            "$where": f"received_date between '{prior_year}-01-01T00:00:00' and '{prior_year}-12-31T23:59:59'"
+                       f" AND upper(major_category)='HEAT/HOT WATER'",
             "$select": "count(*) as total",
         })
         if r2 and r2[0].get("total"):
@@ -600,14 +600,14 @@ def compute_baselines(week_ending_str):
 
     try:
         r = fetch_json(f"{BASE}/ygpa-z7cr.json", {
-            "$where": f"receiveddate between '{prior_start}T00:00:00' and '{prior_end}T23:59:59'",
+            "$where": f"received_date between '{prior_start}T00:00:00' and '{prior_end}T23:59:59'",
             "$select": "count(*) as total",
         })
         if r and r[0].get("total"):
             sw["hpd_complaints"] = int(r[0]["total"])
         r2 = fetch_json(f"{BASE}/ygpa-z7cr.json", {
-            "$where": f"receiveddate between '{prior_start}T00:00:00' and '{prior_end}T23:59:59'"
-                       f" AND upper(majorcategory)='HEAT/HOT WATER'",
+            "$where": f"received_date between '{prior_start}T00:00:00' and '{prior_end}T23:59:59'"
+                       f" AND upper(major_category)='HEAT/HOT WATER'",
             "$select": "count(*) as total",
         })
         if r2 and r2[0].get("total"):

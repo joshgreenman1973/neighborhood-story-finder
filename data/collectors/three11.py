@@ -40,7 +40,8 @@ def fetch_311(days=90, batch_size=50000):
                                     headers={"User-Agent": "NYC-Neighborhood-Story-Finder/1.0"})
                 resp.raise_for_status()
                 break
-            except (requests.exceptions.Timeout, requests.exceptions.ConnectionError) as e:
+            except (requests.exceptions.Timeout, requests.exceptions.ConnectionError,
+                    requests.exceptions.ChunkedEncodingError) as e:
                 if attempt < 2:
                     wait = 10 * (attempt + 1)
                     print(f"  Retry {attempt+1}/2 after {wait}s: {e}")

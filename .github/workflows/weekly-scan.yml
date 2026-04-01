@@ -29,5 +29,10 @@ jobs:
           git config user.name "github-actions"
           git config user.email "actions@github.com"
           git add data/output/weekly-trends.csv data/output/weekly-trends.json data/output/updated-datasets.json
-          git diff --cached --quiet || git commit -m "Weekly scan $(date -u +%Y-%m-%dT%H:%M:%SZ)"
-          git push
+          if git diff --cached --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m "Weekly scan $(date -u +%Y-%m-%dT%H:%M:%SZ)"
+            git pull --rebase
+            git push
+          fi

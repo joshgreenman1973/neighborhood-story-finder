@@ -1,14 +1,14 @@
 {
-  "updated": "2026-04-11T14:19:52.149966Z",
+  "updated": "2026-04-12T14:37:48.624331Z",
   "data_sources": {
-    "311_records": 1000949,
+    "311_records": 1002242,
     "reddit_posts": 0,
     "news_articles": 114,
     "community_boards": 0,
     "budget_requests": 3809,
     "land_use_projects": 247,
     "council_services": 0,
-    "dob_permits": 39138
+    "dob_permits": 38917
   },
   "districts_count": 59
 }

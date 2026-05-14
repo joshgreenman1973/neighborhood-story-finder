@@ -1,9 +1,11 @@
 name: Update neighborhood data
 
 on:
-  schedule:
-    - cron: '0 13 * * *'    # Daily at 1pm UTC (8am ET)
-  workflow_dispatch: {}      # Manual trigger
+  # Daily schedule disabled — Anthropic API spend not adding enough value.
+  # Re-enable by uncommenting the schedule block below.
+  # schedule:
+  #   - cron: '0 13 * * *'    # Daily at 1pm UTC (8am ET)
+  workflow_dispatch: {}      # Manual trigger only
 
 permissions:
   contents: write

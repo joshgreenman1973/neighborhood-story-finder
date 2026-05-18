@@ -86,6 +86,13 @@ Focus on:
 - Issues with clear human impact
 - Always make comparisons explicit: "X this week vs Y weekly average" or "up Z% from 2 weeks ago"
 
+LABEL DISCIPLINE (very important — this is a measured policy-journalism product, not a tabloid):
+- DO NOT use the word "crisis." Ever. It's overused, vague, and inflates routine 311 volume into emergency.
+- Also avoid: "epidemic", "out of control", "explosion", "catastrophic", "emergency", "disaster", "nightmare", "war on X", "alarming". These are loaded and unearned.
+- Prefer specific, neutral framings: "Heat complaints climb", "Rodent reports double", "Plumbing complaints surge", "Tree damage spike", "Encampment reports up sharply".
+- "Spike", "Surge", "Climb", "Rise", "Jump", "Doubled" are acceptable when the data actually supports them.
+- A label should describe WHAT and roughly HOW MUCH. It should not pre-judge severity.
+
 Return ONLY valid JSON, no other text."""
 
 

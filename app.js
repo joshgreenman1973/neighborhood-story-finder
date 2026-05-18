@@ -567,7 +567,7 @@ function renderThemeCard(theme) {
     <div class="theme-card ${theme.intensity}">
       <div class="theme-label">
         ${escapeHtml(theme.label)}
-        ${recency ? `<span class="recency-badge recency-${recency.replace(/\s+/g, '-')}">${recency}</span>` : ''}
+        ${recency ? `<span class="recency-badge recency-${recency.replace(/\s+/g, '-')}">${formatRecencyLabel(recency)}</span>` : ''}
       </div>
       <div class="theme-summary">${escapeHtml(theme.summary || '')}</div>
       <div class="theme-meta">
@@ -711,14 +711,17 @@ function renderOverviewList() {
 
   // Top stories — only show on default view with no search active
   if (!query && !activeCategory && trendsData?.top_stories?.length) {
-    const recencyLabels = { 'this week': 'THIS WEEK', 'last 2 weeks': 'LAST 2 WK', 'last month': 'LAST MONTH', 'ongoing': 'ONGOING' };
+    const asOf = getDataAsOfDate();
+    const weekRange = formatWeekRangeLabel(0);
+    const asOfStr = asOf ? asOf.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }) : '';
     html += `<div class="section top-stories-section">
       <div class="section-title">What's Happening Now</div>
+      ${asOf ? `<div class="section-asof">311 data through ${asOfStr} · “this week” = ${weekRange}</div>` : ''}
       ${trendsData.top_stories.slice(0, 8).map(s => `
         <div class="top-story-card" onclick="selectDistrict('${s.cd}')">
           <div class="top-story-header">
             <span class="top-story-district">${s.district_name}</span>
-            <span class="recency-badge recency-${(s.recency || 'ongoing').replace(/\s+/g, '-')}">${recencyLabels[s.recency] || s.recency || ''}</span>
+            <span class="recency-badge recency-${(s.recency || 'ongoing').replace(/\s+/g, '-')}" title="${s.recency === 'this week' && asOfStr ? 'Week ending ' + asOfStr : (s.recency || '')}">${formatRecencyLabel(s.recency)}</span>
           </div>
           <div class="top-story-label">${escapeHtml(s.label)}</div>
           <div class="top-story-summary">${escapeHtml(s.summary)}</div>
@@ -960,10 +963,45 @@ function hideLoading() {
   setTimeout(() => { overlay.style.display = 'none'; }, 500);
 }
 
+function getDataAsOfDate() {
+  const iso = trendsData?.updated || districtsData?.updated;
+  return iso ? new Date(iso) : null;
+}
+
+function formatWeekRangeLabel(weeksAgo = 0) {
+  const d = getDataAsOfDate();
+  if (!d) return null;
+  const end = new Date(d); end.setDate(end.getDate() - weeksAgo * 7);
+  const start = new Date(end); start.setDate(end.getDate() - 6);
+  const startMonth = start.toLocaleDateString('en-US', { month: 'short' }).toUpperCase();
+  const endMonth = end.toLocaleDateString('en-US', { month: 'short' }).toUpperCase();
+  if (start.getMonth() === end.getMonth()) {
+    return `${startMonth} ${start.getDate()}–${end.getDate()}`;
+  }
+  return `${startMonth} ${start.getDate()} – ${endMonth} ${end.getDate()}`;
+}
+
+function formatRecencyLabel(recency) {
+  if (recency === 'this week') return formatWeekRangeLabel(0) || 'THIS WEEK';
+  if (recency === 'last 2 weeks') {
+    const a = formatWeekRangeLabel(1), b = formatWeekRangeLabel(0);
+    return a && b ? `${a.split(' ')[0]} ${a.match(/\d+/)[0]}–${b.match(/\d+(?!.*\d)/)[0]}` : 'LAST 2 WK';
+  }
+  if (recency === 'last month') return 'LAST MONTH';
+  if (recency === 'ongoing') return 'ONGOING';
+  return (recency || '').toUpperCase();
+}
+
 function updateTimestamp() {
+  const d = getDataAsOfDate();
   const el = document.querySelector('.updated');
-  if (el && districtsData?.updated) {
-    const d = new Date(districtsData.updated);
+  if (el && d) {
     el.textContent = `Updated ${d.toLocaleDateString()} ${d.toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'})}`;
+  }
+  const asof = document.getElementById('data-asof');
+  if (asof && d) {
+    const dateStr = d.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+    const wk = formatWeekRangeLabel(0);
+    asof.innerHTML = `Data current through ${dateStr}<span class="data-asof-sub">“This week” = ${wk}</span>`;
   }
 }

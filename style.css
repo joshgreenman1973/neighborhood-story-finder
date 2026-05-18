@@ -77,6 +77,19 @@ html, body {
   font-size: 10px; color: var(--vc-charcoal); margin-top: 4px;
   text-transform: uppercase; letter-spacing: 0.06em;
 }
+.data-asof {
+  font-size: 10px; color: var(--vc-chartreuse);
+  text-transform: uppercase; letter-spacing: 0.06em;
+  margin-top: 8px; font-weight: 700;
+}
+.data-asof .data-asof-sub {
+  color: var(--sd2); font-weight: 400; margin-left: 6px;
+}
+.section-asof {
+  font-size: 10px; color: var(--sd2);
+  text-transform: uppercase; letter-spacing: 0.06em;
+  margin: -8px 0 10px 0;
+}
 
 /* ═══ SIDEBAR ═══ */
 .sidebar {

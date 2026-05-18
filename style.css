@@ -79,7 +79,7 @@ html, body {
 .header h1 span { color: var(--vc-chartreuse); }
 .header .subtitle {
   font-size: 12px; color: var(--sd2); margin-top: 2px;
-  font-weight: 400; font-family: var(--font-secondary);
+  font-weight: 400;
 }
 .header .updated {
   font-size: 10px; color: var(--vc-charcoal); margin-top: 4px;
@@ -161,7 +161,6 @@ html, body {
 .about-panel p {
   font-size: 13px; line-height: 1.6;
   color: var(--st); margin: 0 0 10px;
-  font-family: var(--font-secondary);
 }
 .about-sources {
   display: flex; flex-direction: column; gap: 8px;
@@ -171,7 +170,6 @@ html, body {
   color: rgba(255,255,255,0.7);
   padding-left: 10px;
   border-left: 2px solid var(--sl);
-  font-family: var(--font-secondary);
 }
 .about-source strong { color: var(--st); }
 .about-close {
@@ -350,7 +348,7 @@ html, body {
 }
 .theme-summary {
   font-size: 12px; color: var(--sd2); line-height: 1.5;
-  margin: 0 0 8px; font-family: var(--font-secondary);
+  margin: 0 0 8px;
 }
 .theme-meta {
   display: flex; gap: 8px; flex-wrap: wrap; align-items: center;
@@ -520,8 +518,7 @@ html, body {
   margin-bottom: 3px;
 }
 .top-story-summary {
-  font-size: 12px; line-height: 1.5; color: rgba(255,255,255,0.7);
-  font-family: var(--font-secondary);
+  font-size: 12px; line-height: 1.5; color: rgba(255,255,255,0.78);
   margin-bottom: 6px;
 }
 .top-story-meta { display: flex; gap: 6px; }
@@ -545,7 +542,6 @@ html, body {
 }
 .hotspot-theme {
   font-size: 11px; color: var(--sd2); margin-top: 2px;
-  font-family: var(--font-secondary);
 }
 .hotspot-score {
   width: 40px; height: 40px; border-radius: 50%;

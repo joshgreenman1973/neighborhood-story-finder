@@ -1,5 +1,5 @@
 // =============================================================================
-// NYC Neighborhood Story Finder
+// NYC 311 Complaint Tracker
 // =============================================================================
 
 const DATA_BASE = 'data/output';
@@ -606,10 +606,12 @@ function showOverview() {
 
   const header = document.querySelector('.sidebar-header');
   header.innerHTML = `
-    <h2>NYC Neighborhood Story Finder</h2>
+    <h2>NYC 311 Complaint Tracker</h2>
     <div class="district-meta">Click a district on the map to explore story leads</div>
+    <div class="data-asof" id="data-asof"></div>
     <button class="about-toggle" onclick="toggleAbout()">About this tool</button>
   `;
+  updateTimestamp();
 
   if (currentView === 'hotspots') {
     renderHotSpots();

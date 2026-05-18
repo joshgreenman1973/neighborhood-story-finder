@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <title>NYC Data Pulse — Neighborhood Map</title>
+  <title>Neighborhood Map — NYC 311 Complaint Tracker</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
   <meta name="description" content="Scan NYC neighborhoods for emerging stories using 311 data, Reddit discussions, community board meetings, and local news." />
 
@@ -41,10 +41,10 @@
 <body>
 
   <nav class="map-nav">
-    <a href="index.html" class="map-nav-brand">NYC <span>Data Pulse</span></a>
+    <a href="map.html" class="map-nav-brand">NYC <span>311 Complaint Tracker</span></a>
     <div class="map-nav-links">
-      <a href="index.html" class="map-nav-link">Citywide Trends</a>
       <a href="map.html" class="map-nav-link active">Neighborhood Map</a>
+      <a href="resolution-times.html" class="map-nav-link">Resolution Times</a>
     </div>
   </nav>
 
@@ -60,15 +60,15 @@
 
   <!-- Header -->
   <div class="header">
-    <h1>NYC <span>Neighborhood Story Finder</span></h1>
-    <div class="subtitle">Emerging concerns by community district — 311, Reddit, local news, community boards</div>
+    <h1>NYC <span>311 Complaint Tracker</span></h1>
+    <div class="subtitle">Emerging concerns by community district — 311 spikes, Reddit, local news, community boards</div>
     <div class="updated"></div>
   </div>
 
   <!-- Sidebar -->
   <div class="sidebar" id="sidebar">
     <div class="sidebar-header">
-      <h2>NYC Neighborhood Story Finder</h2>
+      <h2>NYC 311 Complaint Tracker</h2>
       <div class="district-meta">Click a district on the map to explore story leads</div>
       <div class="data-asof" id="data-asof"></div>
       <button class="about-toggle" onclick="toggleAbout()">About this tool</button>

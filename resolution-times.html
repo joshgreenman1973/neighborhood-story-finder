@@ -1,0 +1,1641 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Resolution times — NYC 311 Complaint Tracker</title>
+<link rel="stylesheet" href="https://use.typekit.net/qqk2vto.css">
+<script src="https://unpkg.com/maplibre-gl@3.6.2/dist/maplibre-gl.js"></script>
+<link href="https://unpkg.com/maplibre-gl@3.6.2/dist/maplibre-gl.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@3.1.0/dist/chartjs-plugin-annotation.min.js"></script>
+<style>
+@font-face {
+  font-family: 'GascogneTS';
+  src: url('fonts/GascogneTS-Light.ttf') format('truetype');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  --vc-black: #050507;
+  --vc-white: #ffffff;
+  --vc-cloud: #dddddd;
+  --vc-chartreuse: #dde44c;
+  --vc-orange: #ff7c53;
+  --vc-periwinkle: #9b9fbc;
+  --vc-charcoal: #707175;
+  --vc-indigo: #394882;
+  --vc-cerulean: #217ebe;
+  --vc-magenta: #e7466d;
+  --vc-goodest-green: #57aa4a;
+  --vc-baddest-red: #d2232a;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'halyard-text', 'Inter', sans-serif;
+  font-weight: 300;
+  background: var(--vc-white);
+  color: var(--vc-black);
+  line-height: 1.6;
+}
+
+.top-accent-bar {
+  height: 3px;
+  background: var(--vc-orange);
+  width: 100%;
+}
+
+.tracker-nav {
+  display: flex; align-items: center; gap: 0;
+  padding: 0 2rem; height: 48px;
+  background: #0c0c0f; border-bottom: 1px solid rgba(255,255,255,0.07);
+}
+.tracker-nav-brand {
+  font-size: 13px; font-weight: 900; text-transform: uppercase;
+  letter-spacing: -0.01em; margin-right: 2rem;
+  color: rgba(255,255,255,0.88); text-decoration: none;
+}
+.tracker-nav-brand span { color: var(--vc-chartreuse); }
+.tracker-nav-links { display: flex; gap: 0; height: 100%; }
+.tracker-nav-link {
+  display: flex; align-items: center; padding: 0 1rem;
+  font-size: 12px; font-weight: 600; text-transform: uppercase;
+  letter-spacing: 0.04em; color: rgba(255,255,255,0.45); text-decoration: none;
+  border-bottom: 2px solid transparent; transition: color 0.15s;
+}
+.tracker-nav-link:hover { color: rgba(255,255,255,0.88); }
+.tracker-nav-link.active { color: var(--vc-chartreuse); border-bottom-color: var(--vc-chartreuse); }
+@media (max-width: 640px) {
+  .tracker-nav { padding: 0 1rem; }
+  .tracker-nav-brand { margin-right: 1rem; font-size: 11px; }
+  .tracker-nav-link { padding: 0 0.6rem; font-size: 10px; }
+}
+
+.container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem;
+}
+
+header {
+  background: #fff;
+  margin: -2rem -1.5rem 1.5rem;
+  padding: 2.5rem 1.5rem 1.75rem;
+  border-bottom: 1px solid #eee;
+}
+
+header h1 {
+  font-family: 'halyard-text', 'Inter', sans-serif;
+  font-size: 2.8rem;
+  font-weight: 900;
+  color: var(--vc-black);
+  margin-bottom: 0.4rem;
+  line-height: 1.15;
+}
+
+header .subtitle {
+  font-size: 1rem;
+  font-weight: 200;
+  color: var(--vc-charcoal);
+  max-width: 700px;
+  line-height: 1.6;
+}
+
+.controls {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  background: #fafafa;
+  padding: 1rem 1.25rem;
+  border-radius: 8px;
+  border-bottom: 1px solid #e5e5e5;
+}
+
+.control-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.control-group label {
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #666;
+}
+
+.control-group select {
+  font-family: 'halyard-text', 'Inter', sans-serif;
+  font-size: 0.95rem;
+  padding: 0.5rem 2rem 0.5rem 0.75rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  background: #fff;
+  color: #1a1a1a;
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath d='M6 8L1 3h10z' fill='%23666'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.6rem center;
+  transition: border-color 0.15s;
+}
+
+.control-group select:focus {
+  outline: none;
+  border-color: var(--vc-indigo);
+}
+
+.main-layout {
+  display: grid;
+  grid-template-columns: 55% 45%;
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.map-column {
+  min-height: 500px;
+}
+
+.map-wrap {
+  background: #fff;
+  border: 1px solid #e5e5e5;
+  border-radius: 8px;
+  overflow: hidden;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+}
+
+.map-wrap h2 {
+  font-family: 'halyard-text', 'Inter', sans-serif;
+  font-size: 1.25rem;
+  font-weight: 900;
+  padding: 1rem 1.25rem 0.5rem;
+}
+
+.map-wrap .map-subtitle {
+  font-size: 0.8rem;
+  color: var(--vc-charcoal);
+  padding: 0 1.25rem 0.75rem;
+}
+
+#map {
+  flex: 1;
+  min-height: 400px;
+}
+
+.map-legend {
+  display: flex;
+  gap: 0.75rem;
+  padding: 0.75rem 1.25rem;
+  font-size: 0.75rem;
+  color: #555;
+  border-top: 1px solid #eee;
+  flex-wrap: wrap;
+  background: #fafafa;
+}
+
+.map-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.map-legend-swatch {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+}
+
+.stats-column {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.headline-stat {
+  background: linear-gradient(135deg, #f0f2f8 0%, #fff 60%);
+  border: 1px solid #e5e5e5;
+  border-radius: 8px;
+  padding: 1.5rem;
+  text-align: center;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+  border-top: 3px solid var(--vc-indigo);
+}
+
+.headline-stat .stat-label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #888;
+  margin-bottom: 0.35rem;
+}
+
+.headline-stat .stat-value {
+  font-family: 'GascogneTS', 'Source Serif 4', Georgia, serif;
+  font-size: 2.8rem;
+  font-weight: 300;
+  color: var(--vc-indigo);
+  line-height: 1.1;
+}
+
+.headline-stat .stat-detail {
+  font-size: 0.8rem;
+  color: #666;
+  margin-top: 0.35rem;
+}
+
+.selected-district-banner {
+  background: #f0f4ff;
+  border: 1px solid #b0bce8;
+  border-left: 4px solid var(--vc-indigo);
+  border-radius: 6px;
+  padding: 0.75rem 1rem;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--vc-indigo);
+  display: none;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: 0 1px 3px rgba(57,72,130,0.1);
+}
+
+.selected-district-banner button {
+  background: none;
+  border: none;
+  color: var(--vc-indigo);
+  font-weight: 700;
+  cursor: pointer;
+  font-size: 0.85rem;
+  font-family: 'halyard-text', 'Inter', sans-serif;
+}
+
+.selected-district-banner button:hover {
+  text-decoration: underline;
+}
+
+.panel-section {
+  background: #fff;
+  border: 1px solid #e5e5e5;
+  border-radius: 8px;
+  padding: 1.25rem;
+  flex: 1;
+  min-height: 0;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+  border-top: 2px solid var(--vc-indigo);
+}
+
+.panel-section + .panel-section {
+  margin-top: 0;
+}
+
+.panel-section h3 {
+  font-family: 'halyard-text', 'Inter', sans-serif;
+  font-size: 1.15rem;
+  font-weight: 900;
+  margin-bottom: 0.75rem;
+}
+
+.panel-section .chart-container {
+  position: relative;
+  width: 100%;
+}
+
+.bottom-sections {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.chart-section {
+  background: #fff;
+  border: 1px solid #e5e5e5;
+  border-radius: 8px;
+  padding: 1.5rem;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+  border-top: 2px solid var(--vc-indigo);
+}
+
+.chart-section h2 {
+  font-family: 'halyard-text', 'Inter', sans-serif;
+  font-size: 1.4rem;
+  font-weight: 900;
+  margin-bottom: 0.25rem;
+}
+
+.chart-section .chart-subtitle {
+  font-size: 0.85rem;
+  color: var(--vc-charcoal);
+  margin-bottom: 1rem;
+}
+
+.chart-container {
+  position: relative;
+  width: 100%;
+}
+
+.legend-bar {
+  display: flex;
+  gap: 1.25rem;
+  margin-top: 1rem;
+  flex-wrap: wrap;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.8rem;
+  color: #555;
+}
+
+.legend-swatch {
+  width: 14px;
+  height: 14px;
+  border-radius: 3px;
+}
+
+.fastest-slowest {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+
+.agency-breakdown-section {
+  margin-bottom: 1.5rem;
+}
+
+.agency-breakdown-row {
+  padding: 1rem 0;
+  border-top: 1px solid #eee;
+}
+
+.agency-breakdown-row:first-child {
+  border-top: none;
+}
+
+.agency-breakdown-name {
+  font-weight: 700;
+  font-size: 1rem;
+  margin-bottom: 0.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.agency-breakdown-count {
+  font-size: 0.75rem;
+  color: var(--vc-charcoal);
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.agency-breakdown-lists {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+
+.breakdown-header {
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--vc-charcoal);
+  padding-bottom: 0.3rem;
+  border-bottom: 2px solid var(--vc-indigo);
+  display: block;
+  margin-bottom: 0.4rem;
+}
+
+.breakdown-header.fast {
+  border-bottom-color: var(--vc-goodest-green);
+}
+
+.breakdown-header.slow {
+  border-bottom-color: var(--vc-baddest-red);
+}
+
+.agency-breakdown-lists ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.agency-breakdown-lists li {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.85rem;
+  padding: 0.3rem 0;
+  border-bottom: 1px solid #f3f3f3;
+}
+
+.agency-breakdown-lists li .dname {
+  color: #333;
+}
+
+.agency-breakdown-lists li .dtime {
+  color: var(--vc-charcoal);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  margin-left: 0.5rem;
+}
+
+@media (max-width: 640px) {
+  .agency-breakdown-lists {
+    grid-template-columns: 1fr;
+  }
+}
+
+.fs-col h4 {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--vc-charcoal);
+  margin-bottom: 0.5rem;
+  padding-bottom: 0.4rem;
+  border-bottom: 2px solid var(--vc-indigo);
+}
+
+.fs-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.5rem 0.5rem;
+  border-bottom: 1px solid #f0f0f0;
+  font-size: 0.85rem;
+}
+
+.fs-row:nth-child(even) {
+  background: #f8f8f6;
+}
+
+.fs-row .fs-district {
+  font-weight: 500;
+}
+
+.fs-row .fs-time {
+  color: #555;
+}
+
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 300px;
+  gap: 1rem;
+}
+
+.spinner {
+  width: 36px;
+  height: 36px;
+  border: 3px solid #e5e5e5;
+  border-top-color: var(--vc-indigo);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.loading-text {
+  font-size: 0.95rem;
+  color: #666;
+}
+
+.error-message {
+  background: #fef2f2;
+  border: 1px solid #fca5a5;
+  color: #991b1b;
+  padding: 1rem 1.25rem;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  margin-bottom: 1.5rem;
+}
+
+.data-note {
+  font-size: 0.78rem;
+  color: #999;
+  margin-top: 1.5rem;
+  padding: 1rem 1.25rem;
+  border-top: 1px solid #e5e5e5;
+  line-height: 1.7;
+  background: #fafafa;
+  border-radius: 0 0 8px 8px;
+}
+
+.page-footer {
+  margin-top: 2rem;
+  padding: 1.5rem 0;
+  border-top: 1px solid var(--vc-cloud);
+  font-size: 0.78rem;
+  color: var(--vc-charcoal);
+  line-height: 1.6;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.page-footer a {
+  color: var(--vc-indigo);
+  text-decoration: none;
+}
+
+.page-footer a:hover {
+  text-decoration: underline;
+}
+
+.maplibregl-popup-content {
+  font-family: 'halyard-text', 'Inter', sans-serif;
+  font-weight: 300;
+  font-size: 0.85rem;
+  padding: 0.75rem 1rem;
+  border-radius: 6px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+}
+
+.popup-district {
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+}
+
+.popup-time {
+  color: #555;
+}
+
+.popup-count {
+  font-size: 0.78rem;
+  color: #888;
+  margin-top: 0.15rem;
+}
+
+@media (max-width: 900px) {
+  .main-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .map-column {
+    min-height: 350px;
+  }
+
+  .bottom-sections {
+    grid-template-columns: 1fr;
+  }
+
+  header h1 {
+    font-size: 2rem;
+  }
+
+  .headline-stat .stat-value {
+    font-size: 2.2rem;
+  }
+
+  .controls {
+    flex-direction: column;
+  }
+
+  .control-group select {
+    width: 100%;
+  }
+
+  .fastest-slowest {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    padding: 1rem;
+  }
+
+  header {
+    margin: -1rem -1rem 1.5rem;
+    padding: 1.5rem 1rem 1.25rem;
+  }
+
+  .headline-stat .stat-value {
+    font-size: 1.8rem;
+  }
+}
+</style>
+</head>
+<body>
+<nav class="tracker-nav">
+  <a href="map.html" class="tracker-nav-brand">NYC <span>311 Complaint Tracker</span></a>
+  <div class="tracker-nav-links">
+    <a href="map.html" class="tracker-nav-link">Neighborhood Map</a>
+    <a href="resolution-times.html" class="tracker-nav-link active">Resolution Times</a>
+  </div>
+</nav>
+<div class="top-accent-bar"></div>
+<div class="container">
+  <header>
+    <h1>How long does the city take to resolve 311 complaints?</h1>
+    <p class="subtitle">Median resolution time by community district, complaint type, and borough — pulled live from the NYC 311 Service Requests dataset.</p>
+  </header>
+
+  <div class="controls">
+    <div class="control-group">
+      <label for="complaint-select">Complaint type</label>
+      <select id="complaint-select">
+        <option value="" selected>All types</option>
+        <option value="Noise - Residential">Noise - Residential</option>
+        <option value="HEAT/HOT WATER">Heat/Hot Water</option>
+        <option value="Street Light Condition">Street Light Condition</option>
+        <option value="Rodent">Rodent</option>
+        <option value="Water System">Water System</option>
+        <option value="Blocked Driveway">Blocked Driveway</option>
+        <option value="Illegal Parking">Illegal Parking</option>
+        <option value="Dirty Conditions">Dirty Conditions</option>
+        <option value="Plumbing">Plumbing</option>
+        <option value="Paint/Plaster">Paint/Plaster</option>
+      </select>
+    </div>
+    <div class="control-group">
+      <label for="borough-select">Borough</label>
+      <select id="borough-select">
+        <option value="">All boroughs</option>
+        <option value="MANHATTAN">Manhattan</option>
+        <option value="BROOKLYN">Brooklyn</option>
+        <option value="QUEENS">Queens</option>
+        <option value="BRONX">Bronx</option>
+        <option value="STATEN ISLAND">Staten Island</option>
+      </select>
+    </div>
+    <div class="control-group">
+      <label for="period-select">Time range</label>
+      <select id="period-select">
+        <option value="30" selected>Last 30 days</option>
+        <option value="90">Last 90 days</option>
+        <option value="180">Last 6 months</option>
+        <option value="365">Last year</option>
+      </select>
+    </div>
+  </div>
+
+  <div id="error-container"></div>
+
+  <div id="loading" class="loading-container">
+    <div class="spinner"></div>
+    <div class="loading-text">Loading 311 data...</div>
+  </div>
+
+  <div id="dashboard" style="display:none;">
+    <div class="main-layout">
+      <div class="map-column">
+        <div class="map-wrap">
+          <h2>Median resolution time by community district</h2>
+          <p class="map-subtitle">Click a district to filter the stats panel</p>
+          <div id="map"></div>
+          <div class="map-legend" id="map-legend">
+            <div class="map-legend-item"><div class="map-legend-swatch" style="background:#57aa4a;"></div><span id="legend-l1">Much faster than citywide</span></div>
+            <div class="map-legend-item"><div class="map-legend-swatch" style="background:#dde44c;"></div><span id="legend-l2">Near citywide median</span></div>
+            <div class="map-legend-item"><div class="map-legend-swatch" style="background:#ff7c53;"></div><span id="legend-l3">Slower than citywide</span></div>
+            <div class="map-legend-item"><div class="map-legend-swatch" style="background:#d2232a;"></div><span id="legend-l4">Much slower than citywide</span></div>
+            <div class="map-legend-item"><div class="map-legend-swatch" style="background:#ddd;"></div> No data</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="stats-column">
+        <div class="headline-stat">
+          <div class="stat-label">Citywide median resolution time</div>
+          <div class="stat-value" id="stat-median">--</div>
+          <div class="stat-detail" id="stat-count"></div>
+        </div>
+
+        <div id="selected-banner" class="selected-district-banner">
+          <span id="selected-text"></span>
+          <button id="clear-selection">Clear</button>
+        </div>
+
+        <div class="panel-section">
+          <h3 id="district-chart-title">5 fastest and 5 slowest community districts</h3>
+          <div class="chart-container" id="district-chart-container" style="height:280px;">
+            <canvas id="district-chart"></canvas>
+          </div>
+        </div>
+
+        <div class="panel-section">
+          <h3 id="agency-chart-title">Median resolution time by agency</h3>
+          <div class="chart-container" id="agency-chart-container" style="height:380px;">
+            <canvas id="agency-chart"></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="bottom-sections">
+      <div class="chart-section">
+        <h2>Summary statistics</h2>
+        <div id="summary-stats"></div>
+      </div>
+    </div>
+
+    <div class="chart-section agency-breakdown-section">
+      <h2>Fastest and slowest neighborhoods, by agency</h2>
+      <p class="chart-subtitle">For each agency, the 5 community districts where complaints close fastest and the 5 where they close slowest. A district needs at least 20 complaints with that agency to be included.</p>
+      <div id="agency-district-breakdown"></div>
+    </div>
+
+    <p class="data-note" id="data-note"></p>
+  </div>
+
+  <footer class="page-footer">
+    <p>Data source: <a href="https://data.cityofnewyork.us/Social-Services/311-Service-Requests-from-2010-to-Present/erm2-nwe9" target="_blank" rel="noopener">NYC 311 Service Requests</a> via NYC Open Data (Socrata API).
+    Community district boundaries from <a href="https://data.cityofnewyork.us/City-Government/Community-Districts/jp9i-3b7y" target="_blank" rel="noopener">NYC Department of City Planning</a>.
+    See the <a href="https://github.com/joshgreenman1973/experiments/blob/main/nyc-311-resolution-times/methodology.md" target="_blank" rel="noopener">full methodology</a> for data sources, calculations, and limitations.</p>
+  </footer>
+</div>
+
+<script>
+(function() {
+  "use strict";
+
+  var API_BASE = "https://data.cityofnewyork.us/resource/erm2-nwe9.json";
+  var GEO_URL = "https://services5.arcgis.com/GfwWNkhOj9bNBqoJ/arcgis/rest/services/NYC_Community_Districts/FeatureServer/0/query?where=1%3D1&outFields=BoroCD&f=geojson";
+
+  var complaintSelect = document.getElementById("complaint-select");
+  var boroughSelect = document.getElementById("borough-select");
+  var periodSelect = document.getElementById("period-select");
+  var loadingEl = document.getElementById("loading");
+  var dashboardEl = document.getElementById("dashboard");
+  var errorContainer = document.getElementById("error-container");
+  var selectedBanner = document.getElementById("selected-banner");
+  var selectedText = document.getElementById("selected-text");
+  var clearBtn = document.getElementById("clear-selection");
+
+  var map = null;
+  var districtChart = null;
+  var agencyChart = null;
+  var geoData = null;
+  var currentDistricts = [];
+  var currentAgencies = [];
+  var citywideMedian = 0;
+  var selectedDistrict = null;
+  var popup = null;
+  var allRecords = [];
+
+  function getDateOffset(days) {
+    var d = new Date();
+    d.setDate(d.getDate() - days);
+    return d.toISOString().slice(0, 19);
+  }
+
+  function formatDays(d) {
+    if (d < 1 / 24) {
+      return "<1 hour";
+    }
+    if (d < 1) {
+      var hours = Math.round(d * 24);
+      if (hours < 1) hours = 1;
+      return hours + (hours === 1 ? " hour" : " hours");
+    }
+    var rounded = Math.round(d * 10) / 10;
+    return rounded + (rounded === 1.0 ? " day" : " days");
+  }
+
+  // Precise version for tooltips where rounding would mask why two
+  // districts with the same "2 hours" label get different colors.
+  function formatDaysPrecise(d) {
+    if (d < 1) {
+      var hours = d * 24;
+      var h = hours < 10 ? hours.toFixed(2) : hours.toFixed(1);
+      return h + (parseFloat(h) === 1 ? " hour" : " hours");
+    }
+    return d.toFixed(2) + " days";
+  }
+
+  function formatNumber(n) {
+    return n.toLocaleString("en-US");
+  }
+
+  function calcMedian(arr) {
+    if (arr.length === 0) return 0;
+    var sorted = arr.slice().sort(function(a, b) { return a - b; });
+    var mid = Math.floor(sorted.length / 2);
+    return sorted.length % 2 !== 0 ? sorted[mid] : (sorted[mid - 1] + sorted[mid]) / 2;
+  }
+
+  function barColor(days) {
+    if (days < 1) return "#57aa4a";
+    if (days <= 3) return "#dde44c";
+    if (days <= 7) return "#ff7c53";
+    return "#d2232a";
+  }
+
+  function mapColor(days) {
+    // Relative to citywide median so the map stays meaningful for fast
+    // complaint types (e.g. most noise) and slow ones (e.g. rodent).
+    var m = citywideMedian || 1;
+    if (days < m * 0.67) return "#57aa4a";
+    if (days < m * 1.33) return "#dde44c";
+    if (days < m * 2) return "#ff7c53";
+    return "#d2232a";
+  }
+
+  var BORO_MAP = {
+    "MANHATTAN": "MN",
+    "BROOKLYN": "BK",
+    "QUEENS": "QN",
+    "BRONX": "BX",
+    "STATEN ISLAND": "SI"
+  };
+
+  var CD_NAMES = {
+    "MN 01": "Financial District", "MN 02": "Greenwich Village", "MN 03": "Lower East Side",
+    "MN 04": "Clinton/Chelsea", "MN 05": "Midtown", "MN 06": "Stuyvesant Town",
+    "MN 07": "Upper West Side", "MN 08": "Upper East Side", "MN 09": "Morningside Heights",
+    "MN 10": "Central Harlem", "MN 11": "East Harlem", "MN 12": "Washington Heights",
+    "BK 01": "Greenpoint/Williamsburg", "BK 02": "Fort Greene/Brooklyn Heights",
+    "BK 03": "Bedford-Stuyvesant", "BK 04": "Bushwick", "BK 05": "East New York",
+    "BK 06": "Park Slope/Carroll Gardens", "BK 07": "Sunset Park", "BK 08": "Crown Heights",
+    "BK 09": "Crown Heights South", "BK 10": "Bay Ridge", "BK 11": "Bensonhurst",
+    "BK 12": "Borough Park", "BK 13": "Coney Island", "BK 14": "Flatbush",
+    "BK 15": "Sheepshead Bay", "BK 16": "Brownsville", "BK 17": "East Flatbush",
+    "BK 18": "Canarsie/Flatlands",
+    "QN 01": "Astoria", "QN 02": "Sunnyside/Woodside", "QN 03": "Jackson Heights",
+    "QN 04": "Elmhurst/Corona", "QN 05": "Ridgewood/Maspeth", "QN 06": "Forest Hills/Rego Park",
+    "QN 07": "Flushing", "QN 08": "Fresh Meadows", "QN 09": "Kew Gardens/Woodhaven",
+    "QN 10": "South Ozone Park", "QN 11": "Bayside", "QN 12": "Jamaica",
+    "QN 13": "Queens Village", "QN 14": "Far Rockaway",
+    "BX 01": "Mott Haven/Melrose", "BX 02": "Hunts Point", "BX 03": "Morrisania",
+    "BX 04": "Highbridge/Concourse", "BX 05": "Fordham", "BX 06": "Belmont/East Tremont",
+    "BX 07": "Kingsbridge", "BX 08": "Riverdale", "BX 09": "Soundview",
+    "BX 10": "Throgs Neck/Co-op City", "BX 11": "Pelham Parkway", "BX 12": "Williamsbridge",
+    "SI 01": "St. George/Stapleton", "SI 02": "South Beach", "SI 03": "Tottenville",
+    // "Joint Interest Areas" used by NYC Planning / 311 for parks, airports,
+    // cemeteries, and islands that sit outside any community district.
+    "MN 63": "Central Park",
+    "MN 64": "Randalls Island / Wards Island",
+    "BX 26": "Van Cortlandt Park",
+    "BX 27": "Bronx Park (Zoo / Botanical Garden)",
+    "BX 28": "Pelham Bay Park",
+    "BK 55": "Prospect Park",
+    "BK 56": "Floyd Bennett / Jamaica Bay / Marine Park",
+    "QN 80": "Flushing Meadows-Corona Park",
+    "QN 81": "Forest Park",
+    "QN 82": "LaGuardia Airport",
+    "QN 83": "JFK Airport",
+    "QN 84": "Rockaway parks / beaches",
+    "SI 95": "Great Kills / Staten Island parks"
+  };
+
+  function cdDisplayName(cdKey) {
+    var name = CD_NAMES[cdKey];
+    return name ? name + " (" + cdKey + ")" : "Unnamed area (" + cdKey + ")";
+  }
+
+  function cdShortName(cdKey) {
+    // Kept for backwards-compat; prefer cdDisplayName for consistency.
+    return cdDisplayName(cdKey);
+  }
+
+  function parseCommunityBoard(cb) {
+    if (!cb) return null;
+    var cleaned = cb.trim();
+    if (cleaned.indexOf("Unspecified") !== -1) return null;
+    var parts = cleaned.split(/\s+/);
+    if (parts.length < 2) return null;
+    var num = parseInt(parts[0], 10);
+    if (isNaN(num) || num === 0) return null;
+    var boro = parts.slice(1).join(" ");
+    var abbr = BORO_MAP[boro.toUpperCase()] || boro.slice(0, 2).toUpperCase();
+    return abbr + " " + (num < 10 ? "0" : "") + num;
+  }
+
+  function geoCdKey(feature) {
+    // Community district GeoJSON has boro_cd field (e.g., 101 = Manhattan CD 1)
+    var props = feature.properties;
+    var boroCd = props.BoroCD || props.boro_cd || props.borocd || "";
+    if (!boroCd) return null;
+    var num = parseInt(boroCd, 10);
+    if (isNaN(num) || num === 0) return null;
+    var boroNum = Math.floor(num / 100);
+    var cd = num % 100;
+    if (cd === 0) return null;
+    var boroNames = { 1: "MN", 2: "BX", 3: "BK", 4: "QN", 5: "SI" };
+    var abbr = boroNames[boroNum];
+    if (!abbr) return null;
+    return abbr + " " + (cd < 10 ? "0" : "") + cd;
+  }
+
+  async function loadGeoData() {
+    try {
+      var resp = await fetch(GEO_URL);
+      if (!resp.ok) throw new Error("GeoJSON fetch failed");
+      geoData = await resp.json();
+      // Add cd_key to each feature
+      geoData.features = geoData.features.filter(function(f) {
+        var key = geoCdKey(f);
+        if (key) {
+          f.properties._cd_key = key;
+          return true;
+        }
+        return false;
+      });
+    } catch (err) {
+      console.error("Failed to load community district boundaries:", err);
+      geoData = null;
+    }
+  }
+
+  function initMap() {
+    if (map) return;
+    map = new maplibregl.Map({
+      container: "map",
+      style: {
+        version: 8,
+        glyphs: "https://demotiles.maplibre.org/font/{fontstack}/{range}.pbf",
+        sources: {
+          "carto": {
+            type: "raster",
+            tiles: ["https://basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png"],
+            tileSize: 256,
+            attribution: "&copy; CARTO &copy; OpenStreetMap"
+          }
+        },
+        layers: [{
+          id: "carto-tiles",
+          type: "raster",
+          source: "carto",
+          minzoom: 0,
+          maxzoom: 19
+        }]
+      },
+      center: [-73.95, 40.73],
+      zoom: 10,
+      attributionControl: false
+    });
+    map.addControl(new maplibregl.NavigationControl(), "top-right");
+
+    popup = new maplibregl.Popup({
+      closeButton: false,
+      closeOnClick: false
+    });
+
+    map.on("load", function() {
+      addMapLayers();
+    });
+  }
+
+  function addMapLayers() {
+    if (!geoData || !map.loaded()) return;
+
+    if (map.getSource("districts")) {
+      map.getSource("districts").setData(geoData);
+      return;
+    }
+
+    map.addSource("districts", {
+      type: "geojson",
+      data: geoData
+    });
+
+    map.addLayer({
+      id: "district-fills",
+      type: "fill",
+      source: "districts",
+      paint: {
+        "fill-color": "#ddd",
+        "fill-opacity": 0.7
+      }
+    });
+
+    map.addLayer({
+      id: "district-borders",
+      type: "line",
+      source: "districts",
+      paint: {
+        "line-color": "#999",
+        "line-width": 1
+      }
+    });
+
+    map.addLayer({
+      id: "district-highlight",
+      type: "line",
+      source: "districts",
+      paint: {
+        "line-color": "#394882",
+        "line-width": 3.5
+      },
+      filter: ["==", "_cd_key", ""]
+    });
+
+    map.on("mousemove", "district-fills", function(e) {
+      map.getCanvas().style.cursor = "pointer";
+      if (e.features.length > 0) {
+        var f = e.features[0];
+        var key = f.properties._cd_key;
+        var districtData = currentDistricts.find(function(d) { return d.district === key; });
+        var html = '<div class="popup-district">' + cdDisplayName(key) + '</div>';
+        if (districtData) {
+          html += '<div class="popup-time">Median: ' + formatDaysPrecise(districtData.median) + '</div>';
+          html += '<div class="popup-count">' + formatNumber(districtData.total) + ' complaints</div>';
+        } else {
+          html += '<div class="popup-time">No data</div>';
+        }
+        popup.setLngLat(e.lngLat).setHTML(html).addTo(map);
+      }
+    });
+
+    map.on("mouseleave", "district-fills", function() {
+      map.getCanvas().style.cursor = "";
+      popup.remove();
+    });
+
+    map.on("click", "district-fills", function(e) {
+      if (e.features.length > 0) {
+        var key = e.features[0].properties._cd_key;
+        selectDistrict(key);
+      }
+    });
+  }
+
+  function updateMapColors() {
+    if (!map || !map.getLayer("district-fills")) return;
+
+    var districtMedians = {};
+    currentDistricts.forEach(function(d) {
+      districtMedians[d.district] = d.median;
+    });
+
+    // Build a match expression for fill-color
+    var matchExpr = ["match", ["get", "_cd_key"]];
+    var hasEntries = false;
+    currentDistricts.forEach(function(d) {
+      matchExpr.push(d.district);
+      matchExpr.push(mapColor(d.median));
+      hasEntries = true;
+    });
+    matchExpr.push("#ddd"); // fallback
+
+    if (hasEntries) {
+      map.setPaintProperty("district-fills", "fill-color", matchExpr);
+    } else {
+      map.setPaintProperty("district-fills", "fill-color", "#ddd");
+    }
+  }
+
+  function selectDistrict(key) {
+    var d = currentDistricts.find(function(d) { return d.district === key; });
+    if (!d) return;
+    selectedDistrict = key;
+    selectedBanner.style.display = "flex";
+    selectedText.textContent = "Showing data for " + cdDisplayName(key) + " -- median " + formatDays(d.median) + " (" + formatNumber(d.total) + " complaints)";
+
+    if (map && map.getLayer("district-highlight")) {
+      map.setFilter("district-highlight", ["==", "_cd_key", key]);
+    }
+
+    updateAgencyChart(key);
+  }
+
+  function clearSelection() {
+    selectedDistrict = null;
+    selectedBanner.style.display = "none";
+    if (map && map.getLayer("district-highlight")) {
+      map.setFilter("district-highlight", ["==", "_cd_key", ""]);
+    }
+    updateAgencyChart(null);
+  }
+
+  clearBtn.addEventListener("click", clearSelection);
+
+  async function fetchData() {
+    var complaint = complaintSelect.value;
+    var borough = boroughSelect.value;
+    var days = parseInt(periodSelect.value, 10);
+    var startDate = getDateOffset(days);
+
+    loadingEl.style.display = "flex";
+    dashboardEl.style.display = "none";
+    errorContainer.innerHTML = "";
+    selectedDistrict = null;
+    selectedBanner.style.display = "none";
+
+    var whereParts = [];
+    if (complaint) {
+      whereParts.push("complaint_type='" + complaint.replace(/'/g, "''") + "'");
+    }
+    if (borough) {
+      whereParts.push("borough='" + borough + "'");
+    }
+    whereParts.push("created_date>'" + startDate + "'");
+    whereParts.push("closed_date IS NOT NULL");
+    whereParts.push("status='Closed'");
+
+    var whereClause = whereParts.join(" AND ");
+
+    // Paginate the full universe of matching records. Socrata caps each
+    // page at 50k; we keep fetching until a short page signals we're done.
+    // Hard safety cap so a misfiltered query can't run away.
+    var MAX_RECORDS = 500000;
+    var PAGE = 50000;
+    var collected = [];
+
+    try {
+      var offset = 0;
+      while (collected.length < MAX_RECORDS) {
+        var params = new URLSearchParams({
+          "$where": whereClause,
+          "$select": "created_date,closed_date,community_board,agency,agency_name",
+          "$limit": String(PAGE),
+          "$offset": String(offset),
+          "$order": "created_date DESC"
+        });
+        var response = await fetch(API_BASE + "?" + params.toString());
+        if (!response.ok) throw new Error("API returned status " + response.status);
+        var chunk = await response.json();
+        if (!Array.isArray(chunk)) throw new Error("Unexpected API response format");
+        collected = collected.concat(chunk);
+        if (chunk.length < PAGE) break;
+        offset += PAGE;
+      }
+      allRecords = collected;
+      processData(collected);
+    } catch (err) {
+      loadingEl.style.display = "none";
+      errorContainer.innerHTML = '<div class="error-message">Failed to load data: ' + err.message + '. Try refreshing the page or selecting a different complaint type.</div>';
+    }
+  }
+
+  function processData(records) {
+    var districtMap = {};
+    var agencyMap = {};
+    var allTimes = [];
+
+    records.forEach(function(r) {
+      var created = new Date(r.created_date);
+      var closed = new Date(r.closed_date);
+      if (isNaN(created.getTime()) || isNaN(closed.getTime())) return;
+      var diffDays = (closed - created) / (1000 * 60 * 60 * 24);
+      if (diffDays < 0) return;
+
+      allTimes.push(diffDays);
+
+      var district = parseCommunityBoard(r.community_board);
+      if (district) {
+        if (!districtMap[district]) {
+          districtMap[district] = { times: [], under24h: 0, over30d: 0 };
+        }
+        districtMap[district].times.push(diffDays);
+        if (diffDays < 1) districtMap[district].under24h++;
+        if (diffDays > 30) districtMap[district].over30d++;
+      }
+
+      var agencyKey = r.agency || "Unknown";
+      var agencyLabel = r.agency_name || r.agency || "Unknown";
+      if (!agencyMap[agencyKey]) {
+        agencyMap[agencyKey] = { label: agencyLabel, times: [] };
+      }
+      agencyMap[agencyKey].times.push(diffDays);
+    });
+
+    // Build district array
+    var districts = [];
+    Object.keys(districtMap).forEach(function(name) {
+      var d = districtMap[name];
+      var med = calcMedian(d.times);
+      districts.push({
+        district: name,
+        median: med,
+        total: d.times.length,
+        fast: d.times.length > 0 ? (d.under24h / d.times.length * 100) : 0,
+        slow: d.times.length > 0 ? (d.over30d / d.times.length * 100) : 0
+      });
+    });
+
+    districts = districts.filter(function(d) { return d.total >= 5; });
+    districts.sort(function(a, b) { return b.median - a.median; });
+
+    // Build agency array
+    var agencies = [];
+    Object.keys(agencyMap).forEach(function(key) {
+      var a = agencyMap[key];
+      if (a.times.length < 5) return;
+      agencies.push({
+        agency: key,
+        label: a.label,
+        median: calcMedian(a.times),
+        total: a.times.length
+      });
+    });
+    agencies.sort(function(a, b) { return b.median - a.median; });
+
+    citywideMedian = calcMedian(allTimes);
+    currentDistricts = districts;
+    currentAgencies = agencies;
+
+    // Update headline
+    document.getElementById("stat-median").textContent = formatDays(citywideMedian);
+    document.getElementById("stat-count").textContent = formatNumber(allTimes.length) + " closed complaints analyzed";
+
+    // Update legend to reflect citywide median thresholds
+    var m = citywideMedian || 1;
+    document.getElementById("legend-l1").textContent = "< " + formatDays(m * 0.67) + " (much faster)";
+    document.getElementById("legend-l2").textContent = formatDays(m * 0.67) + "-" + formatDays(m * 1.33) + " (near median)";
+    document.getElementById("legend-l3").textContent = formatDays(m * 1.33) + "-" + formatDays(m * 2) + " (slower)";
+    document.getElementById("legend-l4").textContent = "> " + formatDays(m * 2) + " (much slower)";
+
+    // Show dashboard BEFORE rendering charts so Chart.js has valid layout
+    loadingEl.style.display = "none";
+    dashboardEl.style.display = "block";
+
+    // Update map
+    updateMapColors();
+
+    // Render charts
+    renderDistrictChart(districts);
+    updateAgencyChart(null);
+    renderSummaryStats(allTimes, districts);
+    renderAgencyDistrictBreakdown();
+
+    // Data note
+    var complaintLabel = complaintSelect.value
+      ? complaintSelect.options[complaintSelect.selectedIndex].text
+      : "all";
+    var periodText = periodSelect.options[periodSelect.selectedIndex].text.toLowerCase();
+    document.getElementById("data-note").textContent =
+      "Source: NYC 311 Service Requests via NYC Open Data (Socrata API). Showing closed " +
+      complaintLabel + " complaints from the " + periodText +
+      ". Resolution time = closed_date minus created_date. " +
+      "Districts with fewer than 5 complaints excluded. " +
+      formatNumber(allTimes.length) + " records analyzed. Median used to reduce outlier impact.";
+
+    // Resize map after display
+    if (map) {
+      setTimeout(function() { map.resize(); }, 100);
+    }
+  }
+
+  function renderDistrictChart(districts) {
+    // 5 fastest and 5 slowest, ordered fastest-at-top to slowest-at-bottom.
+    var asc = districts.slice().sort(function(a, b) { return a.median - b.median; });
+    var fastest = asc.slice(0, 5);
+    var slowest = asc.slice(-5);
+    // Insert a spacer row between the two groups so fastest and slowest
+    // read as distinct sections rather than one continuous ranking.
+    var SPACER = { district: "__spacer__", median: null, isSpacer: true };
+    var combined = fastest.concat([SPACER]).concat(slowest);
+    var labels = combined.map(function(d) { return d.isSpacer ? "" : cdShortName(d.district); });
+    var values = combined.map(function(d) { return d.isSpacer ? null : Math.round(d.median * 100) / 100; });
+    var colors = combined.map(function(d) { return d.isSpacer ? "transparent" : barColor(d.median); });
+
+    var container = document.getElementById("district-chart-container");
+    if (districtChart) districtChart.destroy();
+    container.innerHTML = "";
+    var canvas = document.createElement("canvas");
+    container.appendChild(canvas);
+
+    districtChart = new Chart(canvas.getContext("2d"), {
+      type: "bar",
+      data: {
+        labels: labels,
+        datasets: [{
+          data: values,
+          backgroundColor: colors,
+          borderWidth: 0,
+          barThickness: 18
+        }]
+      },
+      options: {
+        indexAxis: "y",
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            callbacks: {
+              label: function(ctx) { return formatDays(ctx.raw); }
+            },
+            backgroundColor: "#050507",
+            titleFont: { family: "halyard-text" },
+            bodyFont: { family: "halyard-text" }
+          },
+          annotation: {
+            annotations: {
+              medianLine: {
+                type: "line",
+                xMin: citywideMedian,
+                xMax: citywideMedian,
+                borderColor: "#394882",
+                borderWidth: 2,
+                borderDash: [5, 3],
+                label: {
+                  display: true,
+                  content: "Citywide: " + formatDays(citywideMedian),
+                  position: "start",
+                  backgroundColor: "#394882",
+                  color: "#fff",
+                  font: { family: "halyard-text", size: 10 },
+                  padding: { top: 2, bottom: 2, left: 5, right: 5 }
+                }
+              }
+            }
+          }
+        },
+        scales: {
+          x: {
+            title: { display: true, text: "Days", font: { family: "halyard-text", size: 11 }, color: "#666" },
+            grid: { color: "#f0f0f0" },
+            ticks: { font: { family: "halyard-text", size: 10 }, color: "#666" }
+          },
+          y: {
+            grid: { display: false },
+            ticks: { font: { family: "halyard-text", size: 11 }, color: "#1a1a1a" }
+          }
+        }
+      }
+    });
+  }
+
+  function updateAgencyChart(districtKey) {
+    var agencies;
+    if (districtKey) {
+      // Recalculate agencies for selected district
+      var agencyMap = {};
+      allRecords.forEach(function(r) {
+        var district = parseCommunityBoard(r.community_board);
+        if (district !== districtKey) return;
+        var created = new Date(r.created_date);
+        var closed = new Date(r.closed_date);
+        if (isNaN(created.getTime()) || isNaN(closed.getTime())) return;
+        var diffDays = (closed - created) / (1000 * 60 * 60 * 24);
+        if (diffDays < 0) return;
+        var key = r.agency || "Unknown";
+        var label = r.agency_name || r.agency || "Unknown";
+        if (!agencyMap[key]) agencyMap[key] = { label: label, times: [] };
+        agencyMap[key].times.push(diffDays);
+      });
+      agencies = [];
+      Object.keys(agencyMap).forEach(function(k) {
+        var a = agencyMap[k];
+        agencies.push({ agency: k, label: a.label, median: calcMedian(a.times), total: a.times.length });
+      });
+      agencies.sort(function(a, b) { return b.median - a.median; });
+      document.getElementById("agency-chart-title").textContent = "Agency resolution times in " + cdShortName(districtKey);
+    } else {
+      agencies = currentAgencies;
+      document.getElementById("agency-chart-title").textContent = "Median resolution time by agency";
+    }
+
+    // Select top 15 by volume, then sort by median for display
+    var byVolume = agencies.slice().sort(function(a, b) { return b.total - a.total; });
+    var top = byVolume.slice(0, 15)
+      .sort(function(a, b) { return b.median - a.median; })
+      .reverse();
+    var labels = top.map(function(a) { return a.label || a.agency; });
+    var values = top.map(function(a) { return Math.round(a.median * 100) / 100; });
+    var colors = top.map(function(a) { return barColor(a.median); });
+
+    var container = document.getElementById("agency-chart-container");
+    if (agencyChart) agencyChart.destroy();
+    container.innerHTML = "";
+
+    if (agencies.length <= 1) {
+      var note = document.createElement("div");
+      note.style.cssText = "padding:1.5rem 0;color:#707175;font-size:0.9rem;line-height:1.6;";
+      if (agencies.length === 1) {
+        note.innerHTML = "All complaints of this type go to <strong>" + (agencies[0].label || agencies[0].agency) + "</strong> (median " + formatDays(agencies[0].median) + ", " + formatNumber(agencies[0].total) + " complaints). Select a different complaint type to compare agencies.";
+      } else {
+        note.textContent = "No agency data available for this selection.";
+      }
+      container.appendChild(note);
+      return;
+    }
+    var canvas = document.createElement("canvas");
+    container.appendChild(canvas);
+
+    agencyChart = new Chart(canvas.getContext("2d"), {
+      type: "bar",
+      data: {
+        labels: labels,
+        datasets: [{
+          data: values,
+          backgroundColor: colors,
+          borderWidth: 0,
+          barThickness: 18
+        }]
+      },
+      options: {
+        indexAxis: "y",
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            callbacks: {
+              label: function(ctx) { return formatDays(ctx.raw); }
+            },
+            backgroundColor: "#050507",
+            titleFont: { family: "halyard-text" },
+            bodyFont: { family: "halyard-text" }
+          }
+        },
+        scales: {
+          x: {
+            title: { display: true, text: "Days", font: { family: "halyard-text", size: 11 }, color: "#666" },
+            grid: { color: "#f0f0f0" },
+            ticks: { font: { family: "halyard-text", size: 10 }, color: "#666" }
+          },
+          y: {
+            grid: { display: false },
+            ticks: { font: { family: "halyard-text", size: 11 }, color: "#1a1a1a" }
+          }
+        }
+      }
+    });
+  }
+
+  function renderFastestSlowest(districts) {
+    var container = document.getElementById("fs-table");
+    if (districts.length === 0) {
+      container.innerHTML = '<p style="color:#888;font-size:0.9rem;">No district data available.</p>';
+      return;
+    }
+
+    var sorted = districts.slice().sort(function(a, b) { return a.median - b.median; });
+    var fastest = sorted.slice(0, 5);
+    var slowest = sorted.slice(-5).reverse();
+
+    var html = '<div class="fs-col"><h4>5 fastest districts</h4>';
+    fastest.forEach(function(d) {
+      html += '<div class="fs-row"><span class="fs-district">' + cdShortName(d.district) + '</span><span class="fs-time">' + formatDays(d.median) + '</span></div>';
+    });
+    html += '</div>';
+
+    html += '<div class="fs-col"><h4>5 slowest districts</h4>';
+    slowest.forEach(function(d) {
+      html += '<div class="fs-row"><span class="fs-district">' + cdShortName(d.district) + '</span><span class="fs-time">' + formatDays(d.median) + '</span></div>';
+    });
+    html += '</div>';
+
+    container.innerHTML = html;
+  }
+
+  function renderAgencyDistrictBreakdown() {
+    var container = document.getElementById("agency-district-breakdown");
+    // agency -> { label, total, byDistrict: { district: [times] } }
+    var map = {};
+    allRecords.forEach(function(r) {
+      var created = new Date(r.created_date);
+      var closed = new Date(r.closed_date);
+      if (isNaN(created.getTime()) || isNaN(closed.getTime())) return;
+      var diff = (closed - created) / (1000 * 60 * 60 * 24);
+      if (diff < 0) return;
+      var district = parseCommunityBoard(r.community_board);
+      if (!district) return;
+      var key = r.agency || "Unknown";
+      if (!map[key]) {
+        map[key] = { label: r.agency_name || key, byDistrict: {}, total: 0 };
+      }
+      if (!map[key].byDistrict[district]) map[key].byDistrict[district] = [];
+      map[key].byDistrict[district].push(diff);
+      map[key].total++;
+    });
+
+    var rows = [];
+    Object.keys(map).forEach(function(agency) {
+      var info = map[agency];
+      if (info.total < 500) return;
+      var districtRows = [];
+      Object.keys(info.byDistrict).forEach(function(d) {
+        var t = info.byDistrict[d];
+        if (t.length < 20) return;
+        districtRows.push({ district: d, median: calcMedian(t), count: t.length });
+      });
+      if (districtRows.length < 10) return;
+      districtRows.sort(function(a, b) { return a.median - b.median; });
+      rows.push({
+        agency: agency,
+        label: info.label,
+        total: info.total,
+        fastest: districtRows.slice(0, 5),
+        slowest: districtRows.slice(-5).reverse()
+      });
+    });
+    rows.sort(function(a, b) { return b.total - a.total; });
+
+    if (rows.length === 0) {
+      container.innerHTML = '<p style="color:#888;font-size:0.9rem;">Not enough per-agency, per-district volume in this selection to build meaningful rankings. Try a longer time range or broader complaint filter.</p>';
+      return;
+    }
+
+    var html = "";
+    rows.forEach(function(row) {
+      html += '<div class="agency-breakdown-row">';
+      html += '<div class="agency-breakdown-name">' + row.label + '<span class="agency-breakdown-count">' + formatNumber(row.total) + ' complaints</span></div>';
+      html += '<div class="agency-breakdown-lists">';
+      html += '<div><span class="breakdown-header fast">5 fastest neighborhoods</span><ul>';
+      row.fastest.forEach(function(d) {
+        html += '<li><span class="dname">' + cdDisplayName(d.district) + '</span><span class="dtime">' + formatDays(d.median) + '</span></li>';
+      });
+      html += '</ul></div>';
+      html += '<div><span class="breakdown-header slow">5 slowest neighborhoods</span><ul>';
+      row.slowest.forEach(function(d) {
+        html += '<li><span class="dname">' + cdDisplayName(d.district) + '</span><span class="dtime">' + formatDays(d.median) + '</span></li>';
+      });
+      html += '</ul></div>';
+      html += '</div></div>';
+    });
+    container.innerHTML = html;
+  }
+
+  function renderSummaryStats(allTimes, districts) {
+    var container = document.getElementById("summary-stats");
+    if (allTimes.length === 0) {
+      container.innerHTML = '<p style="color:#888;font-size:0.9rem;">No data available.</p>';
+      return;
+    }
+
+    var sorted = allTimes.slice().sort(function(a, b) { return a - b; });
+    var under24h = allTimes.filter(function(t) { return t < 1; }).length;
+    var over7d = allTimes.filter(function(t) { return t > 7; }).length;
+    var over30d = allTimes.filter(function(t) { return t > 30; }).length;
+    var p25 = sorted[Math.floor(sorted.length * 0.25)];
+    var p75 = sorted[Math.floor(sorted.length * 0.75)];
+
+    var html = '<div style="display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;">';
+
+    var stats = [
+      { label: "Total complaints", value: formatNumber(allTimes.length),
+        desc: "Every closed 311 complaint matching the current filters. The denominator for everything below." },
+      { label: "Districts with data", value: districts.length,
+        desc: "Of NYC's 59 community districts, how many have at least 5 complaints in this filter. Tiny-sample districts are excluded from charts." },
+      { label: "25th percentile", value: formatDays(p25),
+        desc: "A quarter of complaints close faster than this." },
+      { label: "75th percentile", value: formatDays(p75),
+        desc: "Three-quarters close faster than this; the slowest quarter takes longer. The middle half of complaints falls between the 25th and 75th." },
+      { label: "Resolved in <24 hours", value: ((under24h / allTimes.length) * 100).toFixed(1) + "%",
+        desc: "Share of complaints closed within 1 day of being filed." },
+      { label: "Took over 7 days", value: ((over7d / allTimes.length) * 100).toFixed(1) + "%",
+        desc: "Share that took more than a week to close." },
+      { label: "Took over 30 days", value: ((over30d / allTimes.length) * 100).toFixed(1) + "%",
+        desc: "Share that took more than a month. Always 0.0% for a 30-day window (nothing filed recently can be older than the window)." }
+    ];
+
+    stats.forEach(function(s) {
+      html += '<div style="padding:0.5rem 0;border-bottom:1px solid #f0f0f0;">' +
+        '<div style="font-size:0.75rem;color:#888;text-transform:uppercase;letter-spacing:0.04em;font-weight:600;">' + s.label + '</div>' +
+        '<div style="font-family:GascogneTS,Source Serif 4,Georgia,serif;font-size:1.3rem;font-weight:700;">' + s.value + '</div>' +
+        '<div style="font-size:0.72rem;color:#888;line-height:1.4;margin-top:0.2rem;">' + s.desc + '</div>' +
+        '</div>';
+    });
+
+    html += '</div>';
+    container.innerHTML = html;
+  }
+
+  // Event listeners
+  complaintSelect.addEventListener("change", fetchData);
+  boroughSelect.addEventListener("change", fetchData);
+  periodSelect.addEventListener("change", fetchData);
+
+  // Initialize
+  async function init() {
+    // Start GeoJSON and data fetch in parallel
+    var geoPromise = loadGeoData();
+    await fetchData();
+    await geoPromise;
+
+    // Now that dashboard is visible, init map
+    initMap();
+    if (map.loaded()) {
+      addMapLayers();
+      updateMapColors();
+    } else {
+      map.on("load", function() {
+        addMapLayers();
+        updateMapColors();
+      });
+    }
+  }
+
+  init();
+})();
+</script>
+</body>
+</html>

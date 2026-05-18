@@ -129,6 +129,25 @@
       <input type="text" id="search-input" placeholder="Search districts, complaints, topics..." />
     </div>
 
+    <!-- Map lens selector -->
+    <div class="lens-toggle">
+      <div class="lens-label">Color map by</div>
+      <div class="lens-pills">
+        <button class="lens-pill active" data-lens="volume" title="Districts colored by 311 complaint activity score (spikes, weighted by recency)">
+          <span class="lens-pill-name">Spikes</span>
+          <span class="lens-pill-hint">What's surging</span>
+        </button>
+        <button class="lens-pill" data-lens="speed" title="Districts colored by average 311 resolution time over the last 90 days">
+          <span class="lens-pill-name">Speed</span>
+          <span class="lens-pill-hint">Response time</span>
+        </button>
+        <button class="lens-pill" data-lens="gap" title="Districts where complaints are spiking AND the city is slow to respond — the journalism sweet spot">
+          <span class="lens-pill-name">Service gap</span>
+          <span class="lens-pill-hint">Surge × slow</span>
+        </button>
+      </div>
+    </div>
+
     <!-- View toggle -->
     <div class="view-toggle">
       <button class="view-btn active" data-view="map">All Districts</button>

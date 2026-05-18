@@ -220,6 +220,76 @@ html, body {
 .search-bar input::placeholder { color: var(--sd2); }
 .search-bar input:focus { border-color: var(--vc-chartreuse); }
 
+.lens-toggle {
+  padding: 12px 20px 10px;
+  border-bottom: 1px solid var(--sl);
+  flex-shrink: 0;
+}
+.lens-label {
+  font-size: 10px; color: var(--sd2);
+  text-transform: uppercase; letter-spacing: 0.08em;
+  margin-bottom: 8px; font-weight: 700;
+}
+.lens-pills {
+  display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px;
+}
+.lens-pill {
+  text-align: left;
+  padding: 8px 10px 7px;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid var(--sl);
+  border-radius: 6px; cursor: pointer;
+  transition: all 0.15s;
+  display: flex; flex-direction: column; gap: 2px;
+  min-height: 50px;
+}
+.lens-pill:hover { background: rgba(255,255,255,0.06); border-color: var(--sd2); }
+.lens-pill-name {
+  font-size: 12px; font-weight: 700; color: var(--st);
+  letter-spacing: 0.01em;
+}
+.lens-pill-hint {
+  font-size: 9.5px; color: var(--sd2);
+  text-transform: uppercase; letter-spacing: 0.06em;
+}
+.lens-pill.active {
+  background: rgba(221,228,76,0.10);
+  border-color: var(--vc-chartreuse);
+}
+.lens-pill.active .lens-pill-name { color: var(--vc-chartreuse); }
+.lens-pill.active .lens-pill-hint { color: var(--vc-chartreuse); opacity: 0.75; }
+
+.lens-legend {
+  display: flex; gap: 12px; align-items: center;
+  padding: 6px 20px 8px; flex-wrap: wrap;
+  border-bottom: 1px solid var(--sl); flex-shrink: 0;
+  font-size: 10px; color: var(--sd2);
+  text-transform: uppercase; letter-spacing: 0.05em;
+}
+.lens-legend-item { display: flex; align-items: center; gap: 5px; }
+.lens-legend-swatch {
+  width: 11px; height: 11px; border-radius: 2px;
+  display: inline-block;
+}
+
+.service-line {
+  display: flex; gap: 10px; align-items: baseline;
+  padding: 6px 8px; margin-top: 8px;
+  background: rgba(155,159,188,0.07);
+  border-left: 2px solid var(--vc-periwinkle);
+  font-size: 11px; color: var(--st);
+  border-radius: 0 3px 3px 0;
+}
+.service-line-label {
+  font-size: 9.5px; text-transform: uppercase;
+  letter-spacing: 0.06em; color: var(--sd2);
+  font-weight: 700; flex-shrink: 0;
+}
+.service-line-stat { color: var(--st); font-weight: 600; }
+.service-line-stat.slow { color: var(--vc-orange); }
+.service-line-stat.fast { color: var(--vc-goodest-green); }
+.service-line-context { color: var(--sd2); font-size: 10.5px; margin-left: auto; }
+
 .view-toggle {
   padding: 8px 20px;
   border-bottom: 1px solid var(--sl);

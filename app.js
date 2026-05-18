@@ -11,7 +11,148 @@ let trendsData = null;
 let selectedDistrict = null;
 let activeCategory = null;
 let currentView = 'map'; // 'map' or 'hotspots'
+let currentLens = 'volume'; // 'volume' | 'speed' | 'gap'
+let resolutionStats = null; // { byDistrict: {cd: avg_days}, citywideAvg, citywideMedian, lookbackDays }
+let geoJSONFeatures = null; // cached for re-coloring when resolution data arrives
 let popup = null;
+
+const SOCRATA_311 = 'https://data.cityofnewyork.us/resource/erm2-nwe9.json';
+
+// Map "01 BRONX" → "201" etc.
+const BORO_CODE = { MANHATTAN: 1, BRONX: 2, BROOKLYN: 3, QUEENS: 4, 'STATEN ISLAND': 5 };
+function cbStringToCd(cb) {
+  if (!cb) return null;
+  const m = cb.match(/^\s*(\d+)\s+(.+?)\s*$/);
+  if (!m) return null;
+  const num = parseInt(m[1], 10);
+  const boro = BORO_CODE[m[2].toUpperCase()];
+  if (!boro || !num || num < 1 || num > 18) return null;
+  return String(boro * 100 + num);
+}
+
+async function fetchResolutionStats(lookbackDays = 90) {
+  const cutoff = new Date(Date.now() - lookbackDays * 86400000)
+    .toISOString().slice(0, 10);
+  const params = new URLSearchParams({
+    '$select': 'community_board, count(*) as n, avg(date_diff_d(closed_date,created_date)) as avg_days',
+    '$where': `created_date > '${cutoff}' AND closed_date IS NOT NULL AND status='Closed'`,
+    '$group': 'community_board',
+    '$having': 'count(*) > 50',
+    '$limit': '500',
+  });
+  try {
+    const resp = await fetch(`${SOCRATA_311}?${params.toString()}`);
+    if (!resp.ok) throw new Error(`Socrata ${resp.status}`);
+    const rows = await resp.json();
+    const byDistrict = {};
+    const allDays = [];
+    let totalN = 0, weighted = 0;
+    for (const r of rows) {
+      const cd = cbStringToCd(r.community_board);
+      if (!cd) continue;
+      const days = parseFloat(r.avg_days);
+      const n = parseInt(r.n, 10);
+      if (!isFinite(days) || days < 0 || days > 365) continue;
+      byDistrict[cd] = { avg_days: days, n };
+      allDays.push(days);
+      totalN += n;
+      weighted += days * n;
+    }
+    allDays.sort((a, b) => a - b);
+    const median = allDays.length ? allDays[Math.floor(allDays.length / 2)] : null;
+    resolutionStats = {
+      byDistrict,
+      citywideAvg: totalN ? weighted / totalN : null,
+      citywideMedian: median,
+      lookbackDays,
+    };
+    onResolutionStatsLoaded();
+    return resolutionStats;
+  } catch (err) {
+    console.warn('Resolution-stats fetch failed:', err);
+    resolutionStats = { byDistrict: {}, citywideAvg: null, citywideMedian: null, lookbackDays, failed: true };
+    onResolutionStatsLoaded();
+    return resolutionStats;
+  }
+}
+
+function formatDays(d) {
+  if (d == null || !isFinite(d)) return '—';
+  if (d < 1) return `${(d * 24).toFixed(0)} hr`;
+  if (d < 10) return `${d.toFixed(1)} days`;
+  return `${Math.round(d)} days`;
+}
+
+function renderServiceLine(cd) {
+  if (!resolutionStats) {
+    return '<div class="service-line service-line-pending"><span class="service-line-label">City response</span><span class="service-line-stat" style="opacity:.5">loading…</span></div>';
+  }
+  if (resolutionStats.failed) return '';
+  const entry = resolutionStats.byDistrict[cd];
+  const cityAvg = resolutionStats.citywideAvg;
+  if (!entry || cityAvg == null) return '';
+  const localDays = entry.avg_days;
+  const ratio = localDays / cityAvg;
+  let cls = '';
+  let verdict = '';
+  if (ratio >= 1.25) { cls = 'slow'; verdict = `${(ratio).toFixed(1)}× citywide`; }
+  else if (ratio <= 0.75) { cls = 'fast'; verdict = `${(1 / ratio).toFixed(1)}× faster than citywide`; }
+  else { verdict = `near citywide pace`; }
+  return `
+    <div class="service-line">
+      <span class="service-line-label">City response</span>
+      <span class="service-line-stat ${cls}">${formatDays(localDays)}</span>
+      <span class="service-line-context">${verdict} · citywide ${formatDays(cityAvg)}</span>
+    </div>`;
+}
+
+function computeGapScore(activity, avgDays) {
+  if (avgDays == null || activity == null) return null;
+  const cityAvg = resolutionStats?.citywideAvg;
+  const volumeNorm = Math.max(0, Math.min(activity / 100, 1));
+  // slowness relative to citywide: 0.5× → 0, 1.5× → 1
+  let slowNorm;
+  if (cityAvg && cityAvg > 0) {
+    const ratio = avgDays / cityAvg;
+    slowNorm = Math.max(0, Math.min((ratio - 0.5) / 1.0, 1));
+  } else {
+    slowNorm = Math.max(0, Math.min(avgDays / 14, 1));
+  }
+  return Math.round(100 * volumeNorm * slowNorm);
+}
+
+function onResolutionStatsLoaded() {
+  if (!geoJSONFeatures || !resolutionStats) return;
+  for (const f of geoJSONFeatures.features) {
+    const cd = f.properties.cd_code;
+    const entry = resolutionStats.byDistrict[cd];
+    f.properties.avg_resolution_days = entry ? entry.avg_days : null;
+    f.properties.gap_score = entry ? computeGapScore(f.properties.activity_score, entry.avg_days) : null;
+  }
+  if (map && map.getSource('districts')) {
+    map.getSource('districts').setData(geoJSONFeatures);
+    applyLens(currentLens);
+  }
+  // re-render sidebar so story cards get the service-line
+  if (currentView === 'map' && !selectedDistrict) renderOverviewList();
+}
+
+// Color ramps for the Speed / Gap lenses
+const SPEED_COLORS = [
+  [0,   '#57aa4a'],   // fast (green)
+  [3,   '#dde44c'],   // chartreuse
+  [7,   '#ff7c53'],   // orange
+  [14,  '#d2232a'],   // red
+  [30,  '#7a0e0e'],   // dark red
+];
+const GAP_COLORS = [
+  [0,    '#1a1a2e'],
+  [10,   '#394882'],
+  [25,   '#217ebe'],
+  [45,   '#dde44c'],
+  [65,   '#ff7c53'],
+  [85,   '#d2232a'],
+];
 
 // Color ramp for activity scores (low → high)
 const SCORE_COLORS = [
@@ -109,10 +250,14 @@ async function loadData() {
         feature.properties.name = districtsData.districts[cd].name || `District ${cd}`;
       }
     }
+    geoJSONFeatures = geoJSON;
+    // Fire-and-forget resolution-times pull from Socrata; updates the map when it lands.
+    fetchResolutionStats(90);
 
     // Add layers once map style is ready
     function onMapReady() {
       addDistrictLayers(geoJSON);
+      renderLensLegend(currentLens);
       showOverview();
       hideLoading();
       updateTimestamp();
@@ -128,6 +273,78 @@ async function loadData() {
     console.error('Failed to load data:', err);
     document.getElementById('loading-text').textContent = 'Error loading data. Run the pipeline first.';
   }
+}
+
+function applyLens(lens) {
+  if (!map || !map.getLayer('district-fill')) return;
+  let expr;
+  if (lens === 'speed') {
+    expr = [
+      'case',
+      ['==', ['coalesce', ['get', 'avg_resolution_days'], -1], -1],
+      'rgba(120,120,120,0.25)',
+      ['interpolate', ['linear'],
+       ['get', 'avg_resolution_days'],
+       ...SPEED_COLORS.flat()],
+    ];
+  } else if (lens === 'gap') {
+    expr = [
+      'case',
+      ['==', ['coalesce', ['get', 'gap_score'], -1], -1],
+      'rgba(120,120,120,0.25)',
+      ['interpolate', ['linear'],
+       ['get', 'gap_score'],
+       ...GAP_COLORS.flat()],
+    ];
+  } else {
+    expr = [
+      'interpolate', ['linear'],
+      ['coalesce', ['get', 'activity_score'], 0],
+      ...SCORE_COLORS.flat(),
+    ];
+  }
+  map.setPaintProperty('district-fill', 'fill-color', expr);
+  renderLensLegend(lens);
+}
+
+function renderLensLegend(lens) {
+  let el = document.querySelector('.lens-legend');
+  if (!el) {
+    const toggle = document.querySelector('.lens-toggle');
+    if (!toggle) return;
+    el = document.createElement('div');
+    el.className = 'lens-legend';
+    toggle.insertAdjacentElement('afterend', el);
+  }
+  let items = [];
+  if (lens === 'speed') {
+    items = [
+      ['#57aa4a', '<3 days'],
+      ['#dde44c', '3–7 days'],
+      ['#ff7c53', '7–14 days'],
+      ['#d2232a', '14+ days'],
+      ['rgba(120,120,120,0.4)', 'no data'],
+    ];
+  } else if (lens === 'gap') {
+    items = [
+      ['#394882', 'low'],
+      ['#217ebe', '–'],
+      ['#dde44c', 'mid'],
+      ['#ff7c53', '–'],
+      ['#d2232a', 'high gap'],
+    ];
+  } else {
+    items = [
+      ['#394882', 'quiet'],
+      ['#217ebe', '–'],
+      ['#dde44c', 'active'],
+      ['#ff7c53', '–'],
+      ['#d2232a', 'surging'],
+    ];
+  }
+  el.innerHTML = items.map(([c, lab]) =>
+    `<div class="lens-legend-item"><span class="lens-legend-swatch" style="background:${c}"></span>${lab}</div>`
+  ).join('');
 }
 
 function addDistrictLayers(geoJSON) {
@@ -731,6 +948,7 @@ function renderOverviewList() {
             <span class="theme-tag">${s.category}</span>
             <span class="theme-tag severity-${s.intensity}">${s.intensity}</span>
           </div>
+          ${renderServiceLine(s.cd)}
         </div>
       `).join('')}
     </div>`;
@@ -839,6 +1057,24 @@ function initControls() {
         if (currentView === 'hotspots') renderHotSpots();
         else renderOverviewList();
       }
+    });
+  });
+
+  // Lens toggle (map coloring: volume / speed / gap)
+  document.querySelectorAll('.lens-pill').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const lens = btn.dataset.lens;
+      if ((lens === 'speed' || lens === 'gap') && (!resolutionStats || resolutionStats.failed)) {
+        if (!resolutionStats) {
+          btn.classList.add('loading');
+          return;
+        }
+      }
+      document.querySelectorAll('.lens-pill').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      currentLens = lens;
+      applyLens(lens);
+      if (!selectedDistrict && currentView === 'map') renderOverviewList();
     });
   });
 

@@ -638,6 +638,150 @@ header .subtitle {
     font-size: 1.8rem;
   }
 }
+
+/* ═══ DARK-MODE OVERRIDES — match map.html visual system ═══ */
+:root {
+  --sd: #0c0c0f;
+  --sd2: rgba(255,255,255,0.45);
+  --sl: rgba(255,255,255,0.07);
+  --sm: #111115;
+  --st: rgba(255,255,255,0.88);
+  --sb: #050507;
+}
+body {
+  background: var(--sb);
+  color: var(--st);
+}
+.top-accent-bar { background: var(--vc-chartreuse); }
+.container { max-width: 1400px; }
+header {
+  background: var(--sb);
+  border-bottom: 1px solid var(--sl);
+  margin: 0 -1.5rem 1.5rem;
+  padding: 2rem 1.5rem 1.5rem;
+}
+header h1 { color: var(--st); font-size: 2.2rem; font-weight: 900; letter-spacing: -0.02em; }
+header .subtitle { color: var(--sd2); }
+
+.controls {
+  background: var(--sd);
+  border: 1px solid var(--sl);
+  border-bottom: 1px solid var(--sl);
+  border-radius: 8px;
+}
+.control-group label { color: var(--sd2); font-size: 0.65rem; }
+.control-group select {
+  background-color: var(--sm);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath d='M6 8L1 3h10z' fill='%23dde44c'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.6rem center;
+  background-size: 10px 10px;
+  border: 1px solid var(--sl);
+  color: var(--st);
+}
+.control-group select:focus { border-color: var(--vc-chartreuse); outline: none; }
+
+.map-wrap {
+  background: var(--sd);
+  border: 1px solid var(--sl);
+  box-shadow: none;
+}
+.map-wrap h2 { color: var(--st); }
+.map-wrap .map-subtitle { color: var(--sd2); }
+.map-legend {
+  background: var(--sm);
+  border-top: 1px solid var(--sl);
+  color: var(--sd2);
+}
+
+.headline-stat {
+  background: linear-gradient(135deg, var(--sd) 0%, var(--sm) 100%);
+  border: 1px solid var(--sl);
+  border-top: 3px solid var(--vc-chartreuse);
+  box-shadow: none;
+}
+.headline-stat .stat-label { color: var(--sd2); }
+.headline-stat .stat-value { color: var(--vc-chartreuse); }
+.headline-stat .stat-detail { color: var(--sd2); }
+
+.selected-district-banner {
+  background: rgba(221,228,76,0.08);
+  border: 1px solid rgba(221,228,76,0.35);
+  border-left: 4px solid var(--vc-chartreuse);
+  color: var(--vc-chartreuse);
+  box-shadow: none;
+}
+.selected-district-banner button { color: var(--vc-chartreuse); }
+
+.panel-section {
+  background: var(--sd);
+  border: 1px solid var(--sl);
+  border-top: 2px solid var(--vc-chartreuse);
+  box-shadow: none;
+}
+.panel-section h3 { color: var(--st); }
+
+.chart-section {
+  background: var(--sd);
+  border: 1px solid var(--sl);
+  border-top: 2px solid var(--vc-chartreuse);
+  box-shadow: none;
+}
+.chart-section h2 { color: var(--st); }
+.chart-section .chart-subtitle { color: var(--sd2); }
+
+.legend-item { color: var(--sd2); }
+
+.breakdown-header {
+  color: var(--sd2);
+  border-bottom: 2px solid var(--vc-chartreuse);
+}
+.breakdown-header.fast { border-bottom-color: var(--vc-goodest-green); }
+.breakdown-header.slow { border-bottom-color: var(--vc-baddest-red); }
+
+.agency-breakdown-row { border-top: 1px solid var(--sl); }
+.agency-breakdown-name { color: var(--st); }
+.agency-breakdown-count { color: var(--sd2); }
+.agency-breakdown-lists li { border-bottom: 1px solid var(--sl); }
+.agency-breakdown-lists li .dname { color: var(--st); }
+.agency-breakdown-lists li .dtime { color: var(--sd2); }
+
+.fs-col h4 { color: var(--sd2); border-bottom: 2px solid var(--vc-chartreuse); }
+.fs-row { border-bottom: 1px solid var(--sl); }
+.fs-row:nth-child(even) { background: rgba(255,255,255,0.02); }
+.fs-row .fs-district { color: var(--st); }
+.fs-row .fs-time { color: var(--sd2); }
+
+.spinner { border-color: var(--sl); border-top-color: var(--vc-chartreuse); }
+.loading-text { color: var(--sd2); }
+
+.error-message {
+  background: rgba(210,35,42,0.10);
+  border: 1px solid rgba(210,35,42,0.4);
+  color: #ffb3b6;
+}
+
+.data-note {
+  background: var(--sm);
+  border-top: 1px solid var(--sl);
+  color: var(--sd2);
+}
+
+.page-footer {
+  border-top: 1px solid var(--sl);
+  color: var(--sd2);
+}
+.page-footer a { color: var(--vc-chartreuse); }
+
+.maplibregl-popup-content {
+  background: var(--sm);
+  color: var(--st);
+  box-shadow: 0 2px 12px rgba(0,0,0,0.6);
+}
+.maplibregl-popup-tip { border-top-color: var(--sm); border-bottom-color: var(--sm); }
+.popup-district { color: var(--st); }
+.popup-time { color: var(--sd2); }
+.popup-count { color: var(--sd2); }
 </style>
 </head>
 <body>
@@ -772,6 +916,14 @@ header .subtitle {
 <script>
 (function() {
   "use strict";
+
+  // Dark-mode Chart.js defaults to match the rest of the 311 Complaint Tracker
+  if (window.Chart && Chart.defaults) {
+    Chart.defaults.color = 'rgba(255,255,255,0.65)';
+    Chart.defaults.borderColor = 'rgba(255,255,255,0.08)';
+    Chart.defaults.scale.grid.color = 'rgba(255,255,255,0.06)';
+    Chart.defaults.scale.ticks.color = 'rgba(255,255,255,0.65)';
+  }
 
   var API_BASE = "https://data.cityofnewyork.us/resource/erm2-nwe9.json";
   var GEO_URL = "https://services5.arcgis.com/GfwWNkhOj9bNBqoJ/arcgis/rest/services/NYC_Community_Districts/FeatureServer/0/query?where=1%3D1&outFields=BoroCD&f=geojson";
@@ -971,7 +1123,7 @@ header .subtitle {
         sources: {
           "carto": {
             type: "raster",
-            tiles: ["https://basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png"],
+            tiles: ["https://basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"],
             tileSize: 256,
             attribution: "&copy; CARTO &copy; OpenStreetMap"
           }
@@ -1341,15 +1493,15 @@ header .subtitle {
                 type: "line",
                 xMin: citywideMedian,
                 xMax: citywideMedian,
-                borderColor: "#394882",
+                borderColor: "#dde44c",
                 borderWidth: 2,
                 borderDash: [5, 3],
                 label: {
                   display: true,
                   content: "Citywide: " + formatDays(citywideMedian),
                   position: "start",
-                  backgroundColor: "#394882",
-                  color: "#fff",
+                  backgroundColor: "#dde44c",
+                  color: "#050507",
                   font: { family: "halyard-text", size: 10 },
                   padding: { top: 2, bottom: 2, left: 5, right: 5 }
                 }
@@ -1359,13 +1511,13 @@ header .subtitle {
         },
         scales: {
           x: {
-            title: { display: true, text: "Days", font: { family: "halyard-text", size: 11 }, color: "#666" },
-            grid: { color: "#f0f0f0" },
-            ticks: { font: { family: "halyard-text", size: 10 }, color: "#666" }
+            title: { display: true, text: "Days", font: { family: "halyard-text", size: 11 }, color: "rgba(255,255,255,0.65)" },
+            grid: { color: "rgba(255,255,255,0.08)" },
+            ticks: { font: { family: "halyard-text", size: 10 }, color: "rgba(255,255,255,0.65)" }
           },
           y: {
             grid: { display: false },
-            ticks: { font: { family: "halyard-text", size: 11 }, color: "#1a1a1a" }
+            ticks: { font: { family: "halyard-text", size: 11 }, color: "rgba(255,255,255,0.88)" }
           }
         }
       }
@@ -1457,13 +1609,13 @@ header .subtitle {
         },
         scales: {
           x: {
-            title: { display: true, text: "Days", font: { family: "halyard-text", size: 11 }, color: "#666" },
-            grid: { color: "#f0f0f0" },
-            ticks: { font: { family: "halyard-text", size: 10 }, color: "#666" }
+            title: { display: true, text: "Days", font: { family: "halyard-text", size: 11 }, color: "rgba(255,255,255,0.65)" },
+            grid: { color: "rgba(255,255,255,0.08)" },
+            ticks: { font: { family: "halyard-text", size: 10 }, color: "rgba(255,255,255,0.65)" }
           },
           y: {
             grid: { display: false },
-            ticks: { font: { family: "halyard-text", size: 11 }, color: "#1a1a1a" }
+            ticks: { font: { family: "halyard-text", size: 11 }, color: "rgba(255,255,255,0.88)" }
           }
         }
       }

@@ -1,3 +1,11 @@
+@font-face {
+  font-family: 'GascogneTS';
+  src: url('fonts/GascogneTS-Light.ttf') format('truetype');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
 :root {
   --vc-black: #050507;
   --vc-white: #ffffff;
@@ -13,8 +21,8 @@
   --vc-baddest-red: #d2232a;
   --vc-goodest-green: #57aa4a;
 
-  --font-primary: 'Halyard', 'Helvetica Neue', Arial, sans-serif;
-  --font-secondary: 'Gascogne', Georgia, 'Times New Roman', serif;
+  --font-primary: 'halyard-text', 'Halyard', 'Inter', 'Helvetica Neue', Arial, sans-serif;
+  --font-secondary: 'GascogneTS', 'Source Serif 4', Georgia, 'Times New Roman', serif;
   --font-mono: 'SF Mono', 'Consolas', monospace;
 
   --sidebar-w: 400px;

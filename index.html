@@ -966,7 +966,7 @@ async function loadShelter() {
 async function loadCrime() {
   try {
     // Find latest data year, then do YTD vs same YTD prior year
-    const [latestRec] = await q('5uac-w243','$select=max(cmplnt_fr_dt) as latest&$limit=1');
+    const [latestRec] = await q('5uac-w243','$select=max(rpt_dt) as latest&$limit=1');
     const latestDate = new Date(latestRec?.latest || '2025-12-31');
     const dataYear = latestDate.getFullYear();
     const now = new Date();
@@ -979,10 +979,10 @@ async function loadCrime() {
 
     // Current YTD from current-year dataset; prior YTD from historical dataset (qgea-i56i)
     const [felonies, [priorYtdFel], byBoro, monthlyTrend] = await Promise.all([
-      q('5uac-w243',`$select=ofns_desc,count(*) as cnt&$where=law_cat_cd='FELONY' AND cmplnt_fr_dt>='${ytdStart}' AND cmplnt_fr_dt<='${ytdEnd}'&$group=ofns_desc&$order=cnt DESC&$limit=10`),
-      q('qgea-i56i',`$select=count(*) as cnt&$where=law_cat_cd='FELONY' AND cmplnt_fr_dt>='${priorYtdStart}' AND cmplnt_fr_dt<='${priorYtdEnd}'`),
-      q('5uac-w243',`$select=boro_nm as boro,count(*) as cnt&$where=law_cat_cd='FELONY' AND cmplnt_fr_dt>='${ytdStart}' AND cmplnt_fr_dt<='${ytdEnd}' AND boro_nm IS NOT NULL AND boro_nm != '(null)'&$group=boro_nm&$order=cnt DESC`),
-      q('5uac-w243',`$select=date_trunc_ym(cmplnt_fr_dt) as month,count(*) as cnt&$where=law_cat_cd='FELONY' AND cmplnt_fr_dt>='${ytdStart}'&$group=month&$order=month`),
+      q('5uac-w243',`$select=ofns_desc,count(*) as cnt&$where=law_cat_cd='FELONY' AND rpt_dt>='${ytdStart}' AND rpt_dt<='${ytdEnd}'&$group=ofns_desc&$order=cnt DESC&$limit=10`),
+      q('qgea-i56i',`$select=count(*) as cnt&$where=law_cat_cd='FELONY' AND rpt_dt>='${priorYtdStart}' AND rpt_dt<='${priorYtdEnd}'`),
+      q('5uac-w243',`$select=boro_nm as boro,count(*) as cnt&$where=law_cat_cd='FELONY' AND rpt_dt>='${ytdStart}' AND rpt_dt<='${ytdEnd}' AND boro_nm IS NOT NULL AND boro_nm != '(null)'&$group=boro_nm&$order=cnt DESC`),
+      q('5uac-w243',`$select=date_trunc_ym(rpt_dt) as month,count(*) as cnt&$where=law_cat_cd='FELONY' AND rpt_dt>='${ytdStart}'&$group=month&$order=month`),
     ]);
 
     const totalFelonies = felonies.reduce((s,r)=>s+Number(r.cnt),0);

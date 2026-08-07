@@ -8,6 +8,8 @@ Run weekly to generate a consolidated insights report + append to trend CSV.
 import csv
 import json
 import os
+import sys
+import time
 import requests
 from datetime import datetime, timedelta
 from collections import Counter
@@ -28,11 +30,42 @@ CSV_COLUMNS = [
 ]
 
 
-def fetch_json(url, params=None):
-    r = requests.get(url, params=params, timeout=60,
-                     headers={"User-Agent": "NYC-Open-Data-Weekly/1.0"})
-    r.raise_for_status()
-    return r.json()
+def fetch_json(url, params=None, attempts=4):
+    """GET JSON from Socrata, retrying the failures that are worth retrying.
+
+    Socrata read-times-out on the big datasets often enough that a single-shot
+    request loses the whole weekly scan to one slow query -- 24 calls each with
+    one chance means a scan that rarely finishes. Timeouts, dropped connections
+    and 5xx get backed off and retried; a 404 or a bad query does not, because
+    repeating those just wastes the run. If every attempt fails the exception
+    still propagates and the job exits non-zero, which is the point: the scan
+    fails loudly rather than publishing a week with holes in it.
+    """
+    last = None
+    for i in range(attempts):
+        try:
+            r = requests.get(url, params=params, timeout=60,
+                             headers={"User-Agent": "NYC-Open-Data-Weekly/1.0"})
+            if r.status_code >= 500:
+                raise requests.exceptions.HTTPError(
+                    f"{r.status_code} Server Error for {url}", response=r)
+            r.raise_for_status()
+            return r.json()
+        except (requests.exceptions.Timeout,
+                requests.exceptions.ConnectionError,
+                requests.exceptions.HTTPError,
+                json.JSONDecodeError) as e:
+            status = getattr(getattr(e, "response", None), "status_code", None)
+            if status is not None and status < 500:
+                raise
+            last = e
+            if i == attempts - 1:
+                break
+            wait = 5 * (2 ** i)
+            print(f"  retry {i + 1}/{attempts - 1} in {wait}s: {url} ({type(e).__name__})",
+                  file=sys.stderr)
+            time.sleep(wait)
+    raise last
 
 
 def get_updated_datasets(days=7, limit=200):

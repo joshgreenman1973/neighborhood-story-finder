@@ -300,7 +300,7 @@ function renderMain() {
     </section>
 
     <section class="blk">
-      <h3>Buildings where records converge <span class="hint">tax lots where two or more independent record families agree, last 14–60 days</span></h3>
+      <h3>Buildings where records converge <span class="hint">tax lots where two or more independent record families agree — or one source is extreme (12+ 311 calls in a fortnight, a vacate order, 10+ class C violations) — last 14–60 days</span></h3>
       ${places.length ? places.map(p => `<div class="bld"><div><b>${esc(p.address)}</b><a class="q" href="https://zola.planning.nyc.gov/l/lot/${p.key[0]}/${parseInt(p.key.slice(1,6))}/${parseInt(p.key.slice(6))}" target="_blank" rel="noopener">lot ↗</a><div class="w">${esc(p.why.join('; '))}</div></div><div class="fam"><i>${p.n_sources}</i>record famil${p.n_sources > 1 ? 'ies' : 'y'}</div></div>`).join('') : '<div class="none">No multi-source buildings in this district this fortnight.</div>'}
     </section>
 

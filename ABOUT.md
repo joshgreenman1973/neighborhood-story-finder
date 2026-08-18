@@ -1,5 +1,20 @@
 # NYC Neighborhood Story Finder
 
+**August 2026 overhaul.** The front page is now a weekly ranked list of leads, built by `data/leads/` and documented in [leads-methodology.md](leads-methodology.md):
+
+- **Buildings** — tax lots where independent record families converge (311/HPD/DOB reports; HPD and OATH inspector findings; vacate orders and marshal evictions; pending state liquor licenses).
+- **District anomalies** — 311 complaint types running above the *same weeks in the prior three years* and above the recent eight-week pace, so October heat and June noise no longer register as "spikes."
+- **New in 311** — descriptors that did not exist in the same window of prior years, with 311's own taxonomy churn set aside.
+- **Coverage check** — every lead is searched against Google News and local RSS; rank = signal x (1 - 0.75 x coverage). Uncovered signals rank first.
+
+The district map (`map.html`) and resolution-times page remain. The former citywide "performance tracker" front page was retired; its weekly citywide scan (`data/scanners/weekly_scan.py`) still appends to `data/output/weekly-trends.csv` for the record.
+
+Live: https://joshgreenman1973.github.io/nyc-311-complaint-tracker/ (repo name predates the rebrand).
+
+---
+
+## Original design (district map)
+
 An early-warning system for neighborhood-level stories across New York City. It scans nine data sources — 311 complaints, community board meetings and budget requests, land use applications, constituent service cases, building permits, Reddit, and local news — and synthesizes them into story leads for each of the city's 59 community districts.
 
 The tool is built on a simple editorial premise: local stories don't appear out of nowhere. Before a neighborhood concern becomes a media story, it leaves traces across multiple city systems — 311 call logs, community board agendas, council casework, building permits, land use filings, local Reddit threads, and news coverage. This tool surfaces those traces and highlights where they converge.

@@ -1,1572 +1,387 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>NYC Data Pulse — Citywide Performance Tracker</title>
-<meta name="description" content="Comprehensive NYC government performance and resident experience tracker. Live data from 15+ city agencies, with editorial intelligence and year-over-year context." />
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,700;0,9..40,900;1,9..40,400&family=DM+Serif+Display&display=swap" rel="stylesheet">
+<meta charset="utf-8" />
+<title>Neighborhood Story Finder — emerging trends, district by district</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="description" content="Pick one of New York City's 59 community districts and see what is changing this month: 311 complaints against their seasonal norm, HPD violations, evictions, vacate orders, DOB complaints, liquor filings, land use, and the buildings where those records converge." />
+<link rel="stylesheet" href="https://use.typekit.net/qqk2vto.css" />
 <style>
+@font-face { font-family: 'GascogneTS'; src: url('fonts/GascogneTS-Light.ttf') format('truetype'); font-weight: 300; font-display: swap; }
 :root {
-  --bg: #050507;
-  --surface: #0c0c0f;
-  --surface2: #111115;
-  --border: rgba(255,255,255,0.07);
-  --border-light: rgba(255,255,255,0.12);
-  --text: rgba(255,255,255,0.88);
-  --muted: rgba(255,255,255,0.45);
-  --dim: rgba(255,255,255,0.25);
-  --chartreuse: #dde44c;
-  --orange: #ff7c53;
-  --periwinkle: #9b9fbc;
-  --magenta: #e7466d;
-  --cerulean: #217ebe;
-  --red: #d2232a;
-  --green: #57aa4a;
-  --indigo: #394882;
-  --sans: 'DM Sans', 'Helvetica Neue', Arial, sans-serif;
-  --serif: 'DM Serif Display', Georgia, serif;
-  --mono: 'SF Mono', 'Cascadia Code', 'Fira Code', monospace;
+  --bg: #050507; --panel: #0c0c0f; --panel2: #121216; --line: rgba(255,255,255,0.08); --line2: rgba(255,255,255,0.16);
+  --text: rgba(255,255,255,0.9); --muted: rgba(255,255,255,0.5); --faint: rgba(255,255,255,0.3);
+  --chart: #dde44c; --orange: #ff7c53; --peri: #9b9fbc; --magenta: #e7466d; --green: #57aa4a; --blue: #7fb8e6;
+  --sans: 'halyard-text', 'Halyard', 'Inter', 'Helvetica Neue', Arial, sans-serif;
+  --serif: 'GascogneTS', 'Source Serif 4', Georgia, serif;
+  --mono: 'SF Mono', Menlo, Consolas, monospace;
 }
-
-*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-
-body {
-  font-family: var(--sans);
-  background: var(--bg);
-  color: var(--text);
-  line-height: 1.5;
-  -webkit-font-smoothing: antialiased;
-  min-height: 100vh;
-}
-
-/* ═══ NAVIGATION ═══ */
-.nav {
-  display: flex; align-items: center;
-  padding: 0 2rem; height: 48px;
-  background: var(--surface);
-  border-bottom: 1px solid var(--border);
-  position: sticky; top: 0; z-index: 100;
-}
-.nav-brand {
-  font-size: 13px; font-weight: 900;
-  text-transform: uppercase; letter-spacing: -0.01em;
-  color: var(--text); text-decoration: none;
-}
-.nav-brand span { color: var(--chartreuse); }
-.nav-tabs {
-  display: flex; gap: 0; height: 100%; margin-left: 2rem;
-}
-.nav-tab {
-  display: flex; align-items: center; padding: 0 1rem;
-  font-size: 11px; font-weight: 700; text-transform: uppercase;
-  letter-spacing: 0.05em; color: var(--muted); cursor: pointer;
-  border-bottom: 2px solid transparent; transition: all 0.15s;
-  background: none; border-top: none; border-left: none; border-right: none;
-  font-family: var(--sans);
-}
-.nav-tab:hover { color: var(--text); }
-.nav-tab.active { color: var(--chartreuse); border-bottom-color: var(--chartreuse); }
-.nav-status {
-  margin-left: auto; display: flex; align-items: center; gap: 12px;
-  font-size: 10px; color: var(--muted); font-family: var(--mono);
-}
-.status-dot {
-  width: 6px; height: 6px; border-radius: 50%; display: inline-block;
-  margin-right: 3px; vertical-align: middle;
-}
-.status-dot.live { background: var(--green); box-shadow: 0 0 6px var(--green); }
-.status-dot.loading { background: var(--chartreuse); animation: pulse 1.5s infinite; }
-@keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.3; } }
-
-/* ═══ MAIN LAYOUT ═══ */
-main { max-width: 1280px; margin: 0 auto; padding: 1.5rem 2rem 3rem; }
-
-/* ═══ HEADER ═══ */
-.page-header { margin-bottom: 1.5rem; }
-.page-header h1 {
-  font-family: var(--serif); font-size: 2rem;
-  font-weight: 400; letter-spacing: -0.02em;
-}
-.page-header h1 span { color: var(--chartreuse); }
-.page-header .subtitle {
-  color: var(--muted); font-size: 0.85rem; margin-top: 0.25rem;
-  font-family: var(--serif); font-style: italic;
-}
-.page-header .meta {
-  display: flex; gap: 1.5rem; margin-top: 0.75rem;
-  font-size: 0.7rem; color: var(--dim); font-family: var(--mono);
-  text-transform: uppercase; letter-spacing: 0.05em;
-}
-
-/* ═══ KPI RAIL ═══ */
-.kpi-rail {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(145px, 1fr));
-  gap: 1px; margin-bottom: 1.5rem;
-  background: var(--border); border-radius: 12px; overflow: hidden;
-}
-.kpi {
-  background: var(--surface); padding: 1rem 1.1rem;
-  position: relative; overflow: hidden;
-}
-.kpi::after {
-  content: ''; position: absolute; top: 0; left: 0; right: 0;
-  height: 2px; background: var(--border); opacity: 0;
-  transition: opacity 0.3s;
-}
-.kpi:hover::after { opacity: 1; }
-.kpi-label {
-  font-size: 0.62rem; text-transform: uppercase;
-  letter-spacing: 0.07em; color: var(--muted); margin-bottom: 0.15rem;
-  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-}
-.kpi-value {
-  font-size: 1.5rem; font-weight: 900;
-  font-variant-numeric: tabular-nums; line-height: 1.1;
-}
-.kpi-value.loading-val { color: var(--dim); font-size: 1rem; }
-.kpi-delta { font-size: 0.68rem; margin-top: 0.2rem; font-family: var(--mono); }
-.kpi-delta.up-bad { color: var(--red); }
-.kpi-delta.down-good { color: var(--green); }
-.kpi-delta.up-good { color: var(--green); }
-.kpi-delta.down-bad { color: var(--red); }
-.kpi-delta.flat { color: var(--muted); }
-.kpi-sub {
-  font-size: 0.6rem; color: var(--dim); margin-top: 0.15rem;
-  font-style: italic;
-}
-
-/* ═══ DIVERGING TRENDS ═══ */
-.diverging {
-  background: var(--surface); border: 1px solid var(--border);
-  border-left: 3px solid var(--orange); border-radius: 10px;
-  padding: 1.25rem 1.5rem; margin-bottom: 1.5rem;
-}
-.diverging-title {
-  font-size: 0.7rem; font-weight: 900; text-transform: uppercase;
-  letter-spacing: 0.08em; color: var(--orange); margin-bottom: 0.75rem;
-  display: flex; align-items: center; gap: 0.5rem;
-}
-.diverging-title::before { content: '\26A1'; }
-.diverging-items { display: flex; flex-direction: column; gap: 0.5rem; }
-.div-item {
-  display: grid; grid-template-columns: 140px 1fr 80px;
-  align-items: center; gap: 0.75rem; font-size: 0.78rem;
-  padding: 0.4rem 0; border-bottom: 1px solid rgba(255,255,255,0.03);
-}
-.div-item:last-child { border-bottom: none; }
-.div-metric { color: var(--text); font-weight: 700; }
-.div-bar-track {
-  height: 6px; background: rgba(255,255,255,0.06);
-  border-radius: 3px; overflow: hidden; position: relative;
-}
-.div-bar-fill {
-  height: 100%; border-radius: 3px;
-  transition: width 0.8s cubic-bezier(0.22, 1, 0.36, 1);
-}
-.div-bar-fill.up { background: var(--red); }
-.div-bar-fill.down { background: var(--green); }
-.div-pct { font-family: var(--mono); font-weight: 700; text-align: right; }
-.div-note {
-  grid-column: 1 / -1; font-size: 0.7rem; color: var(--muted);
-  font-style: italic; padding-left: 0.5rem;
-  border-left: 2px solid rgba(255,255,255,0.06);
-}
-
-/* ═══ DOMAIN SECTIONS ═══ */
-.domain {
-  margin-bottom: 2rem;
-  animation: fadeUp 0.5s ease both;
-}
-@keyframes fadeUp {
-  from { opacity: 0; transform: translateY(12px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-.domain:nth-child(2) { animation-delay: 0.05s; }
-.domain:nth-child(3) { animation-delay: 0.1s; }
-.domain:nth-child(4) { animation-delay: 0.15s; }
-.domain-header {
-  display: flex; align-items: center; gap: 0.75rem;
-  margin-bottom: 0.75rem; padding-bottom: 0.5rem;
-  border-bottom: 1px solid var(--border);
-}
-.domain-header h2 {
-  font-family: var(--serif); font-size: 1.1rem; font-weight: 400;
-}
-.domain-header .badge {
-  font-size: 0.6rem; font-family: var(--mono);
-  padding: 2px 8px; border-radius: 4px;
-  background: rgba(255,255,255,0.05); color: var(--muted);
-  text-transform: uppercase; letter-spacing: 0.05em;
-}
-.domain-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-  gap: 1px; background: var(--border); border-radius: 10px; overflow: hidden;
-}
-
-/* ═══ CARDS ═══ */
-.card {
-  background: var(--surface); padding: 1.25rem;
-  min-height: 180px; position: relative;
-}
-.card-header {
-  display: flex; justify-content: space-between; align-items: center;
-  margin-bottom: 0.75rem;
-}
-.card-title {
-  font-size: 0.72rem; font-weight: 900; text-transform: uppercase;
-  letter-spacing: 0.06em; color: var(--muted);
-}
-.card-badge {
-  font-size: 0.58rem; font-family: var(--mono);
-  padding: 1px 6px; border-radius: 3px;
-  background: rgba(255,255,255,0.04); color: var(--dim);
-}
-.card-loading {
-  color: var(--dim); font-size: 0.75rem; font-style: italic;
-  display: flex; align-items: center; gap: 0.5rem;
-}
-.card-loading::before {
-  content: ''; width: 8px; height: 8px; border-radius: 50%;
-  background: var(--chartreuse); animation: pulse 1.5s infinite;
-}
-.card-error {
-  color: var(--red); font-size: 0.75rem; opacity: 0.7;
-}
-
-/* ═══ METRICS & ROWS ═══ */
-.metric-row {
-  display: flex; justify-content: space-between; align-items: baseline;
-  padding: 0.3rem 0; border-bottom: 1px solid rgba(255,255,255,0.03);
-  font-size: 0.78rem;
-}
-.metric-row:last-child { border-bottom: none; }
-.metric-label { color: var(--muted); flex: 1; }
-.metric-val {
-  font-weight: 700; font-family: var(--mono); margin-left: 0.5rem;
-  white-space: nowrap;
-}
-.comp {
-  display: inline-block; font-size: 0.62rem; font-family: var(--mono);
-  padding: 1px 5px; border-radius: 3px; margin-left: 4px;
-}
-.comp.up-bad { background: rgba(210,35,42,0.15); color: var(--red); }
-.comp.down-good { background: rgba(87,170,74,0.15); color: var(--green); }
-.comp.up-good { background: rgba(87,170,74,0.15); color: var(--green); }
-.comp.down-bad { background: rgba(210,35,42,0.15); color: var(--red); }
-.comp.flat { background: rgba(255,255,255,0.05); color: var(--muted); }
-
-/* ═══ BIG STAT ═══ */
-.big-stat { text-align: center; padding: 0.25rem 0 0.5rem; }
-.big-number {
-  font-size: 2rem; font-weight: 900; line-height: 1;
-  font-variant-numeric: tabular-nums;
-}
-.big-label {
-  font-size: 0.62rem; color: var(--muted); text-transform: uppercase;
-  letter-spacing: 0.05em; margin-top: 0.2rem;
-}
-
-/* ═══ MINI TABLE ═══ */
-.mini-table { width: 100%; font-size: 0.72rem; border-collapse: collapse; margin-top: 0.5rem; }
-.mini-table th {
-  text-align: left; font-weight: 700; color: var(--dim);
-  font-size: 0.58rem; text-transform: uppercase; letter-spacing: 0.05em;
-  padding: 3px 0; border-bottom: 1px solid var(--border);
-}
-.mini-table td {
-  padding: 3px 0; border-bottom: 1px solid rgba(255,255,255,0.02);
-  font-family: var(--mono); font-size: 0.7rem;
-}
-.mini-table td:first-child { font-family: var(--sans); color: var(--muted); }
-.mini-table td:not(:first-child) { text-align: right; }
-
-/* ═══ BARS ═══ */
-.boro-bars { margin-top: 0.5rem; }
-.boro-row {
-  display: flex; align-items: center; gap: 6px;
-  padding: 2px 0; font-size: 0.65rem;
-}
-.boro-name {
-  width: 22px; color: var(--dim); font-weight: 700;
-  text-align: right; flex-shrink: 0;
-}
-.boro-track {
-  flex: 1; height: 8px; background: rgba(255,255,255,0.04);
-  border-radius: 3px; overflow: hidden; position: relative;
-}
-.boro-fill { height: 100%; border-radius: 3px; transition: width 0.6s ease; }
-.boro-benchmark {
-  position: absolute; top: -1px; bottom: -1px; width: 2px;
-  background: rgba(255,255,255,0.35); border-radius: 1px;
-}
-.boro-val {
-  width: 42px; font-family: var(--mono); color: var(--dim); font-size: 0.62rem;
-}
-
-/* ═══ SPARKLINE ═══ */
-canvas.spark { display: block; margin: 6px auto 0; }
-.spark-label {
-  font-size: 0.58rem; color: var(--dim); text-align: center;
-  margin-top: 2px; font-family: var(--mono);
-}
-
-/* ═══ NARRATIVE ═══ */
-.narrative {
-  font-family: var(--serif); font-size: 0.82rem; line-height: 1.55;
-  color: var(--periwinkle); margin-top: 0.75rem;
-  padding-left: 0.75rem; border-left: 2px solid var(--chartreuse);
-  font-style: italic;
-}
-
-/* ═══ BAR CHART (horizontal) ═══ */
-.bar-row {
-  display: flex; align-items: center; gap: 6px; padding: 2px 0;
-}
-.bar-label {
-  font-size: 0.62rem; color: var(--dim); width: 70px;
-  flex-shrink: 0; text-align: right;
-}
-.bar-track {
-  flex: 1; height: 10px; background: rgba(255,255,255,0.04);
-  border-radius: 3px; overflow: hidden;
-}
-.bar-fill { height: 100%; border-radius: 3px; transition: width 0.6s ease; }
-.bar-val {
-  font-size: 0.62rem; font-family: var(--mono); color: var(--dim); width: 55px;
-}
-
-/* ═══ FOOTER ═══ */
-.page-footer {
-  max-width: 1280px; margin: 0 auto;
-  padding: 1.5rem 2rem; border-top: 1px solid var(--border);
-  font-size: 0.65rem; color: var(--dim); text-align: center; line-height: 1.7;
-}
-.page-footer a { color: var(--cerulean); text-decoration: none; }
-.page-footer a:hover { text-decoration: underline; }
-
-/* ═══ VIEW TOGGLE ═══ */
-.view-panel { display: none; }
-.view-panel.active { display: block; }
-
-/* ═══ RESPONSIVE ═══ */
-@media (max-width: 768px) {
-  .nav { padding: 0 1rem; }
-  .nav-tabs { display: none; }
-  main { padding: 1rem; }
-  .page-header h1 { font-size: 1.4rem; }
-  .kpi-rail { grid-template-columns: repeat(2, 1fr); }
-  .domain-grid { grid-template-columns: 1fr; }
-  .div-item { grid-template-columns: 100px 1fr 60px; font-size: 0.72rem; }
-}
-
-@media (max-width: 480px) {
-  .kpi-rail { grid-template-columns: repeat(2, 1fr); }
-  .kpi-value { font-size: 1.2rem; }
+* { box-sizing: border-box; }
+html, body { margin: 0; background: var(--bg); color: var(--text); font-family: var(--sans); -webkit-font-smoothing: antialiased; }
+a { color: inherit; }
+.nav { display: flex; align-items: center; padding: 0 2rem; height: 48px; background: var(--panel); border-bottom: 1px solid var(--line); position: sticky; top: 0; z-index: 50; }
+.nav-brand { font-size: 13px; font-weight: 900; text-transform: uppercase; letter-spacing: -0.01em; margin-right: 2rem; color: var(--text); text-decoration: none; }
+.nav-brand span { color: var(--chart); }
+.nav-links { display: flex; height: 100%; }
+.nav-link { display: flex; align-items: center; padding: 0 1rem; font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; color: var(--muted); text-decoration: none; border-bottom: 2px solid transparent; }
+.nav-link:hover { color: var(--text); }
+.nav-link.active { color: var(--chart); border-bottom-color: var(--chart); }
+.wrap { max-width: 1400px; margin: 0 auto; padding: 0 2rem 4rem; }
+.hero { padding: 1.8rem 0 1.2rem; border-bottom: 1px solid var(--line); display: flex; justify-content: space-between; align-items: flex-end; gap: 2rem; flex-wrap: wrap; }
+.hero h1 { font-family: var(--serif); font-weight: 300; font-size: clamp(28px, 3.6vw, 42px); line-height: 1.05; margin: 0 0 .4rem; }
+.hero h1 span { color: var(--chart); }
+.hero .dek { color: var(--muted); font-size: 14.5px; line-height: 1.5; max-width: 62ch; margin: 0; }
+.hero .asof { font-size: 12px; color: var(--muted); text-align: right; }
+.hero .asof b { color: var(--text); }
+.layout { display: grid; grid-template-columns: 300px minmax(0, 1fr); gap: 1.6rem; margin-top: 1.2rem; }
+/* district picker */
+.picker { position: sticky; top: 60px; align-self: start; max-height: calc(100vh - 76px); display: flex; flex-direction: column; border: 1px solid var(--line); border-radius: 10px; background: var(--panel); overflow: hidden; }
+.picker .ph { padding: .7rem .8rem; border-bottom: 1px solid var(--line); display: flex; flex-direction: column; gap: .5rem; }
+.picker input { font: inherit; font-size: 13px; background: var(--panel2); color: var(--text); border: 1px solid var(--line2); border-radius: 6px; padding: .4rem .6rem; width: 100%; }
+.picker .sorts { display: flex; gap: .3rem; }
+.sbtn { font: inherit; font-size: 11px; background: none; border: 1px solid var(--line2); color: var(--muted); border-radius: 4px; padding: .15rem .45rem; cursor: pointer; }
+.sbtn.on { color: #111; background: var(--chart); border-color: var(--chart); }
+.plist { overflow: auto; }
+.bh { font-size: 10.5px; text-transform: uppercase; letter-spacing: .08em; color: var(--faint); padding: .5rem .8rem .2rem; }
+.drow { display: grid; grid-template-columns: minmax(0,1fr) auto; gap: .5rem; padding: .45rem .8rem; border-bottom: 1px solid var(--line); cursor: pointer; font-size: 13px; }
+.drow:hover { background: var(--panel2); }
+.drow.on { background: rgba(221,228,76,.08); border-left: 3px solid var(--chart); padding-left: calc(.8rem - 3px); }
+.drow .n { font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.drow .b { font-size: 11px; color: var(--muted); }
+.drow .rt { font-size: 10.5px; color: var(--muted); text-align: right; white-space: nowrap; }
+.drow .rt b { display: block; font-family: var(--serif); font-weight: 300; font-size: 17px; color: var(--text); }
+/* main */
+.empty-main { border: 1px dashed var(--line2); border-radius: 10px; padding: 1.4rem 1.4rem 1rem; }
+.empty-main h2 { font-family: var(--serif); font-weight: 300; font-size: 26px; margin: 0 0 .3rem; }
+.empty-main p { color: var(--muted); font-size: 14px; line-height: 1.5; margin: 0 0 1rem; max-width: 70ch; }
+.dhead { display: flex; justify-content: space-between; align-items: flex-end; gap: 1rem; flex-wrap: wrap; margin-bottom: .9rem; }
+.dhead h2 { font-family: var(--serif); font-weight: 300; font-size: 34px; margin: 0; line-height: 1.05; }
+.dhead .sub { color: var(--muted); font-size: 13px; margin-top: .3rem; }
+.dhead .links a { color: var(--chart); font-size: 12.5px; margin-left: 1rem; text-decoration: none; }
+.tiles { display: grid; grid-template-columns: repeat(6, 1fr); gap: 1px; background: var(--line); border: 1px solid var(--line); border-radius: 10px; overflow: hidden; }
+.tile { background: var(--panel); padding: .7rem .8rem; min-width: 0; }
+.tile small { display: block; font-size: 10.5px; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); margin-bottom: .25rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.tile b { font-family: var(--serif); font-weight: 300; font-size: 26px; line-height: 1; }
+.tile .cmp { font-size: 11.5px; color: var(--muted); margin-top: .3rem; }
+.tile .cmp i { font-style: normal; font-weight: 700; }
+.up { color: var(--orange); } .dn { color: var(--green); } .flat { color: var(--muted); }
+.tile svg { display: block; margin-top: .35rem; }
+section.blk { margin-top: 1.4rem; }
+section.blk > h3 { font-size: 11px; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); margin: 0 0 .5rem; display: flex; align-items: center; gap: .8rem; flex-wrap: wrap; }
+section.blk > h3 .hint { font-weight: 400; text-transform: none; letter-spacing: 0; color: var(--faint); font-size: 12px; }
+.tabs { display: flex; gap: .3rem; flex-wrap: wrap; }
+.tab { font: inherit; font-size: 12px; font-weight: 600; background: none; border: 1px solid var(--line2); color: var(--muted); border-radius: 999px; padding: .3rem .7rem; cursor: pointer; }
+.tab.on { background: var(--chart); color: #111; border-color: var(--chart); }
+table.t { width: 100%; border-collapse: collapse; font-size: 13px; }
+table.t th { text-align: left; font-size: 10.5px; text-transform: uppercase; letter-spacing: .06em; color: var(--faint); font-weight: 600; padding: .3rem .4rem .3rem 0; border-bottom: 1px solid var(--line2); }
+table.t td { padding: .38rem .4rem .38rem 0; border-bottom: 1px solid var(--line); vertical-align: middle; }
+table.t td.r, table.t th.r { text-align: right; white-space: nowrap; }
+table.t td.m { color: var(--muted); }
+table.t tr:hover td { background: rgba(255,255,255,.02); }
+.rat { font-weight: 700; }
+.chip { font-size: 10.5px; padding: .1rem .35rem; border-radius: 3px; background: var(--line); color: var(--muted); white-space: nowrap; margin-left: .3rem; }
+.chip.acc { color: var(--orange); background: rgba(255,124,83,.12); }
+.chip.haz { color: var(--magenta); background: rgba(231,70,109,.14); }
+.spark { vertical-align: middle; }
+.none { color: var(--faint); font-size: 13px; padding: .5rem 0; }
+.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1.4rem; }
+.card { border: 1px solid var(--line); border-radius: 10px; background: var(--panel); padding: .9rem 1rem; }
+.card h4 { margin: 0 0 .5rem; font-size: 11px; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); }
+.card ul { margin: 0; padding-left: 1.05rem; font-size: 12.5px; line-height: 1.5; color: var(--muted); }
+.card li b { color: var(--text); font-weight: 600; }
+.card a { color: var(--chart); }
+.bld { border-bottom: 1px solid var(--line); padding: .55rem 0; display: grid; grid-template-columns: minmax(0,1fr) auto; gap: .8rem; font-size: 13px; }
+.bld b { font-weight: 600; }
+.bld .w { color: var(--muted); font-size: 12.5px; margin-top: .15rem; }
+.bld .fam { color: var(--muted); font-size: 11.5px; white-space: nowrap; }
+.bld .fam i { display: block; font-style: normal; font-family: var(--serif); font-weight: 300; font-size: 22px; color: var(--text); text-align: right; }
+.bld a.q { color: var(--chart); font-size: 11.5px; text-decoration: none; margin-left: .4rem; }
+.lead { border: 1px solid var(--line); background: var(--panel); border-radius: 10px; padding: .85rem 1rem; margin-bottom: .6rem; }
+.lead h5 { font-family: var(--serif); font-weight: 300; font-size: 19px; line-height: 1.22; margin: 0 0 .35rem; }
+.lead .meta { display: flex; flex-wrap: wrap; gap: .4rem .7rem; align-items: center; font-size: 12px; color: var(--muted); margin-bottom: .4rem; }
+.tag { font-size: 10.5px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; padding: .16rem .42rem; border-radius: 4px; }
+.tag.place { background: rgba(255,124,83,.16); color: var(--orange); }
+.tag.district { background: rgba(155,159,188,.18); color: var(--peri); }
+.tag.novelty { background: rgba(231,70,109,.16); color: var(--magenta); }
+.tag.cov0 { background: rgba(87,170,74,.16); color: var(--green); }
+.tag.cov1 { background: rgba(221,228,76,.14); color: var(--chart); }
+.tag.covx { background: rgba(255,255,255,.08); color: var(--muted); }
+.lead .why { margin: 0; padding-left: 1.05rem; font-size: 12.5px; line-height: 1.5; color: var(--muted); }
+.lead .whynow { font-size: 13.5px; margin: 0 0 .4rem; }
+details.ev { margin-top: .4rem; font-size: 12.5px; }
+details.ev summary { cursor: pointer; color: var(--muted); font-size: 11.5px; text-transform: uppercase; letter-spacing: .05em; font-weight: 600; }
+.evbody { margin-top: .5rem; padding: .6rem .8rem; background: var(--panel2); border-radius: 8px; border: 1px solid var(--line); }
+.evbody table { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+.evbody td { padding: .25rem .4rem .25rem 0; vertical-align: top; border-bottom: 1px solid var(--line); }
+.evbody td:first-child { color: var(--muted); white-space: nowrap; width: 150px; }
+.evbody a { color: var(--chart); }
+.cov-list { margin: .3rem 0 0; padding-left: 1.05rem; }
+.cov-list a { color: var(--text); }
+.cov-list small { color: var(--muted); }
+.dlink { color: var(--text); text-decoration: none; border-bottom: 1px dotted var(--line2); }
+.foot { margin-top: 3rem; padding-top: 1.2rem; border-top: 1px solid var(--line); font-size: 12.5px; color: var(--muted); line-height: 1.55; display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
+.foot a { color: var(--text); }
+.foot h4 { margin: 0 0 .3rem; font-size: 11px; text-transform: uppercase; letter-spacing: .07em; color: var(--muted); }
+.caution { font-size: 11.5px; color: var(--faint); border-left: 2px solid var(--line2); padding-left: .7rem; }
+.loading { padding: 4rem 0; text-align: center; color: var(--muted); }
+@media (max-width: 980px) {
+  .wrap { padding: 0 1rem 3rem; } .nav { padding: 0 1rem; }
+  .layout { grid-template-columns: 1fr; }
+  .picker { position: static; max-height: 40vh; }
+  .tiles { grid-template-columns: repeat(3, 1fr); }
+  .grid2 { grid-template-columns: 1fr; }
+  .foot { grid-template-columns: 1fr; }
 }
 </style>
 </head>
 <body>
-
 <nav class="nav">
-  <a class="nav-brand" href="#">NYC Data <span>Pulse</span></a>
-  <div class="nav-tabs">
-    <button class="nav-tab active" data-view="overview">Overview</button>
-    <button class="nav-tab" data-view="safety">Public Safety</button>
-    <button class="nav-tab" data-view="housing">Housing</button>
-    <button class="nav-tab" data-view="quality">Quality of Life</button>
-    <button class="nav-tab" data-view="ops">Operations</button>
-  </div>
-  <div class="nav-status">
-    <span id="statusText"><span class="status-dot loading"></span>Loading data&#8230;</span>
+  <a href="index.html" class="nav-brand">Neighborhood <span>Story Finder</span></a>
+  <div class="nav-links">
+    <a href="index.html" class="nav-link active">Districts</a>
+    <a href="map.html" class="nav-link">Map</a>
+    <a href="resolution-times.html" class="nav-link">Resolution times</a>
   </div>
 </nav>
 
-<main>
-  <div class="page-header">
-    <h1>Citywide <span>Performance</span> Tracker</h1>
-    <p>Government performance and resident experience across 15+ agencies</p>
-    <div class="meta">
-      <span id="metaDate">Loading&#8230;</span>
-      <span id="metaSources"></span>
+<div class="wrap">
+  <header class="hero">
+    <div>
+      <h1>Emerging trends, <span>district by district</span></h1>
+      <p class="dek">Pick a community district. See this month's 311 against its seasonal norm, five other city record systems against the month before, the buildings where those records converge, and which of it has been written about.</p>
     </div>
+    <div class="asof" id="asof">Loading…</div>
+  </header>
+
+  <div class="layout">
+    <aside class="picker">
+      <div class="ph">
+        <input type="search" id="q" placeholder="Find a district or neighborhood…" />
+        <div class="sorts">
+          <button class="sbtn on" data-sort="borough">By borough</button>
+          <button class="sbtn" data-sort="311">311 vs norm</button>
+          <button class="sbtn" data-sort="signal">Most signal</button>
+        </div>
+      </div>
+      <div class="plist" id="plist"></div>
+    </aside>
+    <main id="main"><div class="loading">Loading…</div></main>
   </div>
 
-  <!-- KPI RAIL -->
-  <div class="kpi-rail" id="kpiRail">
-    <div class="kpi" id="kpi-shelter"><div class="kpi-label">People in Shelter</div><div class="kpi-value loading-val">&#8230;</div></div>
-    <div class="kpi" id="kpi-felonies"><div class="kpi-label">Felonies (YTD)</div><div class="kpi-value loading-val">&#8230;</div></div>
-    <div class="kpi" id="kpi-crashes"><div class="kpi-label">Crashes / Week</div><div class="kpi-value loading-val">&#8230;</div></div>
-    <div class="kpi" id="kpi-killed"><div class="kpi-label">Traffic Deaths / Wk</div><div class="kpi-value loading-val">&#8230;</div></div>
-    <div class="kpi" id="kpi-hpd"><div class="kpi-label">HPD Complaints / Wk</div><div class="kpi-value loading-val">&#8230;</div></div>
-    <div class="kpi" id="kpi-311"><div class="kpi-label">311 Requests / Wk</div><div class="kpi-value loading-val">&#8230;</div></div>
-    <div class="kpi" id="kpi-ems"><div class="kpi-label">EMS Response (Seg 1)</div><div class="kpi-value loading-val">&#8230;</div></div>
-    <div class="kpi" id="kpi-parks"><div class="kpi-label">Parks Acceptable</div><div class="kpi-value loading-val">&#8230;</div></div>
-  </div>
-
-  <!-- DIVERGING TRENDS -->
-  <div class="diverging" id="divergingSection" style="display:none">
-    <div class="diverging-title">Diverging From Last Year</div>
-    <div class="diverging-items" id="divergingItems"></div>
-  </div>
-
-  <!-- OVERVIEW (default view — shows all domains) -->
-  <div class="view-panel active" id="view-overview">
-
-    <!-- PUBLIC SAFETY -->
-    <div class="domain" id="domain-safety">
-      <div class="domain-header">
-        <h2>Public Safety</h2>
-        <span class="badge">4 sources</span>
-      </div>
-      <div class="domain-grid">
-        <div class="card" id="card-crashes">
-          <div class="card-header"><span class="card-title">Traffic Crashes</span><span class="card-badge" id="crashes-badge">&#8230;</span></div>
-          <div id="crashes-body"><div class="card-loading">Fetching collision data</div></div>
-        </div>
-        <div class="card" id="card-crime">
-          <div class="card-header"><span class="card-title">Crime (NYPD)</span><span class="card-badge" id="crime-badge">&#8230;</span></div>
-          <div id="crime-body"><div class="card-loading">Fetching crime data</div></div>
-        </div>
-        <div class="card" id="card-shootings">
-          <div class="card-header"><span class="card-title">Shootings</span><span class="card-badge" id="shootings-badge">&#8230;</span></div>
-          <div id="shootings-body"><div class="card-loading">Fetching shooting data</div></div>
-        </div>
-        <div class="card" id="card-ems">
-          <div class="card-header"><span class="card-title">Emergency Response</span><span class="card-badge" id="ems-badge">&#8230;</span></div>
-          <div id="ems-body"><div class="card-loading">Fetching EMS &amp; FDNY data</div></div>
-        </div>
-      </div>
+  <footer class="foot">
+    <div>
+      <h4>How to read this</h4>
+      <p><b>311 vs seasonal norm</b> compares the last 28 days of each complaint type with the same weeks in the prior three years (adjusted for citywide volume) and with the recent eight-week pace; the "expected" figure is the higher of the two. <b>Other record systems</b> compare the latest window with the window immediately before it — HPD violations and DOB complaints (30 days), HPD complaints (28 days), residential marshal evictions and HPD vacate orders (60 days). <b>Buildings</b> are tax lots where at least two independent families of records agree (resident reports; inspector findings; enforcement or court action; state licensing). <b>Leads</b> are the strongest of these, checked against Google News and local RSS for the last six weeks; anything already covered is marked.</p>
+      <p>Full method, thresholds, dead feeds and failure modes: <a href="https://github.com/joshgreenman1973/nyc-311-complaint-tracker/blob/main/leads-methodology.md">leads-methodology.md</a>. Data: <a href="data/output/leads.json">leads.json</a> · <a href="data/output/leads/latest.md">this week's brief</a> · <a href="https://github.com/joshgreenman1973/nyc-311-complaint-tracker">source</a>.</p>
     </div>
-
-    <!-- HOUSING & SHELTER -->
-    <div class="domain" id="domain-housing">
-      <div class="domain-header">
-        <h2>Housing &amp; Shelter</h2>
-        <span class="badge">4 sources</span>
-      </div>
-      <div class="domain-grid">
-        <div class="card" id="card-shelter">
-          <div class="card-header"><span class="card-title">Homeless Shelter Census (DHS)</span><span class="card-badge" id="shelter-badge">&#8230;</span></div>
-          <div id="shelter-body"><div class="card-loading">Fetching shelter census</div></div>
-        </div>
-        <div class="card" id="card-hpd">
-          <div class="card-header"><span class="card-title">HPD Complaints</span><span class="card-badge" id="hpd-badge">&#8230;</span></div>
-          <div id="hpd-body"><div class="card-loading">Fetching HPD data</div></div>
-        </div>
-        <div class="card" id="card-nycha">
-          <div class="card-header"><span class="card-title">Public Housing (NYCHA)</span><span class="card-badge" id="nycha-badge">&#8230;</span></div>
-          <div id="nycha-body"><div class="card-loading">Fetching NYCHA data</div></div>
-        </div>
-        <div class="card" id="card-vacates">
-          <div class="card-header"><span class="card-title">Vacate Orders</span><span class="card-badge" id="vacates-badge">&#8230;</span></div>
-          <div id="vacates-body"><div class="card-loading">Loading scanner data</div></div>
-        </div>
-      </div>
+    <div>
+      <h4>Read with care</h4>
+      <p>These are signals, not findings. A building with 40 calls in two weeks may have one persistent caller; a complaint type above its norm may reflect a change in how 311 files things; a "new" descriptor may be a renamed old one. Every number links to the exact public query that produced it. Sources: NYC Open Data (311 <code>erm2-nwe9</code>, HPD violations <code>wvxf-dwi5</code>, HPD complaints <code>ygpa-z7cr</code>, DOB complaints <code>eabe-havv</code>, OATH/ECB <code>6bgk-3dad</code>, vacate orders <code>tb8q-a3ar</code>, marshal evictions <code>6z8x-wfk4</code>, ZAP <code>hgx4-8ukb</code>), NY State Open Data (SLA pending <code>f8i8-k2gm</code>), the City Record, Google News RSS and 11 local outlets' feeds.</p>
+      <p class="caution">Parts of this tool were built with AI assistance. Detection is statistical; the optional weekly lead summaries are written by a language model from the numbers shown and can misjudge significance. Treat them as a starting point.</p>
     </div>
-
-    <!-- QUALITY OF LIFE -->
-    <div class="domain" id="domain-quality">
-      <div class="domain-header">
-        <h2>Quality of Life</h2>
-        <span class="badge">4 sources</span>
-      </div>
-      <div class="domain-grid">
-        <div class="card" id="card-311">
-          <div class="card-header"><span class="card-title">311 Service Requests</span><span class="card-badge" id="sr-badge">&#8230;</span></div>
-          <div id="sr-body"><div class="card-loading">Fetching 311 data</div></div>
-        </div>
-        <div class="card" id="card-restaurants">
-          <div class="card-header"><span class="card-title">Restaurant Inspections</span><span class="card-badge" id="restaurants-badge">&#8230;</span></div>
-          <div id="restaurants-body"><div class="card-loading">Fetching inspection data</div></div>
-        </div>
-        <div class="card" id="card-parks">
-          <div class="card-header"><span class="card-title">Parks Condition</span><span class="card-badge" id="parks-badge">&#8230;</span></div>
-          <div id="parks-body"><div class="card-loading">Fetching parks data</div></div>
-        </div>
-        <div class="card" id="card-sanitation">
-          <div class="card-header"><span class="card-title">Sanitation (DSNY)</span><span class="card-badge" id="sanitation-badge">&#8230;</span></div>
-          <div id="sanitation-body"><div class="card-loading">Fetching sanitation data</div></div>
-        </div>
-      </div>
-    </div>
-
-    <!-- INFRASTRUCTURE & OPERATIONS -->
-    <div class="domain" id="domain-ops">
-      <div class="domain-header">
-        <h2>Infrastructure &amp; Operations</h2>
-        <span class="badge">5 sources</span>
-      </div>
-      <div class="domain-grid">
-        <div class="card" id="card-dot">
-          <div class="card-header"><span class="card-title">Streets &amp; Potholes (DOT)</span><span class="card-badge" id="dot-badge">&#8230;</span></div>
-          <div id="dot-body"><div class="card-loading">Fetching DOT data</div></div>
-        </div>
-        <div class="card" id="card-311speed">
-          <div class="card-header"><span class="card-title">311 Response Speed</span><span class="card-badge" id="speed-badge">&#8230;</span></div>
-          <div id="speed-body"><div class="card-loading">Fetching response times</div></div>
-        </div>
-        <div class="card" id="card-buildings">
-          <div class="card-header"><span class="card-title">Buildings (DOB)</span><span class="card-badge" id="buildings-badge">&#8230;</span></div>
-          <div id="buildings-body"><div class="card-loading">Fetching DOB data</div></div>
-        </div>
-        <div class="card" id="card-workforce">
-          <div class="card-header"><span class="card-title">City Workforce</span><span class="card-badge" id="workforce-badge">&#8230;</span></div>
-          <div id="workforce-body"><div class="card-loading">Fetching payroll data</div></div>
-        </div>
-        <div class="card" id="card-capital">
-          <div class="card-header"><span class="card-title">Capital Projects</span><span class="card-badge" id="capital-badge">&#8230;</span></div>
-          <div id="capital-body"><div class="card-loading">Fetching capital data</div></div>
-        </div>
-      </div>
-    </div>
-
-  </div><!-- /view-overview -->
-</main>
-
-<footer class="page-footer">
-  Data sourced live from <a href="https://data.cityofnewyork.us" target="_blank">NYC Open Data</a> APIs and weekly scanner.
-  All figures are the latest available &#8212; some datasets update daily, others lag weeks or months.
-  Year-over-year comparisons use same-period 2025 data for seasonal accuracy.
-  <br>Built for editorial intelligence.
-</footer>
+  </footer>
+</div>
 
 <script>
-// ============================================================
-//  CONFIG & UTILITIES
-// ============================================================
-const BASE = 'https://data.cityofnewyork.us/resource/';
-const SCANNER_URL = 'data/output/weekly-trends.json';
-const BORO_POP = { BRONX:1472654, BROOKLYN:2736074, MANHATTAN:1694263, QUEENS:2405464, 'STATEN ISLAND':495747 };
-const TOTAL_POP = Object.values(BORO_POP).reduce((a,b)=>a+b,0);
-const BORO_ABBR = { BRONX:'BX', BROOKLYN:'BK', MANHATTAN:'MN', QUEENS:'QN', 'STATEN ISLAND':'SI' };
+const $ = (s, r=document) => r.querySelector(s);
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const fmt = n => (n ?? 0).toLocaleString();
+let DATA = null, sel = null, sortBy = 'borough', q = '', tab311 = 'norm';
+const BORO_ORDER = ['Manhattan', 'Bronx', 'Brooklyn', 'Queens', 'Staten Island'];
 
-const fmt = n => n == null ? '\u2014' : Number(n).toLocaleString('en-US');
-const fmtPct = n => n == null ? '\u2014' : Number(n).toFixed(1) + '%';
-const fmtDec = (n,d=1) => n == null ? '\u2014' : Number(n).toFixed(d);
-const fmtDate = d => {
-  if (!d) return '\u2014';
-  return new Date(d).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
-};
-const fmtShort = d => {
-  if (!d) return '';
-  return new Date(d).toLocaleDateString('en-US',{month:'short',day:'numeric'});
-};
-const secToMin = s => s == null ? '\u2014' : (Number(s)/60).toFixed(1)+' min';
-const isoDate = (daysAgo=0) => {
-  const d = new Date(); d.setDate(d.getDate()-daysAgo);
-  return d.toISOString().slice(0,10);
-};
-const yearStart = () => new Date().getFullYear()+'-01-01';
+fetch('data/output/leads.json?' + Date.now()).then(r => r.json()).then(d => { DATA = d; init(); }).catch(e => {
+  $('#main').innerHTML = `<div class="loading">Could not load leads.json (${esc(e.message)}). The weekly build may not have run yet.</div>`;
+});
 
-let loadedSources = 0;
-let totalSources = 0;
-
-async function q(id, params='') {
-  const r = await fetch(`${BASE}${id}.json?${params}`);
-  if (!r.ok) throw new Error(`API ${r.status}`);
-  return r.json();
+function init() {
+  $('#asof').innerHTML = `Data through <b>${DATA.as_of}</b> · built ${DATA.generated.slice(0,10)}<br>${Object.keys(DATA.districts).length} districts · ${DATA.counts.leads} leads · coverage check ${DATA.coverage_backend}`;
+  document.querySelectorAll('.sbtn').forEach(b => b.onclick = () => { sortBy = b.dataset.sort; document.querySelectorAll('.sbtn').forEach(x => x.classList.toggle('on', x === b)); renderPicker(); });
+  $('#q').oninput = e => { q = e.target.value.trim().toLowerCase(); renderPicker(); };
+  const m = (location.hash || '').match(/cd=(\d{3})/); if (m && DATA.districts[m[1]]) sel = m[1];
+  window.onhashchange = () => { const m2 = (location.hash || '').match(/cd=(\d{3})/); sel = m2 && DATA.districts[m2[1]] ? m2[1] : null; renderPicker(); renderMain(); };
+  renderPicker(); renderMain();
 }
 
-function setBody(id, html) { const el = document.getElementById(id); if(el) el.innerHTML = html; }
-function setBadge(id, t) { const el = document.getElementById(id); if(el) el.textContent = t; }
+function ratio311(d) { const t = d.three11; if (!t) return null; const exp = t.exp_seasonal ?? t.exp_recent ?? 0; return exp > 0 ? t.cur28 / exp : null; }
+function cls(r) { return r == null ? 'flat' : r >= 1.15 ? 'up' : r <= 0.87 ? 'dn' : 'flat'; }
+function pct(r) { if (r == null) return '—'; const p = Math.round((r - 1) * 100); return (p > 0 ? '+' : '') + p + '%'; }
 
-function row(label, value, trend) {
-  let t = '';
-  if (trend) {
-    const cls = trend.class || 'flat';
-    t = `<span class="comp ${cls}">${trend.text}</span>`;
-  }
-  return `<div class="metric-row"><span class="metric-label">${label}</span><span class="metric-val">${value}${t}</span></div>`;
+function spark(arr, w=110, h=26, color='var(--chart)') {
+  if (!arr || !arr.length) return '';
+  const max = Math.max(...arr, 1), n = arr.length;
+  const pts = arr.map((v, i) => `${(i / (n - 1) * (w - 2) + 1).toFixed(1)},${(h - 1 - (v / max) * (h - 4)).toFixed(1)}`).join(' ');
+  return `<svg class="spark" width="${w}" height="${h}" viewBox="0 0 ${w} ${h}"><polyline fill="none" stroke="${color}" stroke-width="1.5" points="${pts}"/><circle cx="${(w-1).toFixed(1)}" cy="${(h - 1 - (arr[n-1] / max) * (h - 4)).toFixed(1)}" r="2" fill="${color}"/></svg>`;
 }
 
-function compBadge(current, prior, invert=false, vsLabel='') {
-  if (current == null || prior == null || prior === 0) return null;
-  const pct = ((current - prior) / Math.abs(prior) * 100);
-  const arrow = pct > 0 ? '\u25B2' : pct < 0 ? '\u25BC' : '\u25CF';
-  const cls = Math.abs(pct) < 1 ? 'flat' :
-    (pct > 0 ? (invert ? 'up-good' : 'up-bad') : (invert ? 'down-bad' : 'down-good'));
-  const suffix = vsLabel ? ` ${vsLabel}` : '';
-  return { text: `${arrow}${Math.abs(pct).toFixed(1)}%${suffix}`, class: cls };
-}
-
-function boroBars(data, maxVal, color='var(--cerulean)', showBenchmark=false) {
-  let html = '<div class="boro-bars">';
-  data.forEach(r => {
-    const name = BORO_ABBR[r.boro] || r.boro?.slice(0,2) || '?';
-    const val = Number(r.cnt);
-    const pct = maxVal > 0 ? (val/maxVal*100) : 0;
-    let benchHtml = '';
-    if (showBenchmark && BORO_POP[r.boro]) {
-      const popShare = BORO_POP[r.boro] / TOTAL_POP;
-      const benchPct = (popShare * data.reduce((s,d)=>s+Number(d.cnt),0) / maxVal) * 100;
-      benchHtml = `<span class="boro-benchmark" style="left:${Math.min(benchPct,100)}%"></span>`;
+function renderPicker() {
+  let ds = Object.values(DATA.districts);
+  if (q) ds = ds.filter(d => (d.name + ' ' + d.borough + ' ' + d.neighborhoods.join(' ')).toLowerCase().includes(q));
+  const html = [];
+  if (sortBy === 'borough') {
+    for (const b of BORO_ORDER) {
+      const rows = ds.filter(d => d.borough === b).sort((x, y) => x.cd.localeCompare(y.cd));
+      if (!rows.length) continue;
+      html.push(`<div class="bh">${b}</div>`, ...rows.map(row));
     }
-    html += `<div class="boro-row"><span class="boro-name">${name}</span><span class="boro-track"><span class="boro-fill" style="width:${pct}%;background:${color}"></span>${benchHtml}</span><span class="boro-val">${fmt(val)}</span></div>`;
-  });
-  return html + '</div>';
-}
-
-function sourceLoaded() {
-  loadedSources++;
-  document.getElementById('statusText').innerHTML =
-    `<span class="status-dot live"></span>${loadedSources} sources loaded`;
-}
-
-// ============================================================
-//  SPARKLINE
-// ============================================================
-function drawSparkline(canvasId, data, color, opts={}) {
-  const canvas = document.getElementById(canvasId);
-  if (!canvas || !data.length) return;
-  const ctx = canvas.getContext('2d');
-  const w = canvas.width, h = canvas.height;
-  const pad = 2;
-  const min = Math.min(...data), max = Math.max(...data);
-  const range = max - min || 1;
-  ctx.clearRect(0,0,w,h);
-  ctx.beginPath();
-  data.forEach((v,i) => {
-    const x = pad+(i/(data.length-1))*(w-2*pad);
-    const y = h-pad-((v-min)/range)*(h-2*pad);
-    i===0 ? ctx.moveTo(x,y) : ctx.lineTo(x,y);
-  });
-  ctx.lineTo(w-pad,h); ctx.lineTo(pad,h); ctx.closePath();
-  ctx.fillStyle = color+'18'; ctx.fill();
-  ctx.beginPath();
-  data.forEach((v,i) => {
-    const x = pad+(i/(data.length-1))*(w-2*pad);
-    const y = h-pad-((v-min)/range)*(h-2*pad);
-    i===0 ? ctx.moveTo(x,y) : ctx.lineTo(x,y);
-  });
-  ctx.strokeStyle = color; ctx.lineWidth = 1.5; ctx.stroke();
-  const lastX = w-pad;
-  const lastY = h-pad-((data[data.length-1]-min)/range)*(h-2*pad);
-  ctx.beginPath(); ctx.arc(lastX,lastY,2.5,0,Math.PI*2);
-  ctx.fillStyle = color; ctx.fill();
-}
-
-// ============================================================
-//  KPI UPDATERS
-// ============================================================
-function setKPI(id, value, delta, sub) {
-  const el = document.getElementById(id);
-  if (!el) return;
-  let html = `<div class="kpi-label">${el.querySelector('.kpi-label').textContent}</div>`;
-  html += `<div class="kpi-value">${value}</div>`;
-  if (delta) html += `<div class="kpi-delta ${delta.class}">${delta.text}</div>`;
-  if (sub) html += `<div class="kpi-sub">${sub}</div>`;
-  el.innerHTML = html;
-}
-
-// ============================================================
-//  SCANNER DATA (pre-computed baselines + editorial flags)
-// ============================================================
-let scannerData = null;
-
-async function loadScanner() {
-  try {
-    const r = await fetch(SCANNER_URL);
-    if (!r.ok) throw new Error('Scanner JSON not found');
-    scannerData = await r.json();
-    renderScannerSections();
-    sourceLoaded();
-  } catch(e) {
-    console.warn('Scanner data unavailable:', e.message);
+  } else if (sortBy === '311') {
+    ds.sort((a, b) => (ratio311(b) ?? 0) - (ratio311(a) ?? 0)); html.push(...ds.map(row));
+  } else {
+    ds.sort((a, b) => b.top_rank - a.top_rank || b.n_places - a.n_places); html.push(...ds.map(row));
+  }
+  $('#plist').innerHTML = html.join('') || '<div class="none" style="padding:.8rem">No match.</div>';
+  function row(d) {
+    const r = ratio311(d);
+    return `<div class="drow ${sel === d.cd ? 'on' : ''}" onclick="select('${d.cd}')">
+      <div><div class="n">${esc(d.name)}</div><div class="b">${esc(d.borough)} CD ${parseInt(d.cd.slice(1))}${d.n_places ? ' · ' + d.n_places + ' bldgs' : ''}${d.n_anomalies ? ' · ' + d.n_anomalies + ' above norm' : ''}</div></div>
+      <div class="rt"><b class="${cls(r)}">${pct(r)}</b>311 vs norm</div></div>`;
   }
 }
 
-function renderScannerSections() {
-  if (!scannerData) return;
-  const wk = scannerData.weekly?.[0];
-  const bl = scannerData.baselines || {};
-  const swpy = bl.same_week_prior_year || {};
-  const annual = bl.annual_prev_year || {};
-  const detail = scannerData.detail || {};
+function select(cd) {
+  sel = (sel === cd) ? null : cd;
+  history.replaceState(null, '', sel ? '#cd=' + sel : location.pathname);
+  renderPicker(); renderMain();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+function setTab(t) { tab311 = t; renderMain(); }
 
-  // --- KPIs from scanner ---
-  if (wk) {
-    setKPI('kpi-crashes', fmt(wk.crashes),
-      swpy.crashes ? compBadge(wk.crashes, swpy.crashes, false, 'vs \u201925') : null,
-      annual.crashes_per_week ? `2025 avg: ${fmt(Math.round(annual.crashes_per_week))}/wk` : null
-    );
-    setKPI('kpi-killed', wk.persons_killed,
-      swpy.persons_killed != null ? compBadge(wk.persons_killed, swpy.persons_killed, false, 'vs \u201925') : null,
-      annual.persons_killed_per_week ? `2025 avg: ${fmtDec(annual.persons_killed_per_week,1)}/wk` : null
-    );
-    setKPI('kpi-hpd', fmt(wk.hpd_complaints),
-      swpy.hpd_complaints ? compBadge(wk.hpd_complaints, swpy.hpd_complaints, false, 'vs \u201925') : null,
-      annual.hpd_complaints_per_week ? `2025 avg: ${fmt(Math.round(annual.hpd_complaints_per_week))}/wk` : null
-    );
-  }
-
-  // --- Diverging Trends ---
-  const trends = bl.diverging_trends || [];
-  if (trends.length) {
-    document.getElementById('divergingSection').style.display = '';
-    const container = document.getElementById('divergingItems');
-    container.innerHTML = trends.map(t => {
-      const absPct = Math.abs(t.yoy_pct);
-      const dir = t.direction === 'up' ? 'up' : 'down';
-      const barWidth = Math.min(absPct, 100);
-      return `
-        <div class="div-item">
-          <span class="div-metric">${t.metric}</span>
-          <span class="div-bar-track"><span class="div-bar-fill ${dir}" style="width:${barWidth}%"></span></span>
-          <span class="div-pct" style="color:var(--${dir==='up'?'red':'green'})">${t.yoy_pct > 0 ? '+' : ''}${t.yoy_pct.toFixed(0)}% YoY</span>
-        </div>
-        ${t.note ? `<div class="div-note">${t.note}</div>` : ''}
-      `;
-    }).join('');
-  }
-
-  // --- Crashes card (scanner enriched) ---
-  if (wk) {
-    setBadge('crashes-badge', `Week of ${fmtShort(wk.week_ending || scannerData.weekly?.[0]?.week_ending)}`);
-    let html = '';
-    html += `<div class="big-stat"><div class="big-number" style="color:var(--orange)">${fmt(wk.crashes)}</div><div class="big-label">crashes this week</div></div>`;
-    if (swpy.crashes) {
-      html += `<div style="text-align:center;margin:-2px 0 8px">`;
-      const yoyComp = compBadge(wk.crashes, swpy.crashes, false, 'vs same week \u201925');
-      if (yoyComp) html += `<span class="comp ${yoyComp.class}" style="font-size:0.7rem">${yoyComp.text}</span> `;
-      if (annual.crashes_per_week) {
-        const avgComp = compBadge(wk.crashes, annual.crashes_per_week, false, 'vs \u201925 avg');
-        if (avgComp) html += `<span class="comp ${avgComp.class}" style="font-size:0.65rem;opacity:0.6">${avgComp.text}</span>`;
-      }
-      html += '</div>';
-    }
-    html += row('Persons Killed', `<strong style="color:var(--red)">${wk.persons_killed}</strong>`,
-      swpy.persons_killed != null ? compBadge(wk.persons_killed, swpy.persons_killed, false, 'YoY') : null);
-    html += row('Pedestrians Injured', fmt(wk.pedestrians_injured),
-      swpy.pedestrians_injured ? compBadge(wk.pedestrians_injured, swpy.pedestrians_injured, false, 'YoY') : null);
-    html += row('Cyclists Injured', fmt(wk.cyclists_injured),
-      swpy.cyclists_injured ? compBadge(wk.cyclists_injured, swpy.cyclists_injured, false, 'YoY') : null);
-
-    // Borough breakdown
-    const cb = detail.crashes?.borough_breakdown;
-    if (cb) {
-      const sorted = Object.entries(cb)
-        .filter(([k]) => k !== 'UNSPECIFIED')
-        .map(([boro,cnt]) => ({boro, cnt}))
-        .sort((a,b) => b.cnt - a.cnt);
-      if (sorted.length) {
-        const mx = Math.max(...sorted.map(r=>r.cnt));
-        html += boroBars(sorted, mx, 'var(--orange)', true);
-      }
-    }
-
-    // Top contributing factors
-    const tf = detail.crashes?.top_factors;
-    if (tf) {
-      const factors = Object.entries(tf).filter(([k])=>k!=='Unspecified').slice(0,5);
-      if (factors.length) {
-        html += '<table class="mini-table"><tr><th>Top Contributing Factors</th><th>#</th></tr>';
-        factors.forEach(([f,c]) => { html += `<tr><td>${f}</td><td>${fmt(c)}</td></tr>`; });
-        html += '</table>';
-      }
-    }
-
-    setBody('crashes-body', html);
-  }
-
-  // --- Shootings card ---
-  if (wk) {
-    setBadge('shootings-badge', `Week of ${fmtShort(wk.week_ending)}`);
-    let html = '';
-    if (wk.shooting_incidents === 0) {
-      html += `<div class="big-stat"><div class="big-number" style="color:var(--muted)">0</div><div class="big-label">incidents reported</div></div>`;
-      html += `<div class="narrative">NYPD restructured shooting datasets in Feb 2026 (now split across three separate files). Zero may reflect a reporting lag rather than the absence of incidents. Same week in 2025: ${swpy.shooting_incidents || '\u2014'} incidents.</div>`;
-    } else {
-      html += `<div class="big-stat"><div class="big-number" style="color:var(--red)">${wk.shooting_incidents}</div><div class="big-label">shooting incidents</div></div>`;
-      html += row('Victims', fmt(wk.shooting_victims));
-      html += row('Fatal', fmt(wk.shooting_murders));
-      if (swpy.shooting_incidents) {
-        html += `<div class="narrative">Same week 2025: ${swpy.shooting_incidents} incidents. 2025 weekly avg: ${fmtDec(annual.shooting_incidents_per_week,1)}.</div>`;
-      }
-    }
-    const sb = detail.shootings?.borough_breakdown;
-    if (sb && Object.keys(sb).length) {
-      const sorted = Object.entries(sb).map(([boro,cnt])=>({boro,cnt})).sort((a,b)=>b.cnt-a.cnt);
-      if (sorted.length) {
-        const mx = Math.max(...sorted.map(r=>r.cnt));
-        html += boroBars(sorted, mx, 'var(--red)', true);
-      }
-    }
-    setBody('shootings-body', html);
-  }
-
-  // --- HPD card ---
-  if (wk) {
-    setBadge('hpd-badge', `Week of ${fmtShort(wk.week_ending)}`);
-    let html = '';
-    html += `<div class="big-stat"><div class="big-number">${fmt(wk.hpd_complaints)}</div><div class="big-label">complaints this week</div></div>`;
-    if (swpy.hpd_complaints) {
-      html += `<div style="text-align:center;margin:-2px 0 8px">`;
-      const yoy = compBadge(wk.hpd_complaints, swpy.hpd_complaints, false, 'vs same week \u201925');
-      if (yoy) html += `<span class="comp ${yoy.class}" style="font-size:0.7rem">${yoy.text}</span>`;
-      html += '</div>';
-    }
-    html += row('Heat/Hot Water', `${fmt(wk.hpd_heat_hot_water)} (${fmtPct(wk.hpd_heat_pct)})`);
-    html += row('Immediate/Emergency', fmt(wk.hpd_immediate_emergency));
-    html += row('Open Rate', fmtPct(wk.hpd_open_pct));
-
-    // Borough breakdown
-    const hb = detail.hpd?.borough_breakdown;
-    if (hb) {
-      const sorted = Object.entries(hb).map(([boro,cnt])=>({boro,cnt})).sort((a,b)=>b.cnt-a.cnt);
-      if (sorted.length) {
-        const mx = Math.max(...sorted.map(r=>r.cnt));
-        html += boroBars(sorted, mx, 'var(--chartreuse)', true);
-      }
-    }
-
-    // Top categories
-    const tc = detail.hpd?.top_categories;
-    if (tc) {
-      const cats = Object.entries(tc).slice(0,6);
-      html += '<table class="mini-table"><tr><th>Top Complaint Types</th><th>#</th></tr>';
-      cats.forEach(([c,n]) => { html += `<tr><td>${c.split(' ').map(w=>w.charAt(0)+w.slice(1).toLowerCase()).join(' ')}</td><td>${fmt(n)}</td></tr>`; });
-      html += '</table>';
-    }
-
-    if (swpy.hpd_complaints) {
-      html += `<div class="narrative">Same week 2025: ${fmt(swpy.hpd_complaints)} complaints with heat/hot water at ${fmtPct(swpy.hpd_heat_pct)}. Housing complaints ${wk.hpd_complaints > swpy.hpd_complaints ? 'running above' : 'tracking below'} last year\u2019s seasonal pattern.</div>`;
-    }
-
-    setBody('hpd-body', html);
-  }
-
-  // --- Vacates card ---
-  if (wk) {
-    setBadge('vacates-badge', `Week of ${fmtShort(wk.week_ending)}`);
-    let html = '';
-    html += `<div class="big-stat"><div class="big-number" style="color:var(--orange)">${wk.vacate_orders_new}</div><div class="big-label">new vacate orders</div></div>`;
-    if (swpy.vacate_orders_new != null) {
-      html += `<div style="text-align:center;margin:-2px 0 8px">`;
-      const yoy = compBadge(wk.vacate_orders_new, swpy.vacate_orders_new, false, 'vs same week \u201925');
-      if (yoy) html += `<span class="comp ${yoy.class}" style="font-size:0.7rem">${yoy.text}</span>`;
-      html += '</div>';
-    }
-    html += row('Still Active', fmt(wk.vacate_orders_active));
-    html += row('2025 Weekly Avg', fmtDec(annual.vacate_orders_per_week, 1));
-
-    const vr = detail.vacates?.reasons;
-    if (vr) {
-      html += '<table class="mini-table"><tr><th>Reason</th><th>#</th></tr>';
-      Object.entries(vr).sort((a,b)=>b[1]-a[1]).forEach(([r,c]) => {
-        html += `<tr><td>${r}</td><td>${c}</td></tr>`;
-      });
-      html += '</table>';
-    }
-
-    const vb = detail.vacates?.boroughs;
-    if (vb) {
-      const sorted = Object.entries(vb).map(([boro,cnt])=>({boro,cnt})).sort((a,b)=>b.cnt-a.cnt);
-      if (sorted.length) {
-        const mx = Math.max(...sorted.map(r=>r.cnt));
-        html += boroBars(sorted, mx, 'var(--orange)', true);
-      }
-    }
-
-    setBody('vacates-body', html);
-  }
-
-  // --- Restaurant card (scanner portion) ---
-  if (wk && (wk.restaurant_inspections || wk.restaurant_closures)) {
-    setBadge('restaurants-badge', `Week of ${fmtShort(wk.week_ending)}`);
-    let html = '';
-    html += row('Inspections', fmt(wk.restaurant_inspections));
-    html += row('Critical Violations', fmt(wk.critical_violations));
-    html += row('Closures', fmt(wk.restaurant_closures),
-      swpy.restaurant_closures ? compBadge(wk.restaurant_closures, swpy.restaurant_closures, false, 'YoY') : null);
-
-    const gd = detail.restaurants?.grade_distribution;
-    if (gd) {
-      const total = Object.values(gd).reduce((s,v)=>s+v,0);
-      const grades = [['A', gd.A||0, 'var(--green)'], ['B', gd.B||0, 'var(--chartreuse)'], ['C', gd.C||0, 'var(--red)']];
-      grades.forEach(([g, cnt, color]) => {
-        const pct = total > 0 ? (cnt/total*100) : 0;
-        html += `<div class="bar-row"><span class="bar-label">Grade ${g}</span><span class="bar-track"><span class="bar-fill" style="width:${pct}%;background:${color}"></span></span><span class="bar-val">${pct.toFixed(0)}% (${cnt})</span></div>`;
-      });
-    }
-    // Live API will enrich this further
-    setBody('restaurants-body', html);
-  }
-
-  // --- Editorial flags ---
-  const flags = scannerData.flags || [];
-  if (flags.length) {
-    document.getElementById('metaSources').textContent =
-      `${flags.length} editorial flag${flags.length > 1 ? 's' : ''} active`;
-  }
+function covTag(cov) {
+  if (!cov || cov.score === null || cov.score === undefined) return `<span class="tag covx">coverage not checked</span>`;
+  if (cov.hits === 0) return `<span class="tag cov0">no coverage found</span>`;
+  return `<span class="tag cov1">${cov.hits} article${cov.hits > 1 ? 's' : ''} found</span>`;
 }
 
-// ============================================================
-//  LIVE API LOADERS
-// ============================================================
+function renderMain() {
+  const el = $('#main');
+  if (!sel) { el.innerHTML = renderCitywide(); return; }
+  const d = DATA.districts[sel];
+  const t = d.three11 || { cur28: 0, weeks: [], top_by_volume: [], rising: [] }, tr = d.trends || {}, meta = DATA.trend_meta || {};
+  const r311 = ratio311(d);
+  const tile = (label, cur, cmpTxt, r, weeks) => `<div class="tile"><small>${label}</small><b>${fmt(cur)}</b><div class="cmp"><i class="${cls(r)}">${pct(r)}</i> ${cmpTxt}</div>${weeks ? spark(weeks, 120, 22) : ''}</div>`;
+  const tiles = [
+    tile('311 requests · 28 days', t.cur28, `vs seasonal norm ${fmt(Math.round(t.exp_seasonal ?? t.exp_recent ?? 0))}`, r311, t.weeks),
+    ...['hpd_violations', 'hpd_complaints', 'dob_complaints', 'evictions', 'vacates'].map(k => {
+      const v = tr[k]; if (!v) return '';
+      return tile(`${meta[k]?.label || k} · ${meta[k]?.days || ''} days`, v.cur, `vs ${fmt(v.prior)} prior ${meta[k]?.days || ''}d`, v.ratio);
+    }),
+  ].join('');
 
-async function loadShelter() {
-  try {
-    const [latest] = await q('k46n-sa2m','$order=date_of_census DESC&$limit=1');
-    const d30 = new Date(latest.date_of_census); d30.setDate(d30.getDate()-30);
-    const d365 = new Date(latest.date_of_census); d365.setDate(d365.getDate()-365);
+  const anom = d.anomalies || [];
+  let rows311, hdr;
+  if (tab311 === 'norm') { rows311 = anom; hdr = 'Types running above both the seasonal norm and the recent pace (28 days)'; }
+  else if (tab311 === 'volume') { rows311 = t.top_by_volume; hdr = 'Biggest complaint types this month, each against the same weeks in prior years (types with no history are compared with the recent eight-week pace)'; }
+  else if (tab311 === 'rising') { rows311 = t.rising; hdr = 'Types where the last 7 days beat the prior three weeks\' average by 50%+'; }
+  else { rows311 = t.top_by_volume.slice(0, 12); hdr = `Weekly counts, ${DATA.week_labels[0]} → ${DATA.week_labels[DATA.week_labels.length-1]}`; }
+  const trendTab = tab311 === 'trend';
+  const table311 = rows311.length ? `<table class="t"><thead><tr><th>Complaint type</th><th class="r">${trendTab ? '12 weeks' : '28 days'}</th><th class="r">${trendTab ? 'last 7d' : (tab311 === 'rising' ? 'prior 3-wk avg' : (tab311 === 'volume' ? 'seasonal norm' : 'expected'))}</th><th class="r">${tab311 === 'rising' ? '7d vs prior' : (tab311 === 'volume' ? 'vs seasonal' : 'vs expected')}</th>${!trendTab ? '<th class="r">12 wk</th>' : ''}</tr></thead><tbody>${rows311.map(a => {
+    const rv = tab311 === 'rising' ? (a.prior3wk_avg ? a.last7 / a.prior3wk_avg : null) : (tab311 === 'volume' ? (a.vs_seasonal ?? a.vs_recent) : a.ratio);
+    return `<tr><td>${esc(a.complaint_type)}${a.accelerating && tab311 !== 'rising' ? '<span class="chip acc">accelerating</span>' : ''}${a.hazard ? '<span class="chip haz">life-safety</span>' : ''}${a.taxonomy_new ? '<span class="chip">new category</span>' : ''}${a.concentrated ? '<span class="chip" title="one address accounts for 40%+ of these complaints">mostly one address</span>' : ''}${a.distinct_addresses ? `<span class="chip" title="distinct addresses in 28 days">${a.distinct_addresses} addr</span>` : ''}</td>
+      <td class="r">${trendTab ? spark(a.weeks, 160, 24) : fmt(a.cur28)}</td>
+      <td class="r m">${trendTab ? fmt(a.last7) : (tab311 === 'rising' ? fmt(a.prior3wk_avg) + '/wk' : fmt(tab311 === 'volume' ? (a.exp_seasonal ?? a.exp_recent) : a.expected))}</td>
+      <td class="r"><span class="rat ${cls(rv)}">${rv == null ? '—' : rv.toFixed(2) + 'x'}</span></td>
+      ${!trendTab ? `<td class="r">${spark(a.weeks, 90, 20, a.ratio >= 1.5 ? 'var(--orange)' : 'var(--peri)')}</td>` : ''}</tr>`;
+  }).join('')}</tbody></table>` : `<div class="none">${tab311 === 'norm' ? 'No complaint type is above its seasonal norm this month.' : tab311 === 'rising' ? 'Nothing rising sharply this week.' : 'No data.'}</div>`;
 
-    const [[prev30],[prev365],sparkData] = await Promise.all([
-      q('k46n-sa2m',`$where=date_of_census='${d30.toISOString().slice(0,10)}'&$limit=1`),
-      q('k46n-sa2m',`$where=date_of_census='${d365.toISOString().slice(0,10)}'&$limit=1`),
-      q('k46n-sa2m','$select=date_of_census,total_individuals_in_shelter&$order=date_of_census DESC&$limit=90'),
-    ]);
+  const places = d.places || [];
+  const leads = DATA.leads.filter(l => l.cd === sel);
+  const q311 = `https://data.cityofnewyork.us/resource/erm2-nwe9.json?$where=community_board='${String(parseInt(d.cd.slice(1))).padStart(2,'0')}%20${encodeURIComponent(d.borough.toUpperCase())}'&$order=created_date%20DESC&$limit=500`;
 
-    const total = Number(latest.total_individuals_in_shelter);
-    const prev30Total = prev30 ? Number(prev30.total_individuals_in_shelter) : null;
-    const prev365Total = prev365 ? Number(prev365.total_individuals_in_shelter) : null;
+  el.innerHTML = `
+    <div class="dhead">
+      <div><h2>${esc(d.name)}</h2><div class="sub">${esc(d.borough)} Community District ${parseInt(d.cd.slice(1))}${d.neighborhoods.length ? ' · ' + esc(d.neighborhoods.join(', ')) : ''}</div></div>
+      <div class="links"><a href="map.html#cd=${d.cd}">Map ↗</a><a href="${q311}" target="_blank" rel="noopener">Latest 311 ↗</a><a href="https://zap.planning.nyc.gov/projects?community-districts=${'MXKQR'[parseInt(d.cd[0])-1]}${d.cd.slice(1)}" target="_blank" rel="noopener">ZAP ↗</a><a href="#" onclick="select('${d.cd}');return false;">All districts</a></div>
+    </div>
+    <div class="tiles">${tiles}</div>
 
-    // KPI
-    setKPI('kpi-shelter', fmt(total),
-      prev365Total ? compBadge(total, prev365Total, false, 'vs 1yr ago') : null,
-      total > 80000 ? 'Crisis level' : null
-    );
+    <section class="blk">
+      <h3>311 complaints, several ways <span class="tabs"><button class="tab ${tab311==='norm'?'on':''}" onclick="setTab('norm')">Above seasonal norm</button><button class="tab ${tab311==='volume'?'on':''}" onclick="setTab('volume')">Biggest by volume</button><button class="tab ${tab311==='rising'?'on':''}" onclick="setTab('rising')">Rising this week</button><button class="tab ${tab311==='trend'?'on':''}" onclick="setTab('trend')">12-week trends</button></span></h3>
+      <div class="none" style="padding:0 0 .4rem">${hdr}.${tab311 === 'norm' ? ' Expected = the higher of the seasonal norm and the recent eight-week pace, so a type must beat both to appear here.' : ''}</div>
+      ${table311}
+    </section>
 
-    // Card
-    setBadge('shelter-badge', fmtDate(latest.date_of_census));
-    let html = `<div class="big-stat"><div class="big-number" style="color:${total > 80000 ? 'var(--red)' : 'var(--text)'}">${fmt(total)}</div><div class="big-label">individuals in shelter</div></div>`;
+    <section class="blk">
+      <h3>Buildings where records converge <span class="hint">tax lots where two or more independent record families agree, last 14–60 days</span></h3>
+      ${places.length ? places.map(p => `<div class="bld"><div><b>${esc(p.address)}</b><a class="q" href="https://zola.planning.nyc.gov/l/lot/${p.key[0]}/${parseInt(p.key.slice(1,6))}/${parseInt(p.key.slice(6))}" target="_blank" rel="noopener">lot ↗</a><div class="w">${esc(p.why.join('; '))}</div></div><div class="fam"><i>${p.n_sources}</i>record famil${p.n_sources > 1 ? 'ies' : 'y'}</div></div>`).join('') : '<div class="none">No multi-source buildings in this district this fortnight.</div>'}
+    </section>
 
-    html += '<div style="text-align:center;margin:-2px 0 8px">';
-    if (prev30Total != null) {
-      const c30 = total - prev30Total;
-      const cls = c30 > 0 ? 'up-bad' : c30 < 0 ? 'down-good' : 'flat';
-      html += `<span class="comp ${cls}" style="font-size:0.7rem">${c30>0?'+':''}${fmt(c30)} vs 30d ago</span> `;
-    }
-    if (prev365Total != null) {
-      const c365 = total - prev365Total;
-      const cls = c365 > 0 ? 'up-bad' : c365 < 0 ? 'down-good' : 'flat';
-      html += `<span class="comp ${cls}" style="font-size:0.7rem">${c365>0?'+':''}${fmt(c365)} vs 1yr ago</span>`;
-    }
-    html += '</div>';
+    <section class="blk">
+      <h3>Leads in this district <span class="hint">the strongest signals, checked against news coverage</span></h3>
+      ${leads.length ? leads.map(leadCard).join('') : '<div class="none">Nothing here made the citywide leads list this week.</div>'}
+    </section>
 
-    html += row('Children in Shelter', fmt(latest.total_children_in_shelter));
-    html += row('Families w/ Children', fmt(latest.families_with_children_in_shelter));
-    html += row('Single Adults', fmt(latest.total_single_adults_in_shelter));
-    html += row('Adult Families', fmt(latest.adult_families_in_shelter));
+    <section class="blk grid2">
+      <div class="card"><h4>Pending liquor licenses · 60 days</h4>${d.sla_pending.length ? `<ul>${d.sla_pending.map(s => `<li><b>${esc(s.name)}</b> — ${esc(s.type)}, ${esc(s.address)} (${s.received})</li>`).join('')}</ul>` : '<div class="none">None located.</div>'}</div>
+      <div class="card"><h4>Land use · milestones in the last 60 days</h4>${d.land_use.length ? `<ul>${d.land_use.map(z => `<li><a href="${esc(z.url)}" target="_blank" rel="noopener"><b>${esc(z.name)}</b></a> — ${esc(z.milestone)} (${z.date})${z.brief ? '<br>' + esc(z.brief) : ''}</li>`).join('')}</ul>` : '<div class="none">No active applications with a recent milestone.</div>'}</div>
+      <div class="card"><h4>City Record notices naming this district · 14 days</h4>${d.city_record.length ? `<ul>${d.city_record.map(n => `<li><b>${esc(n.agency)}</b> · ${esc(n.type)}: ${esc(n.title)}${n.event_date ? ' (event ' + n.event_date + ')' : ''}</li>`).join('')}</ul>` : '<div class="none">None matched.</div>'}</div>
+      <div class="card"><h4>Context</h4><ul>${d.sheds ? `<li><b>${d.sheds.sheds}</b> active sidewalk sheds, ${d.sheds.zombies} standing 5+ years (<a href="https://joshgreenman1973.github.io/nyc-sidewalk-sheds/" target="_blank" rel="noopener">shed tracker</a>)</li>` : ''}<li><a href="https://vitalcity-nyc.github.io/nyc-disorder-index/" target="_blank" rel="noopener">Disorder index</a> · <a href="https://vitalcity-nyc.github.io/nyc-noise-complaints-map/" target="_blank" rel="noopener">Noise map</a> · <a href="https://vitalcity-nyc.github.io/rat-map/" target="_blank" rel="noopener">Rat map</a></li></ul></div>
+    </section>`;
+}
 
-    html += '<canvas class="spark" id="spark-shelter" width="280" height="38"></canvas>';
-    html += '<div class="spark-label">90-day shelter census trend</div>';
+function renderCitywide() {
+  const top = DATA.leads.slice(0, 12);
+  const nov = DATA.leads.filter(l => l.kind === 'novelty').slice(0, 6);
+  const ds = Object.values(DATA.districts).map(d => ({ d, r: ratio311(d) })).filter(x => x.r != null).sort((a, b) => b.r - a.r);
+  const upList = ds.slice(0, 6), dnList = ds.slice(-6).reverse();
+  return `<div class="empty-main">
+      <h2>Choose a district on the left</h2>
+      <p>Each district page shows this month's 311 four ways (above its seasonal norm, biggest by volume, rising this week, 12-week trends), five other city record systems against the month before, the buildings where those records converge, and any leads that cleared the coverage check. Until you pick one, here is the citywide picture.</p>
+      <div class="grid2">
+        <div class="card"><h4>311 furthest above its seasonal norm</h4><ul>${upList.map(x => `<li><a class="dlink" href="#cd=${x.d.cd}" onclick="select('${x.d.cd}');return false;">${esc(x.d.name)}</a> <span class="up">${pct(x.r)}</span></li>`).join('')}</ul></div>
+        <div class="card"><h4>311 furthest below its seasonal norm</h4><ul>${dnList.map(x => `<li><a class="dlink" href="#cd=${x.d.cd}" onclick="select('${x.d.cd}');return false;">${esc(x.d.name)}</a> <span class="dn">${pct(x.r)}</span></li>`).join('')}</ul></div>
+      </div>
+    </div>
+    <section class="blk"><h3>This week's top leads, citywide <span class="hint">rank = signal × (1 − 0.75 × coverage); uncovered signals first</span></h3>${top.map(leadCard).join('')}</section>
+    ${nov.length ? `<section class="blk"><h3>New kinds of 311 complaints <span class="hint">descriptors absent from the same weeks of prior years; 311's own renames set aside</span></h3>${nov.map(leadCard).join('')}</section>` : ''}`;
+}
 
-    setBody('shelter-body', html);
-    drawSparkline('spark-shelter', sparkData.reverse().map(d=>Number(d.total_individuals_in_shelter)), '#d2232a');
-    sourceLoaded();
-  } catch(e) {
-    setBody('shelter-body', `<div class="card-error">Error: ${e.message}</div>`);
+function evidenceRows(l) {
+  const rows = [];
+  const s = l.sources || {};
+  if (l.kind === 'place') {
+    if (s['311']) rows.push(['311 (14 days)', `${s['311'].n14} calls, ${s['311'].types_n} types over ${s['311'].days} days; prior 12-week pace ${s['311'].prior_per14}/14d (${s['311'].ratio}x)` + (s['311'].breakdown ? '<br>' + s['311'].breakdown.map(b => `${esc(b.type)}${b.descriptor ? ' — ' + esc(b.descriptor) : ''} (${b.n})`).join('; ') : ''), s['311'].query]);
+    if (s.hpd_violations) rows.push(['HPD violations (30d)', `${s.hpd_violations.n30} total, ${s.hpd_violations.class_c} class C, ${s.hpd_violations.class_b} class B`, s.hpd_violations.query]);
+    if (s.hpd_complaints) rows.push(['HPD complaints (14d)', `${s.hpd_complaints.n14}`, s.hpd_complaints.query]);
+    if (s.dob_complaints) rows.push(['DOB complaints (30d)', `${s.dob_complaints.n30}: ` + (s.dob_complaints.categories || []).map(c => `${esc(c.label)} (${c.n})`).join('; '), s.dob_complaints.query]);
+    if (s.ecb_violations) rows.push(['OATH/ECB (30d)', `${s.ecb_violations.n30} violations, ${s.ecb_violations.hazardous} hazardous: ` + (s.ecb_violations.types || []).map(t => `${esc(t.type)} (${t.n})`).join('; '), s.ecb_violations.query]);
+    if (s.vacate_orders) rows.push(['Vacate orders (60d)', s.vacate_orders.orders.map(o => `${o.date}: ${esc(o.reason)}, ${esc(o.type)}, ${o.units || '?'} units${o.rescinded ? ' (rescinded ' + o.rescinded + ')' : ''}`).join('<br>'), s.vacate_orders.query]);
+    if (s.evictions) rows.push(['Marshal evictions (60d)', `${s.evictions.n60} (${s.evictions.residential} residential): ${s.evictions.dates.join(', ')}`, s.evictions.query]);
+    if (s.sla_pending) rows.push(['SLA pending license', s.sla_pending.applications.map(a => `${esc(a.name)} — ${esc(a.type)}, received ${a.received} (${esc(a.status)})`).join('<br>'), s.sla_pending.query]);
+    if (l.bbl) rows.push(['BBL', `<a href="https://zola.planning.nyc.gov/l/lot/${l.bbl[0]}/${parseInt(l.bbl.slice(1,6))}/${parseInt(l.bbl.slice(6))}" target="_blank" rel="noopener">${l.bbl}</a> · <a href="https://hpdonline.nyc.gov/hpdonline/building/search-results?boroId=${l.bbl[0]}&block=${parseInt(l.bbl.slice(1,6))}&lot=${parseInt(l.bbl.slice(6))}" target="_blank" rel="noopener">HPD Online</a>`, null]);
+  } else if (l.kind === 'district') {
+    const a = l.stats;
+    rows.push(['This 28 days', `${a.cur28} complaints`, l.query]);
+    rows.push(['Expected', `${a.expected} — the higher of the seasonal norm (${a.exp_seasonal ?? 'n/a'}, ${a.seasonal_years} prior years, drift-adjusted) and the recent 8-week pace (${a.exp_recent})`, null]);
+    rows.push(['Ratio / z', `${a.ratio}x · z ${a.z}` + (a.vs_seasonal ? ` · vs seasonal ${a.vs_seasonal}x` : '') + (a.vs_recent ? ` · vs recent ${a.vs_recent}x` : ''), null]);
+    rows.push(['Last 7 days', `${a.last7} vs ${a.prior3wk_avg}/wk prior three weeks${a.accelerating ? ' — accelerating' : ''}`, null]);
+    if (a.weeks) rows.push(['12 weeks', spark(a.weeks, 200, 26), null]);
+    if (a.distinct_addresses != null) rows.push(['Spread', `${a.distinct_addresses} distinct addresses; top address ${esc(a.top_address || '')} = ${Math.round((a.top_address_share || 0) * 100)}%${a.concentrated ? ' — likely one caller' : ''}${a.top_descriptor ? '; top descriptor: ' + esc(a.top_descriptor) + ' (' + Math.round((a.top_descriptor_share || 0) * 100) + '%)' : ''}`, null]);
+  } else if (l.kind === 'novelty') {
+    rows.push(['By district', (l.by_cd || []).map(x => `${esc(x.district)} (${x.n})`).join(', '), null]);
   }
+  return rows.map(([k, v, u]) => `<tr><td>${esc(k)}</td><td>${v}${u ? ` &nbsp;<a href="${esc(u)}" target="_blank" rel="noopener">query ↗</a>` : ''}</td></tr>`).join('');
 }
 
-async function loadCrime() {
-  try {
-    // Find latest data year, then do YTD vs same YTD prior year
-    const [latestRec] = await q('5uac-w243','$select=max(rpt_dt) as latest&$limit=1');
-    const latestDate = new Date(latestRec?.latest || '2025-12-31');
-    const dataYear = latestDate.getFullYear();
-    const now = new Date();
-    // Use today's month/day as the YTD cutoff, but in the data year
-    const cutoffMD = now.toISOString().slice(5,10); // e.g. "03-19"
-    const ytdStart = dataYear + '-01-01';
-    const ytdEnd = dataYear + '-' + cutoffMD;
-    const priorYtdStart = (dataYear-1) + '-01-01';
-    const priorYtdEnd = (dataYear-1) + '-' + cutoffMD;
-
-    // Current YTD from current-year dataset; prior YTD from historical dataset (qgea-i56i)
-    const [felonies, [priorYtdFel], byBoro, monthlyTrend] = await Promise.all([
-      q('5uac-w243',`$select=ofns_desc,count(*) as cnt&$where=law_cat_cd='FELONY' AND rpt_dt>='${ytdStart}' AND rpt_dt<='${ytdEnd}'&$group=ofns_desc&$order=cnt DESC&$limit=10`),
-      q('qgea-i56i',`$select=count(*) as cnt&$where=law_cat_cd='FELONY' AND rpt_dt>='${priorYtdStart}' AND rpt_dt<='${priorYtdEnd}'`),
-      q('5uac-w243',`$select=boro_nm as boro,count(*) as cnt&$where=law_cat_cd='FELONY' AND rpt_dt>='${ytdStart}' AND rpt_dt<='${ytdEnd}' AND boro_nm IS NOT NULL AND boro_nm != '(null)'&$group=boro_nm&$order=cnt DESC`),
-      q('5uac-w243',`$select=date_trunc_ym(rpt_dt) as month,count(*) as cnt&$where=law_cat_cd='FELONY' AND rpt_dt>='${ytdStart}'&$group=month&$order=month`),
-    ]);
-
-    const totalFelonies = felonies.reduce((s,r)=>s+Number(r.cnt),0);
-    const priorTotal = priorYtdFel ? Number(priorYtdFel.cnt) : null;
-
-    // KPI
-    setKPI('kpi-felonies', fmt(totalFelonies),
-      priorTotal ? compBadge(totalFelonies, priorTotal, false, `vs \u2019${String(dataYear-1).slice(2)} YTD`) : null
-    );
-
-    const ytdLabel = `Jan 1\u2013${fmtShort(ytdEnd)}`;
-    setBadge('crime-badge', `${dataYear} YTD`);
-    let html = `<div class="big-stat"><div class="big-number" style="color:var(--orange)">${fmt(totalFelonies)}</div><div class="big-label">felonies (${ytdLabel}, ${dataYear})</div></div>`;
-
-    if (priorTotal) {
-      const comp = compBadge(totalFelonies, priorTotal, false, `vs same period ${dataYear-1}`);
-      if (comp) html += `<div style="text-align:center;margin:-2px 0 8px"><span class="comp ${comp.class}" style="font-size:0.7rem">${comp.text}</span></div>`;
-    }
-
-    html += '<table class="mini-table"><tr><th>Offense</th><th>Count</th></tr>';
-    felonies.slice(0,7).forEach(r => {
-      const label = r.ofns_desc.split(' ').map(w=>w.length>3?w.charAt(0)+w.slice(1).toLowerCase():w.toLowerCase()).join(' ');
-      html += `<tr><td>${label}</td><td>${fmt(r.cnt)}</td></tr>`;
-    });
-    html += '</table>';
-
-    if (byBoro.length) {
-      const mx = Math.max(...byBoro.map(r=>Number(r.cnt)));
-      html += boroBars(byBoro, mx, 'var(--orange)', true);
-    }
-
-    if (monthlyTrend.length > 2) {
-      html += '<canvas class="spark" id="spark-crime" width="280" height="38"></canvas>';
-      html += '<div class="spark-label">Monthly felonies (12 months)</div>';
-    }
-
-    setBody('crime-body', html);
-    if (monthlyTrend.length > 2) {
-      drawSparkline('spark-crime', monthlyTrend.map(d=>Number(d.cnt)), '#ff7c53');
-    }
-    sourceLoaded();
-  } catch(e) {
-    setBody('crime-body', `<div class="card-error">Error: ${e.message}</div>`);
-  }
+function leadCard(l) {
+  const cov = l.coverage || {};
+  const arts = (cov.articles || []).slice(0, 4);
+  return `<article class="lead">
+    <h5>${esc(l.headline)}</h5>
+    <div class="meta">
+      <span class="tag ${l.kind}">${l.kind === 'place' ? 'building' : l.kind === 'district' ? 'district anomaly' : 'new in 311'}</span>
+      ${l.cd && l.cd !== sel ? `<a class="dlink" href="#cd=${l.cd}" onclick="select('${l.cd}');return false;">${esc(l.borough)} · ${esc(l.district)}</a>` : (l.cd ? '' : `<span>${esc(l.district)}</span>`)}
+      ${covTag(cov)}
+      ${l.confidence ? `<span class="tag covx">${esc(l.confidence)} confidence</span>` : ''}
+      <span title="signal ${l.signal}">rank ${l.rank}</span>
+    </div>
+    ${l.why_now ? `<p class="whynow">${esc(l.why_now)}</p>` : ''}
+    <ul class="why">${(l.why || []).map(w => `<li>${esc(w)}</li>`).join('')}</ul>
+    <details class="ev"><summary>Evidence, sources${arts.length ? ' and coverage' : ''}</summary>
+      <div class="evbody"><table>${evidenceRows(l)}</table>
+        ${arts.length ? `<div style="margin-top:.6rem;font-size:12px;color:var(--muted)">Coverage found (last 42 days):</div><ul class="cov-list">${arts.map(a => `<li><a href="${esc(a.url)}" target="_blank" rel="noopener">${esc(a.title)}</a> <small>— ${esc(a.outlet)}${a.date ? ', ' + a.date : ''}</small></li>`).join('')}</ul>` : ''}
+        ${cov.query ? `<div style="margin-top:.5rem;font-size:11.5px;color:var(--faint)">search: <code>${esc(cov.query)}</code></div>` : ''}
+      </div></details>
+  </article>`;
 }
-
-async function loadEMS() {
-  try {
-    const [latestRec] = await q('76xm-jjuj','$select=max(incident_datetime) as latest&$limit=1');
-    const latestDate = latestRec?.latest;
-    const end = new Date(latestDate);
-    const mStart = latestDate.slice(0,7)+'-01';
-    const pm = new Date(end); pm.setMonth(end.getMonth()-1);
-
-    const [byLevel, priorByLevel, heldStats, monthlyResp, fireByType, fireCur, firePrior] = await Promise.all([
-      q('76xm-jjuj',`$select=initial_severity_level_code,avg(incident_response_seconds_qy) as avg_resp,count(*) as cnt&$where=incident_datetime>='${mStart}' AND valid_incident_rspns_time_indc='Y'&$group=initial_severity_level_code&$order=initial_severity_level_code`),
-      q('76xm-jjuj',`$select=initial_severity_level_code,avg(incident_response_seconds_qy) as avg_resp&$where=incident_datetime>='${pm.toISOString().slice(0,10)}' AND incident_datetime<'${mStart}' AND valid_incident_rspns_time_indc='Y'&$group=initial_severity_level_code`),
-      q('76xm-jjuj',`$select=count(*) as total,sum(case(held_indicator='Y',1,true,0)) as held&$where=incident_datetime>='${mStart}'`),
-      q('76xm-jjuj',`$select=date_trunc_ym(incident_datetime) as month,avg(incident_response_seconds_qy) as avg_resp&$where=initial_severity_level_code='1' AND valid_incident_rspns_time_indc='Y' AND incident_datetime>='${new Date(end.getFullYear()-1,end.getMonth(),1).toISOString().slice(0,10)}'&$group=month&$order=month`),
-      q('8m42-w767',`$select=incident_classification_group,avg(incident_response_seconds_qy) as avg_resp,count(*) as cnt&$where=incident_datetime>='${mStart}' AND valid_incident_rspns_time_indc='Y'&$group=incident_classification_group&$order=cnt DESC&$limit=5`),
-      q('8m42-w767',`$select=avg(incident_response_seconds_qy) as avg_resp,count(*) as cnt&$where=incident_classification_group='Structural Fires' AND incident_datetime>='${mStart}' AND valid_incident_rspns_time_indc='Y'`),
-      q('8m42-w767',`$select=avg(incident_response_seconds_qy) as avg_resp&$where=incident_classification_group='Structural Fires' AND incident_datetime>='${pm.toISOString().slice(0,10)}' AND incident_datetime<'${mStart}' AND valid_incident_rspns_time_indc='Y'`),
-    ]);
-
-    const priorMap = {};
-    priorByLevel.forEach(r => { priorMap[r.initial_severity_level_code] = Number(r.avg_resp); });
-    const seg1 = byLevel.find(r => r.initial_severity_level_code === '1');
-
-    // KPI
-    if (seg1) {
-      const mins = (Number(seg1.avg_resp)/60).toFixed(1);
-      setKPI('kpi-ems', mins+' min',
-        priorMap['1'] ? compBadge(Number(seg1.avg_resp), priorMap['1'], false, 'vs prior mo') : null
-      );
-    }
-
-    setBadge('ems-badge', fmtDate(latestDate));
-    const labels = {'1':'Life-Threatening (Seg 1)','2':'Serious (Seg 2)','3':'Urgent (Seg 3)','4':'Non-Urgent (Seg 4\u20138)'};
-    let html = '<div style="margin-bottom:0.75rem"><div style="font-size:0.62rem;text-transform:uppercase;letter-spacing:0.05em;color:var(--muted);margin-bottom:0.3rem;font-weight:700">EMS Response Times</div>';
-    byLevel.forEach(r => {
-      if (r.initial_severity_level_code > 4) return;
-      const code = r.initial_severity_level_code;
-      html += row(labels[code]||`Seg ${code}`, secToMin(r.avg_resp),
-        priorMap[code] ? compBadge(Number(r.avg_resp), priorMap[code], false, 'vs prior mo') : null);
-    });
-    const heldPct = (heldStats && heldStats.held != null && heldStats.total > 0)
-      ? (Number(heldStats.held)/Number(heldStats.total)*100) : null;
-    if (heldPct !== null && !isNaN(heldPct)) {
-      html += row('Calls Held (delayed)', fmtPct(heldPct),
-        {text: heldPct > 5 ? '\u26A0 High' : '\u2713', class: heldPct > 5 ? 'up-bad' : 'flat'});
-    }
-    html += '</div>';
-
-    // Fire section
-    html += '<div style="margin-top:0.5rem"><div style="font-size:0.62rem;text-transform:uppercase;letter-spacing:0.05em;color:var(--muted);margin-bottom:0.3rem;font-weight:700">FDNY Fire Response</div>';
-    if (fireCur?.[0]?.avg_resp) {
-      const comp = firePrior?.[0]?.avg_resp ? compBadge(Number(fireCur[0].avg_resp), Number(firePrior[0].avg_resp), false, 'vs prior mo') : null;
-      html += row('Structural Fire Response', secToMin(fireCur[0].avg_resp), comp);
-    }
-    fireByType.forEach(r => {
-      if (r.incident_classification_group === 'Structural Fires') return;
-      html += row(r.incident_classification_group||'Other', secToMin(r.avg_resp), {text:fmt(r.cnt),class:'flat'});
-    });
-    html += '</div>';
-
-    if (monthlyResp.length > 2) {
-      html += '<canvas class="spark" id="spark-ems" width="280" height="38"></canvas>';
-      html += '<div class="spark-label">EMS Seg 1 response time (monthly avg min)</div>';
-    }
-
-    setBody('ems-body', html);
-    if (monthlyResp.length > 2) {
-      drawSparkline('spark-ems', monthlyResp.map(d=>Number(d.avg_resp)/60), '#dde44c');
-    }
-    sourceLoaded();
-  } catch(e) {
-    setBody('ems-body', `<div class="card-error">Error: ${e.message}</div>`);
-  }
-}
-
-async function load311() {
-  try {
-    const d7 = isoDate(7), d30 = isoDate(30);
-    const [[weekVol],[priorWeek],topTypes,dailyVol,[openClosed]] = await Promise.all([
-      q('erm2-nwe9',`$select=count(*) as cnt&$where=created_date>='${d7}'`),
-      q('erm2-nwe9',`$select=count(*) as cnt&$where=created_date>='${isoDate(14)}' AND created_date<'${d7}'`),
-      q('erm2-nwe9',`$select=complaint_type,count(*) as cnt&$where=created_date>='${d30}'&$group=complaint_type&$order=cnt DESC&$limit=10`),
-      q('erm2-nwe9',`$select=date_trunc_ymd(created_date) as day,count(*) as cnt&$where=created_date>='${d30}'&$group=day&$order=day`),
-      q('erm2-nwe9',`$select=count(*) as total,sum(case(status='Closed',1,true,0)) as closed&$where=created_date>='${d30}'`),
-    ]);
-
-    // KPI
-    setKPI('kpi-311', fmt(weekVol?.cnt),
-      priorWeek ? compBadge(Number(weekVol?.cnt), Number(priorWeek.cnt), false, 'vs prior wk') : null
-    );
-
-    setBadge('sr-badge', 'Live');
-    const closedPct = openClosed ? (Number(openClosed.closed)/Number(openClosed.total)*100) : null;
-
-    let html = `<div class="big-stat"><div class="big-number" style="color:var(--cerulean)">${fmt(weekVol?.cnt)}</div><div class="big-label">requests this week</div></div>`;
-    if (priorWeek) {
-      const comp = compBadge(Number(weekVol?.cnt), Number(priorWeek.cnt), false, 'vs prior week');
-      if (comp) html += `<div style="text-align:center;margin:-2px 0 8px"><span class="comp ${comp.class}" style="font-size:0.7rem">${comp.text}</span></div>`;
-    }
-    if (closedPct !== null) {
-      html += row('Closed Rate (30d)', fmtPct(closedPct),
-        {text: closedPct > 80 ? '\u2713' : '\u26A0', class: closedPct > 80 ? 'flat' : 'up-bad'});
-    }
-
-    html += '<table class="mini-table"><tr><th>Top Complaints (30d)</th><th>Count</th></tr>';
-    topTypes.slice(0,8).forEach(r => { html += `<tr><td>${r.complaint_type}</td><td>${fmt(r.cnt)}</td></tr>`; });
-    html += '</table>';
-
-    if (dailyVol.length > 2) {
-      html += '<canvas class="spark" id="spark-311" width="280" height="38"></canvas>';
-      html += '<div class="spark-label">Daily 311 volume (30 days)</div>';
-    }
-    setBody('sr-body', html);
-    if (dailyVol.length > 2) {
-      drawSparkline('spark-311', dailyVol.map(d=>Number(d.cnt)), '#217ebe');
-    }
-    sourceLoaded();
-  } catch(e) {
-    setBody('sr-body', `<div class="card-error">Error: ${e.message}</div>`);
-  }
-}
-
-async function loadRestaurantsLive() {
-  try {
-    const d30 = isoDate(30), d180 = isoDate(180);
-    const [grades, [recentCount], monthlyInsp] = await Promise.all([
-      q('43nn-pn8j',`$select=grade,count(*) as cnt&$where=grade_date>='${d180}' AND grade IS NOT NULL AND grade IN('A','B','C')&$group=grade&$order=grade`),
-      q('43nn-pn8j',`$select=count(distinct camis) as cnt&$where=inspection_date>='${d30}'`),
-      q('43nn-pn8j',`$select=date_trunc_ym(inspection_date) as month,count(distinct camis) as cnt&$where=inspection_date>='${isoDate(365)}'&$group=month&$order=month`),
-    ]);
-
-    // If scanner already rendered, enrich; otherwise build from scratch
-    const existing = document.getElementById('restaurants-body').innerHTML;
-    if (!existing.includes('card-loading') && !existing.includes('card-error')) {
-      // Scanner already rendered — append sparkline
-      if (monthlyInsp.length > 2) {
-        const el = document.getElementById('restaurants-body');
-        el.innerHTML += '<canvas class="spark" id="spark-rest" width="280" height="38"></canvas>';
-        el.innerHTML += '<div class="spark-label">Monthly inspections (12 months)</div>';
-        drawSparkline('spark-rest', monthlyInsp.map(d=>Number(d.cnt)), '#57aa4a');
-      }
-    } else {
-      // No scanner data — render from live
-      setBadge('restaurants-badge', 'Live');
-      const totalGraded = grades.reduce((s,r)=>s+Number(r.cnt),0);
-      let html = '';
-      html += row('Restaurants Inspected (30d)', fmt(recentCount?.cnt));
-      const gradeEntries = [['A','var(--green)'],['B','var(--chartreuse)'],['C','var(--red)']];
-      gradeEntries.forEach(([g,color]) => {
-        const gd = grades.find(r=>r.grade===g);
-        const pct = gd ? (Number(gd.cnt)/totalGraded*100) : 0;
-        html += `<div class="bar-row"><span class="bar-label">Grade ${g}</span><span class="bar-track"><span class="bar-fill" style="width:${pct}%;background:${color}"></span></span><span class="bar-val">${pct.toFixed(0)}%</span></div>`;
-      });
-      if (monthlyInsp.length > 2) {
-        html += '<canvas class="spark" id="spark-rest" width="280" height="38"></canvas>';
-        html += '<div class="spark-label">Monthly inspections (12 months)</div>';
-      }
-      setBody('restaurants-body', html);
-      if (monthlyInsp.length > 2) {
-        drawSparkline('spark-rest', monthlyInsp.map(d=>Number(d.cnt)), '#57aa4a');
-      }
-    }
-    sourceLoaded();
-  } catch(e) {
-    if (document.getElementById('restaurants-body').innerHTML.includes('card-loading')) {
-      setBody('restaurants-body', `<div class="card-error">Error: ${e.message}</div>`);
-    }
-  }
-}
-
-async function loadParks() {
-  try {
-    const [latestRec] = await q('yg3y-7juh','$select=max(date) as latest&$limit=1');
-    const latestDate = latestRec?.latest;
-    const yr = latestDate ? latestDate.slice(0,4)+'-01-01' : '2025-01-01';
-
-    const [conditions, clean, qtrTrend] = await Promise.all([
-      q('yg3y-7juh',`$select=overall_condition,count(*) as cnt&$where=date>='${yr}'&$group=overall_condition`),
-      q('yg3y-7juh',`$select=cleanliness,count(*) as cnt&$where=date>='${yr}'&$group=cleanliness`),
-      q('yg3y-7juh',`$select=date_trunc_ym(date) as month,sum(case(overall_condition='A',1,true,0))*1.0/count(*)*100 as pct&$where=date>='2023-01-01'&$group=month&$order=month`),
-    ]);
-
-    const total = conditions.reduce((s,r)=>s+Number(r.cnt),0);
-    const acceptable = conditions.find(r=>r.overall_condition==='A');
-    const acceptPct = acceptable ? (Number(acceptable.cnt)/total*100) : 0;
-    const cleanTotal = clean.reduce((s,r)=>s+Number(r.cnt),0);
-    const cleanAccept = clean.find(r=>r.cleanliness==='A');
-    const cleanPct = cleanAccept ? (Number(cleanAccept.cnt)/cleanTotal*100) : 0;
-
-    // KPI
-    setKPI('kpi-parks', fmtPct(acceptPct), null, 'condition rating');
-
-    setBadge('parks-badge', fmtDate(latestDate));
-    let html = '';
-    html += row('Overall Acceptable', fmtPct(acceptPct));
-    html += row('Cleanliness Acceptable', fmtPct(cleanPct));
-    html += row('Inspections (YTD)', fmt(total));
-
-    html += `<div class="bar-row" style="margin-top:6px"><span class="bar-label">Condition</span><span class="bar-track"><span class="bar-fill" style="width:${acceptPct}%;background:var(--green)"></span></span><span class="bar-val">${acceptPct.toFixed(0)}%</span></div>`;
-    html += `<div class="bar-row"><span class="bar-label">Clean</span><span class="bar-track"><span class="bar-fill" style="width:${cleanPct}%;background:var(--cerulean)"></span></span><span class="bar-val">${cleanPct.toFixed(0)}%</span></div>`;
-
-    if (qtrTrend.length > 2) {
-      html += '<canvas class="spark" id="spark-parks" width="280" height="38"></canvas>';
-      html += '<div class="spark-label">Monthly acceptability % trend</div>';
-    }
-    setBody('parks-body', html);
-    if (qtrTrend.length > 2) {
-      drawSparkline('spark-parks', qtrTrend.map(d=>Number(d.pct)), '#57aa4a');
-    }
-    sourceLoaded();
-  } catch(e) {
-    setBody('parks-body', `<div class="card-error">Error: ${e.message}</div>`);
-  }
-}
-
-async function loadSanitation() {
-  try {
-    const d30 = isoDate(30), d60 = isoDate(60);
-    const [[missed],[missedPrior],[dirty],[litter],[totalDsny],topDsny,monthlyMissed] = await Promise.all([
-      q('erm2-nwe9',`$select=count(*) as cnt&$where=agency='DSNY' AND complaint_type='Missed Collection' AND created_date>='${d30}'`),
-      q('erm2-nwe9',`$select=count(*) as cnt&$where=agency='DSNY' AND complaint_type='Missed Collection' AND created_date>='${d60}' AND created_date<'${d30}'`),
-      q('erm2-nwe9',`$select=count(*) as cnt&$where=agency='DSNY' AND complaint_type='Dirty Conditions' AND created_date>='${d30}'`),
-      q('erm2-nwe9',`$select=count(*) as cnt&$where=agency='DSNY' AND complaint_type='Overflowing Litter Baskets' AND created_date>='${d30}'`),
-      q('erm2-nwe9',`$select=count(*) as cnt&$where=agency='DSNY' AND created_date>='${d30}'`),
-      q('erm2-nwe9',`$select=complaint_type,count(*) as cnt&$where=agency='DSNY' AND created_date>='${d30}'&$group=complaint_type&$order=cnt DESC&$limit=6`),
-      q('erm2-nwe9',`$select=date_trunc_ym(created_date) as month,count(*) as cnt&$where=agency='DSNY' AND complaint_type='Missed Collection' AND created_date>='${isoDate(365)}'&$group=month&$order=month`),
-    ]);
-
-    setBadge('sanitation-badge', 'Live');
-    const comp = compBadge(Number(missed?.cnt), Number(missedPrior?.cnt), false, 'vs prior 30d');
-
-    let html = '';
-    html += row('DSNY 311 Complaints (30d)', fmt(totalDsny?.cnt));
-    html += row('Missed Collections (30d)', fmt(missed?.cnt), comp);
-    html += row('Dirty Conditions (30d)', fmt(dirty?.cnt));
-    html += row('Overflowing Litter Baskets', fmt(litter?.cnt));
-
-    if (topDsny.length) {
-      html += '<table class="mini-table"><tr><th>Complaint Type (30d)</th><th>Count</th></tr>';
-      topDsny.forEach(r => { html += `<tr><td>${r.complaint_type}</td><td>${fmt(r.cnt)}</td></tr>`; });
-      html += '</table>';
-    }
-
-    if (monthlyMissed.length > 2) {
-      html += '<canvas class="spark" id="spark-dsny" width="280" height="38"></canvas>';
-      html += '<div class="spark-label">Monthly missed collections (12 months)</div>';
-    }
-    setBody('sanitation-body', html);
-    if (monthlyMissed.length > 2) {
-      drawSparkline('spark-dsny', monthlyMissed.map(d=>Number(d.cnt)), '#57aa4a');
-    }
-    sourceLoaded();
-  } catch(e) {
-    setBody('sanitation-body', `<div class="card-error">Error: ${e.message}</div>`);
-  }
-}
-
-async function loadDOT() {
-  try {
-    const d30 = isoDate(30), d60 = isoDate(60), d90 = isoDate(90);
-    const [[closedMonth],[closedPrior],avgClose,[potholes311],monthlyPotholes] = await Promise.all([
-      q('x9wy-ing4',`$select=count(*) as cnt&$where=rptclosed>='${d30}'`),
-      q('x9wy-ing4',`$select=count(*) as cnt&$where=rptclosed>='${d60}' AND rptclosed<'${d30}'`),
-      q('x9wy-ing4',`$select=avg(date_diff_d(rptclosed,rptdate)) as avg_days&$where=rptclosed>='${d90}' AND rptdate IS NOT NULL`),
-      q('erm2-nwe9',`$select=count(*) as cnt&$where=complaint_type='Street Condition' AND descriptor='Pothole' AND created_date>='${d30}'`),
-      q('erm2-nwe9',`$select=date_trunc_ym(created_date) as month,count(*) as cnt&$where=complaint_type='Street Condition' AND descriptor='Pothole' AND created_date>='${isoDate(365)}'&$group=month&$order=month`),
-    ]);
-
-    setBadge('dot-badge', 'Live');
-    const comp = compBadge(Number(closedMonth?.cnt), Number(closedPrior?.cnt), true, 'vs prior 30d');
-
-    let html = '';
-    html += row('Potholes Closed (30d)', fmt(closedMonth?.cnt), comp);
-    html += row('Avg Days to Close', avgClose[0]?.avg_days ? fmtDec(avgClose[0].avg_days,1)+' days' : '\u2014');
-    html += row('311 Pothole Complaints (30d)', fmt(potholes311?.cnt));
-
-    if (monthlyPotholes.length > 2) {
-      html += '<canvas class="spark" id="spark-potholes" width="280" height="38"></canvas>';
-      html += '<div class="spark-label">Monthly pothole complaints (12 months)</div>';
-    }
-    setBody('dot-body', html);
-    if (monthlyPotholes.length > 2) {
-      drawSparkline('spark-potholes', monthlyPotholes.map(d=>Number(d.cnt)), '#9b9fbc');
-    }
-    sourceLoaded();
-  } catch(e) {
-    setBody('dot-body', `<div class="card-error">Error: ${e.message}</div>`);
-  }
-}
-
-async function load311Speed() {
-  try {
-    const d30 = isoDate(30);
-    const byAgency = await q('erm2-nwe9',
-      `$select=agency,avg(date_diff_d(closed_date,created_date)) as avg_days,count(*) as cnt&$where=closed_date IS NOT NULL AND created_date>='${d30}'&$group=agency&$order=cnt DESC&$limit=12`);
-
-    setBadge('speed-badge', 'Live');
-    let html = '<table class="mini-table"><tr><th>Agency</th><th>Avg Days</th><th>Vol</th></tr>';
-    byAgency.forEach(r => {
-      const days = Number(r.avg_days);
-      const color = days < 1 ? 'var(--green)' : days < 3 ? 'var(--text)' : days < 7 ? 'var(--chartreuse)' : 'var(--red)';
-      html += `<tr><td>${r.agency}</td><td style="color:${color}">${fmtDec(days,1)}</td><td>${fmt(r.cnt)}</td></tr>`;
-    });
-    html += '</table>';
-
-    const maxDays = Math.max(...byAgency.map(r=>Number(r.avg_days)));
-    html += '<div class="boro-bars" style="margin-top:6px">';
-    byAgency.slice(0,8).forEach(r => {
-      const days = Number(r.avg_days);
-      const color = days < 1 ? 'var(--green)' : days < 3 ? 'var(--cerulean)' : days < 7 ? 'var(--chartreuse)' : 'var(--red)';
-      html += `<div class="boro-row"><span class="boro-name" style="width:auto;max-width:45px;font-size:0.55rem">${r.agency}</span><span class="boro-track"><span class="boro-fill" style="width:${Math.min(days/maxDays*100,100)}%;background:${color}"></span></span><span class="boro-val">${fmtDec(days,1)}d</span></div>`;
-    });
-    html += '</div>';
-    html += '<div style="font-size:0.58rem;color:var(--dim);margin-top:4px;font-family:var(--mono)">Avg calendar days from 311 request to closure (30d)</div>';
-
-    setBody('speed-body', html);
-    sourceLoaded();
-  } catch(e) {
-    setBody('speed-body', `<div class="card-error">Error: ${e.message}</div>`);
-  }
-}
-
-async function loadBuildings() {
-  try {
-    const d30 = isoDate(30), d60 = isoDate(60), yr = yearStart();
-    const [[permitsMonth],[permitsPrior],byType,[activeComplaints]] = await Promise.all([
-      q('rbx6-tga4',`$select=count(*) as cnt&$where=issued_date>='${d30}'`),
-      q('rbx6-tga4',`$select=count(*) as cnt&$where=issued_date>='${d60}' AND issued_date<'${d30}'`),
-      q('rbx6-tga4',`$select=work_type,count(*) as cnt&$where=issued_date>='${yr}'&$group=work_type&$order=cnt DESC&$limit=6`),
-      q('eabe-havv',`$select=count(*) as cnt&$where=status='ACTIVE'`),
-    ]);
-
-    setBadge('buildings-badge', 'Live');
-    const comp = permitsMonth && permitsPrior ? compBadge(Number(permitsMonth.cnt), Number(permitsPrior.cnt), true, 'vs prior 30d') : null;
-
-    let html = '';
-    html += row('Permits Issued (30d)', fmt(permitsMonth?.cnt), comp);
-    html += row('Active Open Complaints', fmt(activeComplaints?.cnt));
-
-    if (byType.length) {
-      html += '<table class="mini-table"><tr><th>Permit Type (YTD)</th><th>Count</th></tr>';
-      byType.forEach(r => { html += `<tr><td>${r.work_type||'Other'}</td><td>${fmt(r.cnt)}</td></tr>`; });
-      html += '</table>';
-    }
-
-    setBody('buildings-body', html);
-    sourceLoaded();
-  } catch(e) {
-    setBody('buildings-body', `<div class="card-error">Error: ${e.message}</div>`);
-  }
-}
-
-async function loadNYCHA() {
-  try {
-    const [[total], byHazard, [recentInsp], topDevs] = await Promise.all([
-      q('im9z-53hg',`$select=count(*) as cnt`),
-      q('im9z-53hg',`$select=hzrd_clas,count(*) as cnt&$group=hzrd_clas&$order=cnt DESC`),
-      q('im9z-53hg',`$select=count(*) as cnt&$where=insp_dt>='${isoDate(90)}'`),
-      q('im9z-53hg',`$select=development_name,count(*) as cnt&$group=development_name&$order=cnt DESC&$limit=5`),
-    ]);
-
-    setBadge('nycha-badge', 'Live');
-    const labels = {'A':'Non-Hazardous','B':'Hazardous','C':'Immed. Hazardous'};
-    const colors = {'A':'var(--muted)','B':'var(--chartreuse)','C':'var(--red)'};
-    const totalV = byHazard.reduce((s,r)=>s+Number(r.cnt),0);
-
-    let html = `<div class="big-stat"><div class="big-number">${fmt(total?.cnt)}</div><div class="big-label">total code violations</div></div>`;
-
-    byHazard.forEach(r => {
-      const pct = (Number(r.cnt)/totalV*100).toFixed(0);
-      html += row(`Class ${r.hzrd_clas} (${labels[r.hzrd_clas]||r.hzrd_clas})`,
-        `<span style="color:${colors[r.hzrd_clas]||''}">${fmt(r.cnt)}</span>`,
-        {text:`${pct}%`, class:'flat'});
-    });
-    html += row('Inspections (90d)', fmt(recentInsp?.cnt));
-
-    if (topDevs.length) {
-      html += '<table class="mini-table"><tr><th>Most Violations (Development)</th><th>#</th></tr>';
-      topDevs.forEach(r => {
-        const name = r.development_name?.length > 30 ? r.development_name.slice(0,28)+'&#8230;' : r.development_name;
-        html += `<tr><td>${name}</td><td>${fmt(r.cnt)}</td></tr>`;
-      });
-      html += '</table>';
-    }
-
-    setBody('nycha-body', html);
-    sourceLoaded();
-  } catch(e) {
-    setBody('nycha-body', `<div class="card-error">Error: ${e.message}</div>`);
-  }
-}
-
-async function loadWorkforce() {
-  try {
-    const [topAgencies, [totalHC], [totalOT], [priorHC]] = await Promise.all([
-      q('k397-673e',`$select=agency_name,count(*) as cnt&$where=fiscal_year=2025 AND leave_status_as_of_june_30='ACTIVE'&$group=agency_name&$order=cnt DESC&$limit=8`),
-      q('k397-673e',`$select=count(*) as cnt&$where=fiscal_year=2025 AND leave_status_as_of_june_30='ACTIVE'`),
-      q('k397-673e',`$select=sum(total_ot_paid) as total_ot&$where=fiscal_year=2025`),
-      q('k397-673e',`$select=count(*) as cnt&$where=fiscal_year=2024 AND leave_status_as_of_june_30='ACTIVE'`),
-    ]);
-
-    setBadge('workforce-badge', 'FY2025');
-    const hcComp = compBadge(Number(totalHC?.cnt), Number(priorHC?.cnt), true, 'vs FY2024');
-
-    let html = '';
-    html += row('Active City Employees', `<strong>${fmt(totalHC?.cnt)}</strong>`, hcComp);
-    html += row('Total Overtime Paid', totalOT?.total_ot ? '$'+fmt(Math.round(Number(totalOT.total_ot))) : '\u2014');
-
-    if (topAgencies.length) {
-      const maxA = Number(topAgencies[0].cnt);
-      html += '<div class="boro-bars" style="margin-top:6px">';
-      topAgencies.forEach(r => {
-        const name = r.agency_name.length > 22 ? r.agency_name.slice(0,20)+'&#8230;' : r.agency_name;
-        const val = Number(r.cnt);
-        html += `<div class="boro-row"><span class="boro-name" style="width:auto;max-width:130px;font-size:0.55rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${r.agency_name}">${name}</span><span class="boro-track"><span class="boro-fill" style="width:${val/maxA*100}%;background:var(--periwinkle)"></span></span><span class="boro-val">${fmt(val)}</span></div>`;
-      });
-      html += '</div>';
-    }
-
-    setBody('workforce-body', html);
-    sourceLoaded();
-  } catch(e) {
-    setBody('workforce-body', `<div class="card-error">Error: ${e.message}</div>`);
-  }
-}
-
-async function loadCapital() {
-  try {
-    const [byPhase, [totals], largest] = await Promise.all([
-      q('n7gv-k5yt',`$select=current_phase,count(*) as cnt&$group=current_phase&$order=cnt DESC&$limit=6`),
-      q('n7gv-k5yt',`$select=count(*) as cnt,sum(budget_forecast) as total_budget`),
-      q('n7gv-k5yt',`$select=project_name,managing_agency,budget_forecast,current_phase&$order=budget_forecast DESC&$limit=5`),
-    ]);
-
-    setBadge('capital-badge', 'Live');
-    const totalBudget = Number(totals?.total_budget || 0);
-
-    let html = '';
-    html += row('Active Capital Projects', fmt(totals?.cnt));
-    html += row('Total Budget Forecast', totalBudget > 0 ? '$'+fmt(Math.round(totalBudget/1000000))+'M' : '\u2014');
-
-    if (byPhase.length) {
-      const maxP = Math.max(...byPhase.filter(r=>r.current_phase).map(r=>Number(r.cnt)));
-      const phaseColors = {Design:'var(--cerulean)',Construction:'var(--green)','Construction Procurement':'var(--chartreuse)',IT:'var(--periwinkle)','Close-Out':'var(--muted)'};
-      html += '<div class="boro-bars" style="margin-top:4px">';
-      byPhase.filter(r=>r.current_phase).forEach(r => {
-        const val = Number(r.cnt);
-        html += `<div class="boro-row"><span class="boro-name" style="width:auto;max-width:80px;font-size:0.55rem">${r.current_phase}</span><span class="boro-track"><span class="boro-fill" style="width:${val/maxP*100}%;background:${phaseColors[r.current_phase]||'var(--periwinkle)'}"></span></span><span class="boro-val">${fmt(val)}</span></div>`;
-      });
-      html += '</div>';
-    }
-
-    if (largest.length) {
-      html += '<table class="mini-table"><tr><th>Largest Projects</th><th>Budget</th></tr>';
-      largest.forEach(r => {
-        const name = (r.project_name||'').slice(0,35);
-        const budget = Number(r.budget_forecast||0);
-        html += `<tr><td>${name}</td><td>$${fmt(Math.round(budget/1000000))}M</td></tr>`;
-      });
-      html += '</table>';
-    }
-
-    setBody('capital-body', html);
-    sourceLoaded();
-  } catch(e) {
-    setBody('capital-body', `<div class="card-error">Error: ${e.message}</div>`);
-  }
-}
-
-// ============================================================
-//  NAV TABS (section filtering)
-// ============================================================
-function initNavTabs() {
-  document.querySelectorAll('.nav-tab[data-view]').forEach(tab => {
-    tab.addEventListener('click', () => {
-      document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
-      tab.classList.add('active');
-      const view = tab.dataset.view;
-      const kpiRail = document.getElementById('kpiRail');
-      const divSection = document.getElementById('divergingSection');
-      const header = document.querySelector('.page-header');
-      if (view === 'overview') {
-        header.style.display = '';
-        kpiRail.style.display = '';
-        divSection.style.display =
-          (scannerData?.baselines?.diverging_trends?.length) ? '' : 'none';
-        document.querySelectorAll('.domain').forEach(d => d.style.display = '');
-      } else {
-        header.style.display = 'none';
-        kpiRail.style.display = 'none';
-        divSection.style.display = 'none';
-        const map = {
-          safety: 'domain-safety',
-          housing: 'domain-housing',
-          quality: 'domain-quality',
-          ops: 'domain-ops',
-        };
-        document.querySelectorAll('.domain').forEach(d => {
-          d.style.display = d.id === map[view] ? '' : 'none';
-        });
-      }
-      window.scrollTo(0, 0);
-    });
-  });
-}
-
-// ============================================================
-//  INIT
-// ============================================================
-async function init() {
-  document.getElementById('metaDate').textContent =
-    'Updated: ' + new Date().toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric',hour:'numeric',minute:'2-digit'});
-
-  initNavTabs();
-
-  // Scanner first (fast, local), then all live APIs in parallel
-  await loadScanner();
-
-  await Promise.allSettled([
-    loadShelter(),
-    loadCrime(),
-    loadEMS(),
-    load311(),
-    loadRestaurantsLive(),
-    loadParks(),
-    loadSanitation(),
-    loadDOT(),
-    load311Speed(),
-    loadBuildings(),
-    loadNYCHA(),
-    loadWorkforce(),
-    loadCapital(),
-  ]);
-
-  document.getElementById('statusText').innerHTML =
-    `<span class="status-dot live"></span>${loadedSources} sources loaded`;
-}
-
-init();
 </script>
 </body>
 </html>

@@ -223,14 +223,18 @@ def scan_shootings(days=7):
 def scan_dob_filings(days=7):
     """DOB NOW Job Application Filings (w9ak-ipjd)"""
     since = (datetime.now() - timedelta(days=days)).strftime("%Y-%m-%d")
-    rows = fetch_json(f"{BASE}/w9ak-ipjd.json", {
+    # Count server-side: the old $limit=2000 fetch silently capped busy weeks at 2,000.
+    total = fetch_json(f"{BASE}/w9ak-ipjd.json", {
+        "$select": "count(*) as n",
         "$where": f"filing_date>='{since}'",
-        "$limit": 2000,
     })
-    big_projects = [r for r in rows if float(r.get("initial_cost", 0) or 0) > 1_000_000]
+    big = fetch_json(f"{BASE}/w9ak-ipjd.json", {
+        "$select": "count(*) as n",
+        "$where": f"filing_date>='{since}' AND initial_cost::number > 1000000",
+    })
     return {
-        "total_filings": len(rows),
-        "large_projects_over_1m": len(big_projects),
+        "total_filings": int((total or [{}])[0].get("n", 0)),
+        "large_projects_over_1m": int((big or [{}])[0].get("n", 0)),
     }
 
 
@@ -247,17 +251,23 @@ def build_week_row(week_ending, collisions, hpd, vacates, restaurants, shootings
     # For immediate emergency, try to get "EMERGENCY" category
     imm_emergency = hpd["top_categories"].get("EMERGENCY", 0) if hpd else 0
 
+    # Collisions publish 6-10 weeks late and NYPD's shooting file is quarterly, so a
+    # "last 7 days" query legitimately returns nothing. Write blanks, not zeros — a
+    # zero here reads as "no crashes this week" and produced -100% YoY artifacts.
+    def lag(v):
+        return "" if not v else v
+
     return {
         "week_ending": week_ending,
-        "crashes": collisions["total_crashes"] if collisions else 0,
-        "persons_injured": collisions["persons_injured"] if collisions else 0,
-        "persons_killed": collisions["persons_killed"] if collisions else 0,
-        "pedestrians_injured": collisions["pedestrians_injured"] if collisions else 0,
-        "pedestrians_killed": collisions["pedestrians_killed"] if collisions else 0,
-        "cyclists_injured": collisions["cyclists_injured"] if collisions else 0,
-        "shooting_incidents": shootings["total_incidents"] if shootings else 0,
-        "shooting_victims": shootings["total_victims"] if shootings else 0,
-        "shooting_murders": shootings["murders"] if shootings else 0,
+        "crashes": lag(collisions["total_crashes"] if collisions else 0),
+        "persons_injured": lag(collisions["persons_injured"] if collisions else 0),
+        "persons_killed": lag(collisions["persons_killed"] if collisions else 0),
+        "pedestrians_injured": lag(collisions["pedestrians_injured"] if collisions else 0),
+        "pedestrians_killed": lag(collisions["pedestrians_killed"] if collisions else 0),
+        "cyclists_injured": lag(collisions["cyclists_injured"] if collisions else 0),
+        "shooting_incidents": lag(shootings["total_incidents"] if shootings else 0),
+        "shooting_victims": lag(shootings["total_victims"] if shootings else 0),
+        "shooting_murders": lag(shootings["murders"] if shootings else 0),
         "hpd_complaints": hpd_total,
         "hpd_heat_hot_water": heat_hw,
         "hpd_heat_pct": round(heat_hw / hpd_total * 100, 1) if hpd_total else 0,
@@ -691,20 +701,24 @@ def compute_diverging_trends(current_row, baselines):
     ann = baselines.get("annual_prev_year", {})
     sw = baselines.get("same_week_prior_year", {})
 
+    def num(k):
+        v = current_row.get(k, 0)
+        return None if v in ("", None) else float(v)
+
     comparisons = [
-        ("Crashes", float(current_row.get("crashes", 0)), sw.get("crashes"), ann.get("crashes_per_week")),
-        ("Killed in traffic", float(current_row.get("persons_killed", 0)), sw.get("persons_killed"), ann.get("persons_killed_per_week")),
-        ("Pedestrian injuries", float(current_row.get("pedestrians_injured", 0)), sw.get("pedestrians_injured"), ann.get("pedestrians_injured_per_week")),
-        ("Cyclist injuries", float(current_row.get("cyclists_injured", 0)), sw.get("cyclists_injured"), ann.get("cyclists_injured_per_week")),
-        ("HPD complaints", float(current_row.get("hpd_complaints", 0)), sw.get("hpd_complaints"), ann.get("hpd_complaints_per_week")),
-        ("Shooting incidents", float(current_row.get("shooting_incidents", 0)), sw.get("shooting_incidents"), ann.get("shooting_incidents_per_week")),
-        ("Restaurant closures", float(current_row.get("restaurant_closures", 0)), sw.get("restaurant_closures"), ann.get("restaurant_closures_per_week")),
-        ("Vacate orders", float(current_row.get("vacate_orders_new", 0)), sw.get("vacate_orders_new"), ann.get("vacate_orders_per_week")),
+        ("Crashes", num("crashes"), sw.get("crashes"), ann.get("crashes_per_week")),
+        ("Killed in traffic", num("persons_killed"), sw.get("persons_killed"), ann.get("persons_killed_per_week")),
+        ("Pedestrian injuries", num("pedestrians_injured"), sw.get("pedestrians_injured"), ann.get("pedestrians_injured_per_week")),
+        ("Cyclist injuries", num("cyclists_injured"), sw.get("cyclists_injured"), ann.get("cyclists_injured_per_week")),
+        ("HPD complaints", num("hpd_complaints"), sw.get("hpd_complaints"), ann.get("hpd_complaints_per_week")),
+        ("Shooting incidents", num("shooting_incidents"), sw.get("shooting_incidents"), ann.get("shooting_incidents_per_week")),
+        ("Restaurant closures", num("restaurant_closures"), sw.get("restaurant_closures"), ann.get("restaurant_closures_per_week")),
+        ("Vacate orders", num("vacate_orders_new"), sw.get("vacate_orders_new"), ann.get("vacate_orders_per_week")),
     ]
 
     for metric, this_week, same_week, avg_week in comparisons:
-        if same_week is None and avg_week is None:
-            continue
+        if this_week is None or (same_week is None and avg_week is None):
+            continue  # lagged feed with no data this week -- not a -100% drop
         yoy_pct = round((this_week - same_week) / same_week * 100, 1) if same_week and same_week > 0 else None
         vs_avg_pct = round((this_week - avg_week) / avg_week * 100, 1) if avg_week and avg_week > 0 else None
         # Flag if >15% YoY change OR >20% vs annual avg

@@ -261,6 +261,9 @@ async function loadData() {
       showOverview();
       hideLoading();
       updateTimestamp();
+      // Deep link from the leads page: map.html#cd=301
+      const m = (location.hash || '').match(/cd=(\d{3})/);
+      if (m) selectDistrict(m[1]);
     }
 
     if (map.isStyleLoaded()) {

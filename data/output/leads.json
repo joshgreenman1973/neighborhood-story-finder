@@ -1,6 +1,6 @@
 {
  "as_of": "2026-08-16",
- "generated": "2026-08-19T01:04:11Z",
+ "generated": "2026-08-19T01:26:14Z",
  "week_labels": [
   "2026-05-25",
   "2026-06-01",
@@ -105,7 +105,11 @@
  },
  "coverage_backend": "ok",
  "synthesis": {
-  "used": false
+  "used": true,
+  "model": "claude-opus-5",
+  "n": 20,
+  "input_tokens": 6627,
+  "output_tokens": 4228
  },
  "counts": {
   "leads": 95,
@@ -118,7 +122,7 @@
   {
    "id": "district:410:Building/Use",
    "kind": "district",
-   "headline": "Howard Beach / Ozone Park: Building/Use complaints 4.34x normal (1563 in the four weeks to Aug 16)",
+   "headline": "Illegal-conversion complaints drove Building/Use 311 calls in Howard Beach and Ozone Park to 1,563 between Jul 20 and Aug 16, 2026, more than four times the recent pace",
    "cd": "410",
    "district": "Howard Beach / Ozone Park",
    "borough": "Queens",
@@ -176,12 +180,15 @@
     "top_descriptor_share": 0.97,
     "concentrated": false
    },
-   "query": "https://data.cityofnewyork.us/resource/erm2-nwe9.json?$where=complaint_type='Building/Use' AND community_board='10 QUEENS' AND created_date >= '2026-07-20'&$order=created_date DESC"
+   "query": "https://data.cityofnewyork.us/resource/erm2-nwe9.json?$where=complaint_type='Building/Use' AND community_board='10 QUEENS' AND created_date >= '2026-07-20'&$order=created_date DESC",
+   "headline_auto": "Howard Beach / Ozone Park: Building/Use complaints 4.34x normal (1563 in the four weeks to Aug 16)",
+   "why_now": "The count is roughly four times the 360.5 expected from the recent eight-week pace, it rose again to 491 in the week of Aug 10 to 16, and 97 percent of the calls cite illegal conversion of residential building or space spread across 1,538 separate addresses, which points to a campaign or a reporting channel change rather than one landlord; a near-identical descriptor on that many addresses can also be a data artifact from bulk or duplicate filings. First calls: the Queens Community Board 10 district manager, the local council office, and the New York City Department of Buildings on whether an enforcement sweep or a new complaint intake is behind the volume.",
+   "confidence": "medium"
   },
   {
    "id": "place:1020350001",
    "kind": "place",
-   "headline": "2588 7 Avenue: 27 311 calls in two weeks; 9 class C violations; 4 evictions",
+   "headline": "2588 7 Avenue in Central Harlem had 27 311 calls between Aug 3 and Aug 16, 2026, nine class C violations, and four evictions since Jun 18",
    "cd": "110",
    "district": "Central Harlem",
    "borough": "Manhattan",
@@ -307,12 +314,15 @@
      ],
      "query": "https://data.cityofnewyork.us/resource/6z8x-wfk4.json?bbl=1020350001&$order=executed_date DESC"
     }
-   }
+   },
+   "headline_auto": "2588 7 Avenue: 27 311 calls in two weeks; 9 class C violations; 4 evictions",
+   "why_now": "The mix matters: nine of 18 violations issued from Jul 18 to Aug 16 are class C, three DOB complaints in the same window cite plumbing work without a permit, and four residential evictions were carried out between Jun 18 and Aug 16. Pull the DOB permit record for the plumbing work, then call the owner via HPD registration and the Manhattan Community Board 10 district manager.",
+   "confidence": "high"
   },
   {
    "id": "place:3051900075",
    "kind": "place",
-   "headline": "2505 Bedford Avenue: 53 311 calls in two weeks; 19 class C violations; 6 DOB complaints",
+   "headline": "2505 Bedford Avenue in East Flatbush logged 53 311 calls and 46 HPD complaints between Aug 3 and Aug 16, 2026",
    "cd": "317",
    "district": "East Flatbush",
    "borough": "Brooklyn",
@@ -438,12 +448,15 @@
      ],
      "query": "https://data.cityofnewyork.us/resource/6z8x-wfk4.json?bbl=3051900075&$order=executed_date DESC"
     }
-   }
+   },
+   "headline_auto": "2505 Bedford Avenue: 53 311 calls in two weeks; 19 class C violations; 6 DOB complaints",
+   "why_now": "Nineteen of the 34 HPD violations issued from Jul 18 to Aug 16 are class C, and six DOB complaints in the same window suggest construction or systems work at issue. Pull the DOB inspection records and permits, then call the owner listed in the HPD registration and the Brooklyn Community Board 17 district manager.",
+   "confidence": "high"
   },
   {
    "id": "place:2028820229",
    "kind": "place",
-   "headline": "20 Richman Plaza: 89 311 calls in two weeks; 19 class C violations; 8 evictions",
+   "headline": "20 Richman Plaza in the Bronx drew 89 311 calls between Aug 3 and Aug 16, 2026, and eight residential evictions since Jun 18",
    "cd": "205",
    "district": "Fordham / University Heights",
    "borough": "Bronx",
@@ -489,13 +502,13 @@
        "n": 9
       },
       {
-       "type": "Noise - Street/Sidewalk",
-       "descriptor": "Loud Music/Party",
+       "type": "UNSANITARY CONDITION",
+       "descriptor": "MOLD",
        "n": 6
       },
       {
-       "type": "UNSANITARY CONDITION",
-       "descriptor": "MOLD",
+       "type": "Noise - Street/Sidewalk",
+       "descriptor": "Loud Music/Party",
        "n": 6
       },
       {
@@ -546,12 +559,15 @@
      ],
      "query": "https://data.cityofnewyork.us/resource/6z8x-wfk4.json?bbl=2028820229&$order=executed_date DESC"
     }
-   }
+   },
+   "headline_auto": "20 Richman Plaza: 89 311 calls in two weeks; 19 class C violations; 8 evictions",
+   "why_now": "The calls span 17 types over 13 days, so this is broad rather than one repeated grievance, and it sits with 86 HPD violations from Jul 18 to Aug 16, 19 of them class C, plus eight marshal evictions between Jun 18 and Aug 16. The combination of hazardous violations and steady evictions in one Fordham-area building is worth a visit; first call the owner through HPD registration, then the Bronx Community Board 5 district manager.",
+   "confidence": "high"
   },
   {
    "id": "place:2043420010",
    "kind": "place",
-   "headline": "2300 Olinville Avenue: 25 311 calls in two weeks; 9 class C violations",
+   "headline": "2300 Olinville Avenue in the Bronx saw 311 calls at nearly six times its prior 12-week pace, with 25 calls between Aug 3 and Aug 16, 2026",
    "cd": "211",
    "district": "Morris Park / Pelham Parkway",
    "borough": "Bronx",
@@ -663,12 +679,15 @@
      ],
      "query": "https://data.cityofnewyork.us/resource/6z8x-wfk4.json?bbl=2043420010&$order=executed_date DESC"
     }
-   }
+   },
+   "headline_auto": "2300 Olinville Avenue: 25 311 calls in two weeks; 9 class C violations",
+   "why_now": "Thirty-six HPD violations were issued from Jul 18 to Aug 16, nine of them class C, but the 25 calls landed on only six days, so confirm with HPD whether a building-wide condition or one household is behind them. First call the registered owner, then the Bronx Community Board 11 district manager.",
+   "confidence": "medium"
   },
   {
    "id": "place:2022957501",
    "kind": "place",
-   "headline": "105 Willis Avenue: 43 311 calls in two weeks; 10 class C violations",
+   "headline": "105 Willis Avenue in Mott Haven logged 43 311 calls across 18 types between Aug 3 and Aug 16, 2026",
    "cd": "201",
    "district": "Mott Haven / Melrose",
    "borough": "Bronx",
@@ -787,12 +806,15 @@
      ],
      "query": "https://data.cityofnewyork.us/resource/6z8x-wfk4.json?bbl=2022957501&$order=executed_date DESC"
     }
-   }
+   },
+   "headline_auto": "105 Willis Avenue: 43 311 calls in two weeks; 10 class C violations",
+   "why_now": "Ten of the 31 HPD violations issued from Jul 18 to Aug 16 are class C, and five OATH or ECB violations in the same window point to unresolved city enforcement. The breadth of complaint types argues against a single complainant; first call the owner through HPD registration and the Bronx Community Board 1 district manager.",
+   "confidence": "medium"
   },
   {
    "id": "place:4014300029",
    "kind": "place",
-   "headline": "33-54 83 Street: 30 311 calls in two weeks; 13 class C violations; 5 DOB complaints",
+   "headline": "33-54 83 Street in Jackson Heights saw 311 calls run five times its prior 12-week pace, with 30 calls between Aug 3 and Aug 16, 2026",
    "cd": "403",
    "district": "Jackson Heights / Elmhurst / Corona",
    "borough": "Queens",
@@ -904,12 +926,15 @@
      ],
      "query": "https://data.cityofnewyork.us/resource/6bgk-3dad.json?$where=boro='4' AND block='01430' AND lot='0029' AND issue_date >= '20260718'"
     }
-   }
+   },
+   "headline_auto": "33-54 83 Street: 30 311 calls in two weeks; 13 class C violations; 5 DOB complaints",
+   "why_now": "Thirteen of the 36 HPD violations issued from Jul 18 to Aug 16 are class C, and five DOB complaints and five OATH violations in the same period suggest an active enforcement file. Because the 30 calls fell on only seven days, check whether a single unit or one tenant group is filing; first call the registered owner and the Queens Community Board 3 district manager.",
+   "confidence": "medium"
   },
   {
    "id": "place:2033550090",
    "kind": "place",
-   "headline": "3322 Decatur Avenue: 31 311 calls in two weeks; 5 class C violations; 3 DOB complaints",
+   "headline": "3322 Decatur Avenue in Bedford Park logged 31 311 calls between Aug 3 and Aug 16, 2026, and three DOB complaints about a defective or missing sidewalk shed",
    "cd": "207",
    "district": "Kingsbridge / Bedford Park",
    "borough": "Bronx",
@@ -1030,12 +1055,15 @@
      ],
      "query": "https://data.cityofnewyork.us/resource/6z8x-wfk4.json?bbl=2033550090&$order=executed_date DESC"
     }
-   }
+   },
+   "headline_auto": "3322 Decatur Avenue: 31 311 calls in two weeks; 5 class C violations; 3 DOB complaints",
+   "why_now": "Twenty-eight HPD violations were issued from Jul 18 to Aug 16, five of them class C, and the scaffold complaints give a street-level condition a reporter can check in person. Pull the DOB inspection and permit record for the shed, then call the registered owner and the Bronx Community Board 7 district manager.",
+   "confidence": "medium"
   },
   {
    "id": "place:3045950215",
    "kind": "place",
-   "headline": "5 East 93 Street: 45 311 calls in two weeks; 17 class C violations; 2 evictions",
+   "headline": "5 East 93 Street in East Flatbush logged 103 HPD complaints and 45 311 calls between Aug 3 and Aug 16, 2026",
    "cd": "317",
    "district": "East Flatbush",
    "borough": "Brooklyn",
@@ -1146,12 +1174,15 @@
      ],
      "query": "https://data.cityofnewyork.us/resource/6z8x-wfk4.json?bbl=3045950215&$order=executed_date DESC"
     }
-   }
+   },
+   "headline_auto": "5 East 93 Street: 45 311 calls in two weeks; 17 class C violations; 2 evictions",
+   "why_now": "Sixty-five HPD violations were issued from Jul 18 to Aug 16, 17 of them class C, and the complaint total far exceeds the 311 count, which can happen when tenants file directly with HPD or when duplicates are logged, so verify before publishing. First call the owner in the HPD registration, then the Brooklyn Community Board 17 district manager.",
+   "confidence": "medium"
   },
   {
    "id": "place:2039447501",
    "kind": "place",
-   "headline": "1515 Metropolitan Avenue: 75 311 calls in two weeks; 26 class C violations; 4 evictions",
+   "headline": "1515 Metropolitan Avenue in the Bronx received 26 class C violations among 41 issued between Jul 18 and Aug 16, 2026",
    "cd": "209",
    "district": "Parkchester / Soundview",
    "borough": "Bronx",
@@ -1241,12 +1272,15 @@
      ],
      "query": "https://data.cityofnewyork.us/resource/6z8x-wfk4.json?bbl=2039447501&$order=executed_date DESC"
     }
-   }
+   },
+   "headline_auto": "1515 Metropolitan Avenue: 75 311 calls in two weeks; 26 class C violations; 4 evictions",
+   "why_now": "Most of the violations at this Parkchester-area building are class C, the immediately hazardous class, alongside 75 311 calls between Aug 3 and Aug 16 and five marshal evictions since Jun 18. Ask HPD what the inspector found and whether the case is headed to housing court; first call the registered owner, then the Bronx Community Board 9 district manager.",
+   "confidence": "high"
   },
   {
    "id": "place:4159260001",
    "kind": "place",
-   "headline": "57-07 Shore Front Parkway: 34 311 calls in two weeks; 23 class C violations; 5 evictions",
+   "headline": "57-07 Shore Front Parkway in Far Rockaway received 23 class C violations among 67 issued between Jul 18 and Aug 16, 2026",
    "cd": "414",
    "district": "Far Rockaway / Rockaways",
    "borough": "Queens",
@@ -1296,6 +1330,11 @@
        "n": 3
       },
       {
+       "type": "UNSANITARY CONDITION",
+       "descriptor": "MOLD",
+       "n": 2
+      },
+      {
        "type": "FLOORING/STAIRS",
        "descriptor": "FLOOR",
        "n": 2
@@ -1303,11 +1342,6 @@
       {
        "type": "ELECTRIC",
        "descriptor": "OUTLET/SWITCH",
-       "n": 2
-      },
-      {
-       "type": "DOOR/WINDOW",
-       "descriptor": "DOOR",
        "n": 2
       }
      ],
@@ -1337,12 +1371,15 @@
      ],
      "query": "https://data.cityofnewyork.us/resource/6z8x-wfk4.json?bbl=4159260001&$order=executed_date DESC"
     }
-   }
+   },
+   "headline_auto": "57-07 Shore Front Parkway: 34 311 calls in two weeks; 23 class C violations; 5 evictions",
+   "why_now": "The violation count runs well ahead of the 34 311 calls and 14 HPD complaints in the two weeks to Aug 16, which suggests a sustained inspection push rather than a fresh wave of tenant reports, and five residential evictions since Jun 18 add to the picture. Ask HPD for the inspection history and call the registered owner and the Queens Community Board 14 district manager.",
+   "confidence": "medium"
   },
   {
    "id": "place:4156100001",
    "kind": "place",
-   "headline": "711 Seagirt Avenue: 35 311 calls in two weeks; 6 class C violations; 17 evictions",
+   "headline": "711 Seagirt Avenue in Far Rockaway saw 17 residential marshal evictions between Jun 18 and Aug 16, 2026",
    "cd": "414",
    "district": "Far Rockaway / Rockaways",
    "borough": "Queens",
@@ -1393,13 +1430,13 @@
        "n": 3
       },
       {
-       "type": "HEAT/HOT WATER",
-       "descriptor": "APARTMENT ONLY",
+       "type": "Noise - Street/Sidewalk",
+       "descriptor": "Loud Talking",
        "n": 2
       },
       {
-       "type": "Noise - Street/Sidewalk",
-       "descriptor": "Loud Talking",
+       "type": "HEAT/HOT WATER",
+       "descriptor": "APARTMENT ONLY",
        "n": 2
       },
       {
@@ -1444,12 +1481,15 @@
      ],
      "query": "https://data.cityofnewyork.us/resource/6z8x-wfk4.json?bbl=4156100001&$order=executed_date DESC"
     }
-   }
+   },
+   "headline_auto": "711 Seagirt Avenue: 35 311 calls in two weeks; 6 class C violations; 17 evictions",
+   "why_now": "Seventeen completed evictions at a single address in two months is the standout figure here, with 35 311 calls and 17 HPD complaints between Aug 3 and Aug 16 and six class C violations since Jul 18. Check the marshal's records and housing court docket for a coordinated set of nonpayment cases, and call the owner via HPD registration and the Queens Community Board 14 district manager.",
+   "confidence": "high"
   },
   {
    "id": "place:4097930033",
    "kind": "place",
-   "headline": "89-29 163 Street: 110 311 calls in two weeks; 25 class C violations",
+   "headline": "89-29 163 Street in Jamaica logged 110 311 calls between Aug 3 and Aug 16, 2026, with 25 class C violations issued since Jul 18",
    "cd": "412",
    "district": "Jamaica / Hollis / St. Albans",
    "borough": "Queens",
@@ -1500,13 +1540,13 @@
        "n": 10
       },
       {
-       "type": "UNSANITARY CONDITION",
-       "descriptor": "MOLD",
+       "type": "WATER LEAK",
+       "descriptor": "HEAVY FLOW",
        "n": 8
       },
       {
-       "type": "WATER LEAK",
-       "descriptor": "HEAVY FLOW",
+       "type": "UNSANITARY CONDITION",
+       "descriptor": "MOLD",
        "n": 8
       },
       {
@@ -1537,12 +1577,15 @@
      ],
      "query": "https://data.cityofnewyork.us/resource/6z8x-wfk4.json?bbl=4097930033&$order=executed_date DESC"
     }
-   }
+   },
+   "headline_auto": "89-29 163 Street: 110 311 calls in two weeks; 25 class C violations",
+   "why_now": "The 110 calls came on just five days and are about three times the building's own pace over the prior 12 weeks, alongside 109 HPD complaints in the same two weeks and 77 HPD violations from Jul 18 to Aug 16, of which 25 are class C, the immediately hazardous class. Clustering on five days can mean one organized tenant filing or a building-wide outage; start with the owner listed in the HPD registration, then the Queens Community Board 12 district manager.",
+   "confidence": "high"
   },
   {
    "id": "place:2036810001",
    "kind": "place",
-   "headline": "2045 Story Avenue: 25 311 calls in two weeks; 34 class C violations",
+   "headline": "2045 Story Avenue in the Bronx drew 34 class C violations among 77 issued between Jul 18 and Aug 16, 2026",
    "cd": "209",
    "district": "Parkchester / Soundview",
    "borough": "Bronx",
@@ -1641,12 +1684,15 @@
      ],
      "query": "https://data.cityofnewyork.us/resource/6z8x-wfk4.json?bbl=2036810001&$order=executed_date DESC"
     }
-   }
+   },
+   "headline_auto": "2045 Story Avenue: 25 311 calls in two weeks; 34 class C violations",
+   "why_now": "The class C share is the story, and a DOB complaint in the same window about locked or blocked egress raises a life-safety question worth checking against the inspection record this week. First calls: the registered owner through HPD, the New York City Department of Buildings on the egress complaint, and the Bronx Community Board 9 district manager.",
+   "confidence": "high"
   },
   {
    "id": "place:3058720071",
    "kind": "place",
-   "headline": "321 Ovington Avenue: 17 311 calls in two weeks; 17 class C violations; 3 evictions",
+   "headline": "321 Ovington Avenue in Bay Ridge drew 75 HPD violations, 17 of them class C, between Jul 18 and Aug 16, 2026",
    "cd": "310",
    "district": "Bay Ridge / Dyker Heights",
    "borough": "Brooklyn",
@@ -1734,12 +1780,15 @@
      ],
      "query": "https://data.cityofnewyork.us/resource/6z8x-wfk4.json?bbl=3058720071&$order=executed_date DESC"
     }
-   }
+   },
+   "headline_auto": "321 Ovington Avenue: 17 311 calls in two weeks; 17 class C violations; 3 evictions",
+   "why_now": "The violation total dwarfs the 17 311 calls and 12 HPD complaints in the two weeks to Aug 16, which usually signals a comprehensive HPD inspection rather than rising tenant reports, and three residential evictions were completed since Jun 18. Ask HPD what triggered the inspection, then call the owner in the registration and the Brooklyn Community Board 10 district manager.",
+   "confidence": "medium"
   },
   {
    "id": "place:2051410120",
    "kind": "place",
-   "headline": "140 Benchley Place: 68 311 calls in two weeks; 6 class C violations; 12 evictions",
+   "headline": "140 Benchley Place in Co-op City had 68 311 calls across 24 types between Aug 3 and Aug 16, 2026, and 12 residential evictions since Jun 18",
    "cd": "210",
    "district": "Throgs Neck / Co-op City",
    "borough": "Bronx",
@@ -1830,12 +1879,15 @@
      ],
      "query": "https://data.cityofnewyork.us/resource/6z8x-wfk4.json?bbl=2051410120&$order=executed_date DESC"
     }
-   }
+   },
+   "headline_auto": "140 Benchley Place: 68 311 calls in two weeks; 6 class C violations; 12 evictions",
+   "why_now": "Calls came on all 14 days and across two dozen categories, which reads as building-wide rather than one persistent complainant, and 12 completed evictions between Jun 18 and Aug 16 is a large number for a single address. Start with management and the HPD registration, then the Bronx Community Board 10 district manager and the council office.",
+   "confidence": "high"
   },
   {
    "id": "place:2039377501",
    "kind": "place",
-   "headline": "1919 Mcgraw Avenue: 31 311 calls in two weeks; 6 class C violations; 2 evictions",
+   "headline": "1919 Mcgraw Avenue in the Bronx recorded 31 311 calls across 14 types between Aug 3 and Aug 16, 2026, against five HPD complaints",
    "cd": "209",
    "district": "Parkchester / Soundview",
    "borough": "Bronx",
@@ -1935,12 +1987,15 @@
      ],
      "query": "https://data.cityofnewyork.us/resource/6z8x-wfk4.json?bbl=2039377501&$order=executed_date DESC"
     }
-   }
+   },
+   "headline_auto": "1919 Mcgraw Avenue: 31 311 calls in two weeks; 6 class C violations; 2 evictions",
+   "why_now": "The 311 volume runs well ahead of the five HPD complaints logged in the same two weeks, and only 14 violations were issued from Jul 18 to Aug 16, so this may be routed to other agencies or reflect a small number of repeat callers. Check the call descriptors with the Bronx Community Board 9 district manager before committing reporting time, and confirm the owner through HPD registration.",
+   "confidence": "low"
   },
   {
    "id": "place:1016170007",
    "kind": "place",
-   "headline": "15 East 111 Street: 18 311 calls in two weeks; 5 class C violations",
+   "headline": "15 East 111 Street in East Harlem recorded 18 311 calls between Aug 3 and Aug 16, 2026, after almost none over the prior 12 weeks",
    "cd": "111",
    "district": "East Harlem",
    "borough": "Manhattan",
@@ -2044,12 +2099,15 @@
      ],
      "query": "https://data.cityofnewyork.us/resource/6z8x-wfk4.json?bbl=1016170007&$order=executed_date DESC"
     }
-   }
+   },
+   "headline_auto": "15 East 111 Street: 18 311 calls in two weeks; 5 class C violations",
+   "why_now": "The 18-fold jump over the building's own baseline is striking, but the calls fell on only five days and just six violations were issued from Jul 18 to Aug 16, five of them class C, so a single household or a short-lived outage is plausible. Four OATH or ECB violations in the same window are worth pulling; first call the registered owner and the Manhattan Community Board 11 district manager.",
+   "confidence": "low"
   },
   {
    "id": "place:3043710001",
    "kind": "place",
-   "headline": "245 Wortman Avenue: 15 311 calls in two weeks; 8 class C violations; 5 evictions",
+   "headline": "245 Wortman Avenue in East New York had eight of nine HPD violations issued as class C between Jul 18 and Aug 16, 2026, with five evictions since Jun 18",
    "cd": "305",
    "district": "East New York / Cypress Hills",
    "borough": "Brooklyn",
@@ -2162,12 +2220,15 @@
      ],
      "query": "https://data.cityofnewyork.us/resource/6z8x-wfk4.json?bbl=3043710001&$order=executed_date DESC"
     }
-   }
+   },
+   "headline_auto": "245 Wortman Avenue: 15 311 calls in two weeks; 8 class C violations; 5 evictions",
+   "why_now": "Small absolute counts, but nearly every violation is the immediately hazardous class and five residential evictions were completed between Jun 18 and Aug 16, plus a DOB complaint about plumbing work without a permit. Verify the violation descriptions with HPD before writing; first call the registered owner and the Brooklyn Community Board 5 district manager.",
+   "confidence": "medium"
   },
   {
    "id": "place:2039437501",
    "kind": "place",
-   "headline": "1650 Metropolitan Avenue: 60 311 calls in two weeks; 16 class C violations; 2 evictions",
+   "headline": "1650 Metropolitan Avenue in the Bronx had 60 311 calls on all 14 days between Aug 3 and Aug 16, 2026",
    "cd": "209",
    "district": "Parkchester / Soundview",
    "borough": "Bronx",
@@ -2255,7 +2316,10 @@
      ],
      "query": "https://data.cityofnewyork.us/resource/6z8x-wfk4.json?bbl=2039437501&$order=executed_date DESC"
     }
-   }
+   },
+   "headline_auto": "1650 Metropolitan Avenue: 60 311 calls in two weeks; 16 class C violations; 2 evictions",
+   "why_now": "The calls cover 15 types and run every day of the window, alongside 39 HPD violations from Jul 18 to Aug 16, 16 of them class C, though only six HPD complaints were logged in the two weeks, a gap worth reconciling with the agency. Start with the registered owner and the Bronx Community Board 9 district manager.",
+   "confidence": "medium"
   },
   {
    "id": "place:2024650025",
@@ -4687,13 +4751,13 @@
        "n": 7
       },
       {
-       "type": "PAINT/PLASTER",
-       "descriptor": "CEILING",
+       "type": "ELECTRIC",
+       "descriptor": "OUTLET/SWITCH",
        "n": 5
       },
       {
-       "type": "ELECTRIC",
-       "descriptor": "OUTLET/SWITCH",
+       "type": "PAINT/PLASTER",
+       "descriptor": "CEILING",
        "n": 5
       },
       {
@@ -5908,9 +5972,9 @@
     "hits": 1,
     "articles": [
      {
-      "title": "Paramount's wartime film shoot to disrupt Manhattan Chinatown traffic on Mother's Day - Gothamist",
+      "title": "Paramount's wartime film shoot to disrupt Manhattan Chinatown traffic on Mother's Day - gothamist.com",
       "url": "https://news.google.com/rss/articles/CBMirwFBVV95cUxPcHFSOGM2TEcyODJaa25fYnQ3X09yR0tXNVVzZi0yNXhWZ1JnOGdVbjJSTExoYnpxaTE5OU5iT2hjVi1GMXRkOGxNWXlnVEFEdUpDYWgxeU82TzRSVHlUaGNqT1E3TkkzUTFGXzRBSVhLMnRtTm96amdOZm5DcVVmSk01MGJLcU1ZMElUeUpNVW9tMjZhZEVvTFlHbFA5bGh6OFNSRklTRWt4RFdrN3ln?oc=5",
-      "outlet": "Gothamist",
+      "outlet": "gothamist.com",
       "date": "2026-07-27"
      }
     ],
@@ -6167,9 +6231,9 @@
     "hits": 1,
     "articles": [
      {
-      "title": "Woman dies after receiving injection from unlicensed doctor at Bronx lifestyle business, police say - cbsnews.com",
+      "title": "Woman dies after receiving injection from unlicensed doctor at Bronx lifestyle business, police say - CBS News",
       "url": "https://news.google.com/rss/articles/CBMinAFBVV95cUxNUVhXWWh1RXV4VHJtN1NDZUtWbVNOM3JpdTRHLVJlS05uN1VrakRESFJIUS1yZkJyeXZISGRvcDR1T2xHX3hmVkdkN0FpbkVJRHF2b21zallhRmlnX1l5bm9uUWJMYzdNWWZyYWxwWTkxTDNraUtXdDRSc3RJREJTZDZUQThfVlRmZGVwM2VPUzFzdVVuWXptTDFZTGI?oc=5",
-      "outlet": "cbsnews.com",
+      "outlet": "CBS News",
       "date": "2026-07-21"
      }
     ],
@@ -6767,9 +6831,9 @@
     "hits": 2,
     "articles": [
      {
-      "title": "Inwood apartment landlord cited for ‘fire hazards’ days before fatal blaze - Gothamist",
+      "title": "Inwood apartment landlord cited for ‘fire hazards’ days before fatal blaze - gothamist.com",
       "url": "https://news.google.com/rss/articles/CBMipwFBVV95cUxPYXVfQWIta0ZNQnN0RmJpejVsbFFNUV9mN19Fb1luVC1hcGRTcGd6QXhQQ0VsOHdsS3oxUjRtaW1rUmNtWGdnZE9DaE1xbUI3Y2lGckprUUhNT2R5cWpLVmFQdjJ4aE5GNldvek01UmE3cERmaHRCU3pkeXA4SC1JVi1IcFNacnZjSTNmQ1RFbjdtbzB4VGRvdDFuLVZwb013ZEl2MmtsUQ?oc=5",
-      "outlet": "Gothamist",
+      "outlet": "gothamist.com",
       "date": "2026-07-29"
      },
      {
@@ -7887,9 +7951,9 @@
     "hits": 9,
     "articles": [
      {
-      "title": "Harlem parents who complained of trash, encampment outside school see progress, but want long-term change - cbsnews.com",
+      "title": "Harlem parents who complained of trash, encampment outside school see progress, but want long-term change - CBS News",
       "url": "https://news.google.com/rss/articles/CBMihAFBVV95cUxQSk54M0xZd1hXaG5BWnVRMUpfVHBHZzVVWExoLVhQOUZSU3JCRURPci1JWG1teUQtRmswaHp2MHExQUItdHV3VGdydmd3Y3FVTzF6Q0FiLTNGY3c4T0FKcnVkaEk5UmxLTy00ajBTTmlUSVEtUmNUdXdfcUhGRXJvYXh3S0Y?oc=5",
-      "outlet": "cbsnews.com",
+      "outlet": "CBS News",
       "date": "2026-07-22"
      },
      {
@@ -7905,9 +7969,9 @@
       "date": "2026-08-08"
      },
      {
-      "title": "Manhattan residents who tasted NYC's trash revolution want their street bins back - Gothamist",
+      "title": "Manhattan residents who tasted NYC's trash revolution want their street bins back - gothamist.com",
       "url": "https://news.google.com/rss/articles/CBMiqwFBVV95cUxOYXluNGdrZm5OeXJwbmg4UVpKS2ltLUNQT0V1WmZ4MHFIVDNPZTVQOHl5a01pd2o5dlBoblphenFhRUNWV25TQlVabmtxSXZQZEpiUmxNWjB0SDE0cnp0NDF3NnBJOVh5Z0R1N2xPd1FiX2RWRk14SUJKU1RLY0xQdnRTV0IxM2FlTDlDZnA5dUhrSkpOVjRFUE0xTDhLd1o2NDFpTkF2Q1hadUk?oc=5",
-      "outlet": "Gothamist",
+      "outlet": "gothamist.com",
       "date": "2026-08-15"
      }
     ],
@@ -7975,9 +8039,9 @@
     "hits": 13,
     "articles": [
      {
-      "title": "B-East (East 125th Street Development) - NYC Economic Development Corporation (NYCEDC)",
+      "title": "B-East (East 125th Street Development) - edc.nyc",
       "url": "https://news.google.com/rss/articles/CBMibEFVX3lxTE1tb00yVEJFUEVCdFBHT01WNklWNmtYNUtyY1ZvSDJrV09TNzl2YWJ3XzFybm9GYVlWcmlpLTZIcnlsc2RiblBWQmtCT2xsakV1UDJvWGVhSExXN3p0Y3BfNTh0UHB4N3EwUnQ3Sg?oc=5",
-      "outlet": "NYC Economic Development Corporation (NYCEDC)",
+      "outlet": "edc.nyc",
       "date": "2026-07-20"
      },
      {
@@ -7993,9 +8057,9 @@
       "date": "2026-08-05"
      },
      {
-      "title": "Manhattan roads close for NYC Summer Streets for 2nd weekend - cbsnews.com",
+      "title": "Manhattan roads close for NYC Summer Streets for 2nd weekend - CBS News",
       "url": "https://news.google.com/rss/articles/CBMihAFBVV95cUxORnVUTmZHem9xRTh3QUhEY3U1eEpCd0w3S21fYkFjWnFrdlZGbjZLU0ozRjNUYUZjcTRhZ3g4MVZ3bWNQZjRENDRtRk1Ja3V4eE8wZ0NJYkpHTHJfcVlTRlJRUm5saVNPM2otZWZjUUFLOFpDVDJuazhzYmhrNkNBUkFxTl8?oc=5",
-      "outlet": "cbsnews.com",
+      "outlet": "CBS News",
       "date": "2026-08-07"
      }
     ],
@@ -8884,30 +8948,24 @@
     }
    },
    "attention": {
-    "n7": 6,
+    "n7": 3,
     "top": [
      {
-      "title": "1,568-Unit Residential Conversion Underway At 111 Wall Street In Financial District, Manhattan - New York YIMBY",
-      "url": "https://news.google.com/rss/articles/CBMiygFBVV95cUxNdzFqaW4xa3pPaHppdGtYWllnVkd5ZVpxdS1Qbm1NRWtSd3ZmYzBpV3Z6ZXBYUXFPOW1JenNTNmJYSTFWaVQyNXFoc3ExLU5ZZXQ2b0Y0T1FMMkhlUjNxUkx5eEk3NGdTYTk1MnFJVGJlM0cyNVEtWkg4ZFI1aHdBbE9zZ2ZHaVh4Zll4XzJjRHRvckdFakM5TGdydnEwZml4YnhHdkZvaEN5blNDaHBMM1JTNXVNaVR5dW9JMnR4STVjRFVpdVhQVjR3?oc=5",
-      "outlet": "New York YIMBY",
-      "date": "2026-08-11"
-     },
-     {
-      "title": "Transcript: Mayor Mamdani, Governor Hochul, and MTA Announce Plan to Lower Subway Platform Temperatures and Harness Thermal Energy in Lower Manhattan - NYC.gov",
-      "url": "https://news.google.com/rss/articles/CBMisAFBVV95cUxQZjJGYjMzT3JKNUM5UlZaSi16TzE3Q0xueDdKaVFsbFBObTNYMGJGTXFmdEdvU3pzMDhyLWpuMWgxUW0tTWpmclQtR2ZXdzhZTDJMNW8yUWEyNm1MX3k5NElEaGVRM0R3bnlmWTgtNGU4WTl1cnVuRW52VVM2TjFfZGl0VzM2cS1TRTVzYlF5RGQ1Ym8wdUc1eGd0R3pWcVp5azk2YnN1Y2ZjN1JtY3YzUw?oc=5",
-      "outlet": "NYC.gov",
-      "date": "2026-08-11"
-     },
-     {
-      "title": "Police say they fatally shot man who advanced on them while wielding a butcher's knife in Lower Manhattan - cbsnews.com",
+      "title": "Police say they fatally shot man who advanced on them while wielding a butcher's knife in Lower Manhattan - CBS News",
       "url": "https://news.google.com/rss/articles/CBMijAFBVV95cUxPQzV1TWJaVldQSm04NXJ1V3ZRQ1o2eTVOcEljd181aGlXZFZBcFIyOXdFRWx0YTNKWTIzX0J3VHlfMTFjZDNvNEQ0eTBfcjRneDd4S1FDQnFwdkd6MkJ2NElqenJuMUJUcnlsbXh2OVNUdHVPNTMzaGxJYXRWOFNndjQ2bnR0ZzByT0ZHYw?oc=5",
-      "outlet": "cbsnews.com",
+      "outlet": "CBS News",
       "date": "2026-08-16"
      },
      {
-      "title": "Man armed with knife fatally shot by police in Lower Manhattan, NYPD says - cbsnews.com",
+      "title": "Man armed with knife fatally shot by police in Lower Manhattan, NYPD says - CBS News",
       "url": "https://news.google.com/rss/articles/CBMisAFBVV95cUxPbGo0Y0kyMFVGemE0N0Z1OFIyWmZMUzFFTWRYSGVyNG9QR0tfREFtVGxTcFNLZU94M2pSREpNQTd0Vl9Ra1RfYlFYQnN0T2FZTHVRWk1XWFllQzBHZEoxTFBGSURlV0o4VnNET1RVWThGNGpISWZFM3NGMkRtQ0xNTFQ5RjNURlRlV1hrdlFTWElVc0UyYWY3ZjVSdnk3elB6X2wxNE9QYW50eE5IbEtwRQ?oc=5",
-      "outlet": "cbsnews.com",
+      "outlet": "CBS News",
+      "date": "2026-08-17"
+     },
+     {
+      "title": "One dead in Lower Manhattan police shooting - Breakingthenews.net",
+      "url": "https://news.google.com/rss/articles/CBMikgFBVV95cUxPZG1DWmhsU3ZDVGJPMjlWdV9mbjRKNHFnZzlQX2tIRmluVllhVlVaTmlJV0QyRW84SzRVbFQtZHpVYTdXazZBNV9tdXJkb0hsaV9nYjk1TS1YekRVUGhJbXZUcndHNVBmTGx5VVg2MWhrMEtZQnRlNVd5UVI0YWF6X1I5ZzBaSE01QjZMTEhtMDF2Zw?oc=5",
+      "outlet": "Breakingthenews.net",
       "date": "2026-08-17"
      }
     ],
@@ -10074,15 +10132,9 @@
     "n7": 5,
     "top": [
      {
-      "title": "Claude Bakery bets on local ingredients, brand collaborations in competitive West Village - The Business Journals",
-      "url": "https://news.google.com/rss/articles/CBMiqAFBVV95cUxObTRPRkpWa04zUkNua0Jmb2dnUWJ6bjA0LTV1SVpDWENwY2piWFNLWkJ2RURIMkpxS0k0VzNISVZIMlVOLTAzU29ZY3Jmd1dxWk9vSjg4emw1TUI1N2wyazJCNlBEVnhhb2NOU2xxN3lOVlNyUDVjTy1yUzJiVllMSW9sY1NXU2twNGF3azdMcG9xUGtFN2owNGtpRm9tLUxtM3JWVlY4WlU?oc=5",
-      "outlet": "The Business Journals",
-      "date": "2026-08-14"
-     },
-     {
-      "title": "The Corner Store’s Next Sibling Highlights French Brasserie Fare in the West Village - Eater New York",
+      "title": "The Corner Store’s Next Sibling Highlights French Brasserie Fare in the West Village - ny.eater.com",
       "url": "https://news.google.com/rss/articles/CBMiuAFBVV95cUxONEk0MWRNdDhNYUtqOGVidERuc1VKU1oxNHNZeTFiUDRLbl90UmwteENla2E5bHBodTZoaG1YZFNpR3hJdVRDMWVzUmZzYTRuNEp5TUtNQWJ5Wm1sNzdfSFhxMktuVTIwd0JwUkVhbV8zZXNsU2lkLVROeGdIQUE0cW5iQWJMR25rakdQTlkxM3cycEc0QXY5dG9lSFVEYTU0N3lKbVNDYU1UUlNTNXZGZ2MweHlubVhF?oc=5",
-      "outlet": "Eater New York",
+      "outlet": "ny.eater.com",
       "date": "2026-08-17"
      },
      {
@@ -10090,6 +10142,12 @@
       "url": "https://news.google.com/rss/articles/CBMisAFBVV95cUxNeFc1ekF0TkN6clc1T3dkQi1ZWFFhNmQtVl9ZcVBQN2k1ajZDOF9CUkp6bG9aNXJkaXNzQ281SHVrVjVlcVZpMlpJdzJsTGt0bFhFdnhsekpWX3FVZU1kckpZcTRRdUVlOTI2WUdmMEVSclpKYndRVUU3QUNoZWs3djJPLTdSY1VKVzRXMW9lUTY2bWJNbWhodExreTFmcFlFeDB3T0pOc214S1AwdUlZNtIBuAFBVV95cUxNeS1Na0ZhZG5DeEZPSWdaOHhPVURzVnZhRklMeDZTZk9KdkZ1ZkhzOENtM2p1amttR0ZROEo3U1JXZ2plTWpHWTBWbGdwc2dnUHVjWGFLMm5IdjllbGNyUlc5czVBSHIwbmFEcFktRkplUkplUVQ2bGJZQmtQc1c5UnJmSmpIUFlfOE5ZV0pLaUdwakQyaTVzTURsb3IwUEFlQjFFSHdMV3ZSVV8tbDBtLUJlaVJZYUxp?oc=5",
       "outlet": "NBC New York",
       "date": "2026-08-12"
+     },
+     {
+      "title": "Claude Bakery bets on local ingredients, brand collaborations in competitive West Village - The Business Journals",
+      "url": "https://news.google.com/rss/articles/CBMiqAFBVV95cUxObTRPRkpWa04zUkNua0Jmb2dnUWJ6bjA0LTV1SVpDWENwY2piWFNLWkJ2RURIMkpxS0k0VzNISVZIMlVOLTAzU29ZY3Jmd1dxWk9vSjg4emw1TUI1N2wyazJCNlBEVnhhb2NOU2xxN3lOVlNyUDVjTy1yUzJiVllMSW9sY1NXU2twNGF3azdMcG9xUGtFN2owNGtpRm9tLUxtM3JWVlY4WlU?oc=5",
+      "outlet": "The Business Journals",
+      "date": "2026-08-14"
      },
      {
       "title": "$16.5 Million Sale of 36 East 12th Street in Greenwich Village NYC Announced by BKREA - FinancialContent",
@@ -12793,7 +12851,7 @@
     }
    },
    "attention": {
-    "n7": 13,
+    "n7": 11,
     "top": [
      {
       "title": "NYC May Day protest preps underway as volunteers create signs in Chelsea - PIX11",
@@ -12814,10 +12872,10 @@
       "date": "2026-08-12"
      },
      {
-      "title": "RFR offloads vacant Chelsea retail building to Asian investor - Crain's New York Business",
-      "url": "https://news.google.com/rss/articles/CBMiqwFBVV95cUxNZHNXNHJqT085c1pXbTNzNnkybEtjNDBaWnVvMExOUS1mSmRHYXdxc1Q5N19ucWQxek9ncDlMV003SFU4T21oS25ENXJSMkRTQnJFbnltTzh0WVh6WDNRclkzMkhIQVpLbXQ3SC1jei1wTHBNWlgtTFVfOEc1a0llMTRscG9rY3FNV1VPWVFUY2huSjZSYTJZWjVMSEJSYmR5dmVLWV96M1ZjRXM?oc=5",
-      "outlet": "Crain's New York Business",
-      "date": "2026-08-11"
+      "title": "Mark Walter looking to sell Chelsea FC stakes after stunning Lakers $12.5 billion sale - New York Post",
+      "url": "https://news.google.com/rss/articles/CBMipAFBVV95cUxPTUs0QWg4eEtUdG1DY2NYWUZzb0ZqY19QSjJBSmg2V0RTREdLYTJuTmNoT0x5M2dBeEU4TGtiTlg1SmJTTlBGOFVYQTh6c3RwYUZ1SDk3OFUwbmt3TElyZXJOdTdsV3pXVWZ2ZDFxbGtXTl9pdjJTUXBseEdHbWRudDdFOXBGQ01RVFo0ZExEWVBwd1RfWV9HY2llQVYxc0RNdVJJRw?oc=5",
+      "outlet": "New York Post",
+      "date": "2026-08-17"
      }
     ],
     "query": "(\"Chelsea\" OR \"Hell's Kitchen\" OR \"Hells Kitchen\") (NYC OR \"New York\")"
@@ -14063,7 +14121,7 @@
     }
    },
    "attention": {
-    "n7": 19,
+    "n7": 18,
     "top": [
      {
       "title": "Exclusive | Flatiron Building nears sellout as wealthy buyers race to claim a rare piece of NYC history - New York Post",
@@ -14078,16 +14136,16 @@
       "date": "2026-08-13"
      },
      {
-      "title": "NYC's iconic Carnegie Deli teases return to Midtown Manhattan in social media post - ABC7 New York",
-      "url": "https://news.google.com/rss/articles/CBMirgFBVV95cUxOblFfZzk2MFhtYUUwV2pRc2l6T2dtTEZLN1QwS0UyQWgxTmR4MHVfMlZCdXF2SURPTWdxUnJQUl91eFpDVEtxeWFoQkJTb2NrMThlZGNGa2NYX0M2NkRuSVh0MGw2cUtvVjVBeEFQdHlnNUtxaWhUaEJLVF9ZYVRqaklSQW9RRzZsdmdERzVqYTM1OVllYUlkM3NRQkJ2YjcxSmdjOEludTdkNm00YkHSAbMBQVVfeXFMT0QwMGg1V0VFZ3VyYWxJdXBBNG03VmhRMmF3eHdjbU9Zb0taNml4dE95Uk95Qnh3OFRlQlJsNV9FMVVpNk9KcGh0QlpfUHJlVVlZUFQyVXh1ZDVjRDQ4SXBnM1pNLU51VDZiN1lTS0lTYjhVczlrYS1jNmtoZFhaQ0VZY3Z3OXFCZmc3c0d6d0dsaTgtdjYwNXBJZ0JYZGY2b2t1N0JDZ21jcF9Xc2RITkJDSVE?oc=5",
-      "outlet": "ABC7 New York",
-      "date": "2026-08-18"
-     },
-     {
       "title": "Tourist stabbed inside Midtown McDonald’s in unprovoked attack - amNewYork",
       "url": "https://news.google.com/rss/articles/CBMiuAFBVV95cUxQeWZxck5PUWdkVFl4NmxpT3l5SUlpM0FTUXZfYzRMb2Z2ZUltZVVaU3M3cEpMYTlKY09GczRMNFFkX01EV25wU0w0QXVfZ1EtOFhWRXptS1piRDVRbzNWSnMzdno1M2lKNVFjZ29KQ0RzMXZtUmFJMEd3UnU0Nl9qcVctZDFmcm8xcEFtU3dJQVdRRHE0QkloMEJINnRSNkRuXzRHbXlORHlEc3BKbm42WEZuTUU2OEot?oc=5",
       "outlet": "amNewYork",
       "date": "2026-08-17"
+     },
+     {
+      "title": "NYC's iconic Carnegie Deli teases return to Midtown Manhattan in social media post - ABC7 New York",
+      "url": "https://news.google.com/rss/articles/CBMirgFBVV95cUxOblFfZzk2MFhtYUUwV2pRc2l6T2dtTEZLN1QwS0UyQWgxTmR4MHVfMlZCdXF2SURPTWdxUnJQUl91eFpDVEtxeWFoQkJTb2NrMThlZGNGa2NYX0M2NkRuSVh0MGw2cUtvVjVBeEFQdHlnNUtxaWhUaEJLVF9ZYVRqaklSQW9RRzZsdmdERzVqYTM1OVllYUlkM3NRQkJ2YjcxSmdjOEludTdkNm00YkHSAbMBQVVfeXFMT0QwMGg1V0VFZ3VyYWxJdXBBNG03VmhRMmF3eHdjbU9Zb0taNml4dE95Uk95Qnh3OFRlQlJsNV9FMVVpNk9KcGh0QlpfUHJlVVlZUFQyVXh1ZDVjRDQ4SXBnM1pNLU51VDZiN1lTS0lTYjhVczlrYS1jNmtoZFhaQ0VZY3Z3OXFCZmc3c0d6d0dsaTgtdjYwNXBJZ0JYZGY2b2t1N0JDZ21jcF9Xc2RITkJDSVE?oc=5",
+      "outlet": "ABC7 New York",
+      "date": "2026-08-18"
      }
     ],
     "query": "(\"Midtown\" OR \"Flatiron\" OR \"Gramercy\") (NYC OR \"New York\")"
@@ -17800,9 +17858,9 @@
       "date": "2026-08-18"
      },
      {
-      "title": "NYC confirms 2 more Legionnaires' deaths in Upper East Side outbreak - Gothamist",
+      "title": "NYC confirms 2 more Legionnaires' deaths in Upper East Side outbreak - gothamist.com",
       "url": "https://news.google.com/rss/articles/CBMinAFBVV95cUxOZlltUS00ZXl0QlBTU09INmhrdVpjUzAzNW9zX2VDQmpSLVAtOVJzbFJmSXN4elhvZkZ5ZWdqU0hCY3dDMkpoamV5bUNNMkxCRm5yeWZhVjBLTFpqbEdFbEJtbXkwZHZDV0M2RDZfYWU1Uk5GbVZvaTZfN0tkNm82eG52REV0WWhiYTdwNTVjOEVPcC1YSEh0b25oRlM?oc=5",
-      "outlet": "Gothamist",
+      "outlet": "gothamist.com",
       "date": "2026-08-14"
      },
      {
@@ -18950,9 +19008,9 @@
       "date": "2026-08-14"
      },
      {
-      "title": "Hamilton Heights fire injures 5, including 4 firefighters - cbsnews.com",
+      "title": "Hamilton Heights fire injures 5, including 4 firefighters - CBS News",
       "url": "https://news.google.com/rss/articles/CBMimwFBVV95cUxQaDBkN1B2VmNleWtHRVFvSFFjM2xYc2tlR3EzbVVaenVOckpscHJUYmdJNHQ0TmNBdHVseUFRWFNwOUV5d1dxUXA5UENNdjJGQW96T0VHRVFXQVo3WUZVc0dJNTBxd1ZxVmdWQk12aFFXdi1zR0ozV0ZHTWhiMzRlNVMxcU11bHBidTM1amVNOGo3LTVfUm1JVnZlQQ?oc=5",
-      "outlet": "cbsnews.com",
+      "outlet": "CBS News",
       "date": "2026-08-17"
      },
      {
@@ -20206,7 +20264,7 @@
     }
    },
    "attention": {
-    "n7": 5,
+    "n7": 4,
     "top": [
      {
       "title": "Man slashed during dispute on D train in Harlem - ABC7 New York",
@@ -20221,16 +20279,16 @@
       "date": "2026-08-12"
      },
      {
-      "title": "Owner of Harlem food truck staple Mo's Famous Burgers to retire - cbsnews.com",
+      "title": "Owner of Harlem food truck staple Mo's Famous Burgers to retire - CBS News",
       "url": "https://news.google.com/rss/articles/CBMihgFBVV95cUxNYmU5UnJFbXVfMnZMYjZHR3htc2xwOWpnVVpmMDdyTi1uOWYzdW1zVWNPaXNlWUxZSnV4T3hfZ3dtVXZFSmhaS3dudU04cHU3STQwY3RMLWhIbkJJd3h0c2x5WTJHQUFycUFodjZuczlLSFJjTWRpOE9RMXlKdzdKUDJGZ0ZfUQ?oc=5",
-      "outlet": "cbsnews.com",
+      "outlet": "CBS News",
       "date": "2026-08-18"
      },
      {
-      "title": "New York State To Host Public Hearing On Child Poverty From Harlem To The Hudson - Harlem World Magazine",
-      "url": "https://news.google.com/rss/articles/CBMiuAFBVV95cUxPUUx5RkpwdHBvSjhVTUlRVU1oel9ONkdzeFA2UU9XMzJPSDRDc1lJNmNTaWQ1UmxqOGluUVlSbVVzZmk4WV9OSlVCNFVkdHZKLUFweXQ0bW5oaDFVeFV4Vlh0djBPaHl3SjdrX1VPMG0ydFRVZFdQa29kcDMzNk54TFpxVFlnOS1KNWYtRkVmWjZXYURlekVvaXJaMUJMMVdkRFcxeTM3QkgxQlpsTjdwcFZJQUZLTXVY?oc=5",
-      "outlet": "Harlem World Magazine",
-      "date": "2026-08-11"
+      "title": "Harlem's Fashion Row to open New York Fashion Week season with 19th anniversary show - Fashion United",
+      "url": "https://news.google.com/rss/articles/CBMi0gFBVV95cUxPVkN6bUhYb2NEQVJyVHpEWF9KRTFrVFV6UWtsQ3Vsb2hlNFQwaVZiaW4xZ2hhRHM5Q3c1RlB3elN1TlhYdERudGd4aUZsV2RZWUM3OU9DTjNXS1U2eHk5WE9Hd2FBa1NTMGZGXzZ5UERwcjJfblZoTU9nZ3ItOFdUdERxQUVqbnpYSndYMUNCaWhJai1TZGtpdE93NXpPU1dTcVliUVRyOWZlZkliSmJUaGIzQm1obE91Q19tOE5VekJmd1RTbVJPZ2UtWVh6eUdKM1E?oc=5",
+      "outlet": "Fashion United",
+      "date": "2026-08-17"
      }
     ],
     "query": "(\"Central Harlem\" OR \"Harlem\") (NYC OR \"New York\")"
@@ -21458,7 +21516,7 @@
     }
    },
    "attention": {
-    "n7": 4,
+    "n7": 5,
     "top": [
      {
       "title": "Man, 64, dies after suffering medical episode in police custody in East Harlem - New York Daily News",
@@ -21479,10 +21537,10 @@
       "date": "2026-08-17"
      },
      {
-      "title": "East Harlem Man, 64, Dies in NYPD Custody Minutes After Denying He Needed Help - Hoodline",
-      "url": "https://news.google.com/rss/articles/CBMiqgFBVV95cUxPV3JwYUE1Y3hFcE50SE4zcFVWZ0d4MTRyMk9ZeXBxdFBNOTR2b2VYb2ttbGM1R1R1SkIxcmRwMzV4VWxmOEViNmoycnVrc3ZuTHNpeWZjWmVNUFIxVVlOa2pFZjhFb2xvRm9hZ0R2Y0U0eHFvd0xuUXhtNVZYRlUwWmJIMXhCUUFMWXc3bk5rRGhwODVjd2R3S2lYZjVxSWpERUhpcjEtUmhlQQ?oc=5",
+      "title": "East Harlem's 711-Unit Tower Passes Halfway Mark on Old Pathmark Block - Hoodline",
+      "url": "https://news.google.com/rss/articles/CBMiogFBVV95cUxOMk1Ea19uQzRRaVd3aE1yeFZmZFJPOEh6bXVFWU9sVW5PNjIyMFRIV1BydWE0aUV6dTBtOWh5Mm40R3h4WTFNT3pLcmZYZ2tsa0Zmb1ZrQWVvelRnbEpsbXNEUEdxRDZpLVVycjlKcEtFdHk4SGNxUENyaHlRZWZqdG00SzVMcjZyOG81b0tmaUs2aHJKc1V1WDFXXzc5ZFZJOEE?oc=5",
       "outlet": "Hoodline",
-      "date": "2026-08-16"
+      "date": "2026-08-15"
      }
     ],
     "query": "(\"East Harlem\" OR \"Spanish Harlem\" OR \"El Barrio\") (NYC OR \"New York\")"
@@ -22666,12 +22724,12 @@
     }
    },
    "attention": {
-    "n7": 12,
+    "n7": 7,
     "top": [
      {
-      "title": "NYC officials say they're aware of teen takeover plans for Inwood Sunday - cbsnews.com",
+      "title": "NYC officials say they're aware of teen takeover plans for Inwood Sunday - CBS News",
       "url": "https://news.google.com/rss/articles/CBMiakFVX3lxTFBnT0V4Nml4NUROdE1udEc0Z2phc3NfNTRES3hSZ2lsZlIxOWdvLWJDaXdCSHZrY3ZWT1E5cEc2MjA2WU9SNnJKTXE2My1jdWt1MEFVVUY2LWtSSmNRdnNNRkV4ZEYtRXNvT0E?oc=5",
-      "outlet": "cbsnews.com",
+      "outlet": "CBS News",
       "date": "2026-08-14"
      },
      {
@@ -22687,9 +22745,9 @@
       "date": "2026-08-12"
      },
      {
-      "title": "NYPD attempts to head off potential teen takeover in Inwood - cbsnews.com",
+      "title": "NYPD attempts to head off potential teen takeover in Inwood - CBS News",
       "url": "https://news.google.com/rss/articles/CBMinwFBVV95cUxQWkJpcWF5dERaTmxrSmJxLW5hTlduN3pJWDJwVmU3ZHpRdUxNQVF1ZnBURld3MGctZjh1czhaZmNrRzNsaFh0anZRdi1DTzVYTTllVTJpQmJzSko2NzFockdIUG9UWEpyYmEtQ3UxR2t6bXUzN2t3X2l5eFpuWG0wakhFZ0FsWGp2cjRLQ3dRdU1yc19BQm9jdnJCQTdsRG8?oc=5",
-      "outlet": "cbsnews.com",
+      "outlet": "CBS News",
       "date": "2026-08-16"
      }
     ],
@@ -24812,7 +24870,7 @@
     }
    },
    "attention": {
-    "n7": 11,
+    "n7": 9,
     "top": [
      {
       "title": "FDY firefighters, civilians hurt after MTA bus and fire engine collide in Longwood, Bronx - ABC7 New York",
@@ -25858,9 +25916,9 @@
     "n7": 3,
     "top": [
      {
-      "title": "Chris Claremont On Marvel’s Current \"State Of Flux\" - bleedingcool.com",
+      "title": "Chris Claremont On Marvel’s Current \"State Of Flux\" - Bleeding Cool News",
       "url": "https://news.google.com/rss/articles/CBMiiAFBVV95cUxQY200REIzOVVOQUtXY19xNkFfby1kTGhZX0lkRmxZSVVJU0FwbzBOelA4MmNCV1JfN2I4a3NyblVuRGlrLWxiTWt0NGxXX1lDYndMM2VaNURvQTNtSU9OcU5iQmwtNWxWUjk1b3c2MEZfeE5qd1BJbkxyMmZrZFZWYlJMYVFNbnZr?oc=5",
-      "outlet": "bleedingcool.com",
+      "outlet": "Bleeding Cool News",
       "date": "2026-08-14"
      },
      {
@@ -28227,21 +28285,21 @@
     "n7": 7,
     "top": [
      {
-      "title": "Fordham Teams Up with the New York Liberty - now.fordham.edu",
+      "title": "Fordham Teams Up with the New York Liberty - Fordham Now",
       "url": "https://news.google.com/rss/articles/CBMiiwFBVV95cUxONko2TmlsZzJzSk5kVUp4a2xKa0lqRWR5eW0zNTd4MVQ4eUlxSkVHemd3TmtnT3J1em0tcGZEYXRiUVdhbUJxcHRXdVBaV2xjUi0weE5XTldlUWRXWEVsNE5PWEsyWVJRbWEzSU5NdEtuNW93cmNjQXpvNWVsMmZpeVNIa0JjZEozZnNv?oc=5",
-      "outlet": "now.fordham.edu",
+      "outlet": "Fordham Now",
       "date": "2026-08-18"
      },
      {
-      "title": "How WNBA Broadcaster Isis “Ice” Young Found Her Calling - now.fordham.edu",
+      "title": "How WNBA Broadcaster Isis “Ice” Young Found Her Calling - Fordham Now",
       "url": "https://news.google.com/rss/articles/CBMimwFBVV95cUxOS040SGhSSnppbHRWOFdzT2FadWM1WXNwWjNnaHpNSU9KeHN0SWs0Q3BKQmc5SmFTUjR6RG9PaDB2YXFpS3JoRmRWU0Nqei1SSG43VWlVWC1xRnZrdDBVSlExRnNSTlRQSjlwVndoM2taWGhzeDF1Mm1GM3p3ZXFTNE1MSEFsQ2lZeHY3aS1PWWlZT0kyRVJUNTIycw?oc=5",
-      "outlet": "now.fordham.edu",
+      "outlet": "Fordham Now",
       "date": "2026-08-17"
      },
      {
-      "title": "The Dreaming of the Bones : A Chamber Opera - now.fordham.edu",
+      "title": "The Dreaming of the Bones : A Chamber Opera - Fordham Now",
       "url": "https://news.google.com/rss/articles/CBMifEFVX3lxTE5GNmtZUEoyWWYzRnRWYS1vVENmUHY5U0VudTIzQ2Q0aTc4clNGQzE2a0hWeURsRTRvbnVNbTZjVUY3QUxYX0RGODVmYXhBQS1BWFFad0hiS3J6WlhQWGFNbnV0UFZxN21ZWk5qNHA0WGJ6ejFaLTdYRzFMaVE?oc=5",
-      "outlet": "now.fordham.edu",
+      "outlet": "Fordham Now",
       "date": "2026-08-14"
      },
      {
@@ -29339,7 +29397,7 @@
     }
    },
    "attention": {
-    "n7": 5,
+    "n7": 4,
     "top": [
      {
       "title": "Community Recycling Event - Belmont | Events | City of New York - NYC.gov",
@@ -29354,15 +29412,15 @@
       "date": "2026-08-16"
      },
      {
-      "title": "Belmont racing festival made Saratoga a 'place to be,' chamber official says - Spectrum News",
+      "title": "Belmont racing festival made Saratoga a 'place to be,' chamber official says - spectrumlocalnews.com",
       "url": "https://news.google.com/rss/articles/CBMimwFBVV95cUxPRlhyVTlnZ3g4R3REN2NkWTQ4Q05VWWdGY3ZGQ0lKcXRkNFFIM2tNUm42cnNvMDhGX0ZFU3padkt4T0oyTDhJelhhOC1nV2cxMGVmUnRmWk0zVG9PMzY2cVBwWTlQakpQQ0NfWHpnTTNqZmd6bXU0aDU0bXY2RnJjYk01TFhLSGE0X0d1QU9RTWtqRFRzbW9qeXJ2cw?oc=5",
-      "outlet": "Spectrum News",
+      "outlet": "spectrumlocalnews.com",
       "date": "2026-08-12"
      },
      {
-      "title": "Cynthia R. Pierce, 71, Belmont - the wellsville sun",
+      "title": "Cynthia R. Pierce, 71, Belmont - wellsvillesun.com",
       "url": "https://news.google.com/rss/articles/CBMiekFVX3lxTE5vX2dDTGJfbUtpbkxFd19IN01TcENDbTF5cUIyc1VEdGZkN3NqRkpSMWFJNnlaaDlHV0JxSGh4d0l6dXhhSU83Sk1Gdy1LOFdiRGJ1QmZFalN0T2tCaUtFX3FNWFk1eHBHemRlUlY5T0RjYk9lZmpXZzR3?oc=5",
-      "outlet": "the wellsville sun",
+      "outlet": "wellsvillesun.com",
       "date": "2026-08-12"
      }
     ],
@@ -36690,7 +36748,7 @@
     }
    },
    "attention": {
-    "n7": 9,
+    "n7": 7,
     "top": [
      {
       "title": "Lorraine Rocco Obituary (2026) - Eastchester, NY - Riverdale Funeral Home, Inc. - New York - Legacy obituary",
@@ -36705,16 +36763,16 @@
       "date": "2026-08-12"
      },
      {
-      "title": "Eastchester Gardens gets multi-million-dollar PACT renovation - News12 | Long Island",
-      "url": "https://news.google.com/rss/articles/CBMiwwFBVV95cUxQYzc3YndWWkhKcVhXcmlHd19tUTVzZy1qWktNbDJwX2xybk5sdjY4cHFkcmh3aEFSNEtEakk5Nm5rZkpBbzF2MmJNRE90MV9TTG9fVHV3VmtEZ1RLNV9IbURwSG91ODY1VGVHT3RKV1dvRFhUUldoUkEtckZNaElSc2hMRm9zaGdvLV82OFYzbUJjNWM4RDZTNlJqV2RtOFZhaWZMWjhvbXFHc3ZXUjM5LVZSWnBXU0xBdm9nYjVEYWEzX1U?oc=5",
-      "outlet": "News12 | Long Island",
-      "date": "2026-08-11"
-     },
-     {
       "title": "Kenneth Calabro Obituary | Westchester Funeral Home | Eastchester, NY - Tribute Archive",
       "url": "https://news.google.com/rss/articles/CBMidEFVX3lxTE4yU1hPd3hpZFZSV2JaZlV0SUFKb3Q4WHZqZW12dlA1RFBLRVpoUVFDcTlXdjRfVUJ0MWxvUTMwLW1HaTYwTzJsbnlHdnZxUGdnYjBqdE1qN1FVNlZuT1VOUkVDXzFBcnFwOEswRjVEd0xWeksx?oc=5",
       "outlet": "Tribute Archive",
       "date": "2026-08-12"
+     },
+     {
+      "title": "Eastchester Community Rallies Around Beloved Teacher After Bicycle Crash - News 12 - Hudson Valley",
+      "url": "https://news.google.com/rss/articles/CBMi1AFBVV95cUxNSGJlekZQbHhaU19JamdaMjBuT1VrZE4yZHNOVjFSMzhHS0VXZUFDQjlMUjlrVWZGb2c0TTRtVGRXZnc0aDJpWUVOZjVFZ1E0czk5UlBjejMyRVEzUk5FRHdlejNkMDRaQmYyZEg0Yk9nRXR0d01qTExERU13T0xwUEtPdG9wUlg2QUlvQXNJZjdrS2RuVHo4ek5ocnJGa2FMOEthLXpERmVSd044ck1oSGxPNDBLaFhuT19FTTBaV1IzNDZ5OW4xd0kxUzVqN05KbFltRQ?oc=5",
+      "outlet": "News 12 - Hudson Valley",
+      "date": "2026-08-18"
      }
     ],
     "query": "(\"Williamsbridge\" OR \"Baychester\" OR \"Eastchester\") (NYC OR \"New York\")"
@@ -37941,7 +37999,7 @@
     }
    },
    "attention": {
-    "n7": 7,
+    "n7": 6,
     "top": [
      {
       "title": "L3 Capital lands Zara in Williamsburg retail development - The Real Deal",
@@ -39281,10 +39339,10 @@
       "date": "2026-08-12"
      },
      {
-      "title": "Brooklyn Heights Is Getting a Late-Night Pizza Bar - Grub Street",
-      "url": "https://news.google.com/rss/articles/CBMihAFBVV95cUxQLVlrZDUyQW1SYkYzQ1BHeUM4RjJQVzg2MlhaNWkwaTNYRWJ0NUR5dnJhMU9wSGNQR2lvckllbXpiODV3Qi1zQzVwX0RxQkpEMy1LeE9JZW5qYU4wZHduUDU4ZzBQSmVUODRRdzIzOWZ6NE5ueHp5NFNneDlrLUlTdVpINnA?oc=5",
-      "outlet": "Grub Street",
-      "date": "2026-08-11"
+      "title": "Brooklyn firefighters battle string of weekend blazes, including Fort Greene battery fire - brooklynpaper.com",
+      "url": "https://news.google.com/rss/articles/CBMihgFBVV95cUxPS3JwSXVMOHFYYktLSG9Xb1VNY0Fnc293RGgzbzVOYXo4dFV5a2hqdUgwV3N6eHlBcFNGM0dvdTg4ZW1NeE5udWJQcndsWktxN250d3llRE8xbkNDWHJtcnlaeEpHLWJ0dndreThnMXRGQmFuN2VzbGVuN1ZZVnhKTFhYZVp1UQ?oc=5",
+      "outlet": "brooklynpaper.com",
+      "date": "2026-08-17"
      }
     ],
     "query": "(\"Fort Greene\" OR \"Brooklyn Heights\" OR \"Downtown Brooklyn\") (NYC OR \"New York\")"
@@ -41759,14 +41817,8 @@
     }
    },
    "attention": {
-    "n7": 4,
+    "n7": 2,
     "top": [
-     {
-      "title": "New small-scale nightclub XTC Bushwick opens in New York - Mixmag",
-      "url": "https://news.google.com/rss/articles/CBMiggFBVV95cUxQN0hTZXpfMVZLLWM0TjluOVE2NGk5aWJ2bEk2ckk3WEg4Um5DTXl1NGJKUVJPdGhOWnZ1S05TN2p6ZzVCVlBYcDNPZ2FjY2RGZ1RjQ2Qxbm9ORFNtTGltcDQ1bUp0QTRKTHV3eS1SYzcwSUFKbXRnRmEwdWpEWEZmTVZR0gGCAUFVX3lxTFA3SFNlel8xVkstYzROOW45UTY0aTlpYnZsSTZySTdYSDhSbkNNeXU0YkpRUk90aE5adnVLTlM3anpnNUJWUFhwM09nYWNjZEZnVGNDZDFub05EU21MaW1wNDVtSnRBNEpMdXd5LVJjNzBJQUptdGdGYTB1akRYRmZNVlE?oc=5",
-      "outlet": "Mixmag",
-      "date": "2026-08-17"
-     },
      {
       "title": "This Bushwick café, faces NYC's high costs while building a community hub for art and coffee lovers. - Business Insider",
       "url": "https://news.google.com/rss/articles/CBMiekFVX3lxTE5rb1BWYUlzVDB1WE9lRGNwbzJkSVU3VlpaX3F2ZDNYSnQ1aG9pczNCZ1RQQzJHUjhBX1N3aGsxY2JhT25LTG5sdEFRUU9HNWtEQWVLempxUnJzakJDRG8xTS1sTkdkM2Y5Q3ZhODM0MUh4S0pidk1KWHFB?oc=5",
@@ -41774,16 +41826,10 @@
       "date": "2026-08-18"
      },
      {
-      "title": "Parents rally to save Bushwick childcare center after funding crisis leads to temporary closure - News12 | Long Island",
-      "url": "https://news.google.com/rss/articles/CBMitAFBVV95cUxOMnBYYzdUMUhYcF9wdHZmZy1aOGdPMjZCRjFOLXVuRU9GZGZCRVA2aU50aUc1OGtLc0JyTGxQMC12cXI2SXZMOXIzTXRaTTVKTGcxVU9yU1hENl85bUF5ZTVsSEFfVzRNTHdCeTZmcVRLOXM1STVrYmhSbHBTQ3JqNGlEaTdLcWN5ajVNNmxrMDh4SFVhTFJpS0NBMGNPOGFjV3BkN0ZWT0ZBcENhTDVwQ2dqVjc?oc=5",
-      "outlet": "News12 | Long Island",
-      "date": "2026-08-11"
-     },
-     {
-      "title": "Bushwick Subtenant's Padlocked-Bathroom Videos Expose Roommate From Hell - Hoodline",
-      "url": "https://news.google.com/rss/articles/CBMipAFBVV95cUxNR1c0RE5WeGhvcEZXWm9UazQ3RWE0VEVZVmlBLTE0ajBSSFZIcm5Na0pSa0pHNm5xVnQyVGlud0dNRkRxcFVHNjJiOUZPbnpic2hGTG4zdFV1dmZxNHVIbWJsNFR1eWpBRS1vQzRjSEhhT19raFpWLW00d0Jvb0RyUFlrQ3VzbUtqZEhfbUdZMUp0YUIzM190cjh0VWRwRW1LeFplbA?oc=5",
-      "outlet": "Hoodline",
-      "date": "2026-08-11"
+      "title": "New small-scale nightclub XTC Bushwick opens in New York - Mixmag",
+      "url": "https://news.google.com/rss/articles/CBMiggFBVV95cUxQN0hTZXpfMVZLLWM0TjluOVE2NGk5aWJ2bEk2ckk3WEg4Um5DTXl1NGJKUVJPdGhOWnZ1S05TN2p6ZzVCVlBYcDNPZ2FjY2RGZ1RjQ2Qxbm9ORFNtTGltcDQ1bUp0QTRKTHV3eS1SYzcwSUFKbXRnRmEwdWpEWEZmTVZR0gGCAUFVX3lxTFA3SFNlel8xVkstYzROOW45UTY0aTlpYnZsSTZySTdYSDhSbkNNeXU0YkpRUk90aE5adnVLTlM3anpnNUJWUFhwM09nYWNjZEZnVGNDZDFub05EU21MaW1wNDVtSnRBNEpMdXd5LVJjNzBJQUptdGdGYTB1akRYRmZNVlE?oc=5",
+      "outlet": "Mixmag",
+      "date": "2026-08-17"
      }
     ],
     "query": "(\"Bushwick\") (NYC OR \"New York\")"
@@ -43043,7 +43089,7 @@
     }
    },
    "attention": {
-    "n7": 12,
+    "n7": 11,
     "top": [
      {
       "title": "Permits Filed for 320 Essex Street in East New York, Brooklyn - New York YIMBY",
@@ -44369,9 +44415,9 @@
       "date": "2026-08-17"
      },
      {
-      "title": "Block Party Pow Wow coming to Carroll Gardens Saturday - Gothamist",
+      "title": "Block Party Pow Wow coming to Carroll Gardens Saturday - gothamist.com",
       "url": "https://news.google.com/rss/articles/CBMimwFBVV95cUxPaVFZVVZ0eHNRaFVnelFxdk9zSFlNeXVaWkFvcmhBLVBhVjgzeHVVZWhDZDEyd2RwR0UtOTlxODBGOENrR2FuTE9Dd2tFRS1GNEhVbC1aQm9ta2FnT0FOVE9wWWpXdkFVRWR5b1h4Uk9nc2pGLUU2X2c2S1B0b3RvbVlYVWJWX1BYekF3SExrTkxWaTRQLUhCREhSNA?oc=5",
-      "outlet": "Gothamist",
+      "outlet": "gothamist.com",
       "date": "2026-08-13"
      },
      {
@@ -45586,14 +45632,8 @@
     }
    },
    "attention": {
-    "n7": 6,
+    "n7": 4,
     "top": [
-     {
-      "title": "Cardi B films latest music video in Sunset Park - Brooklyn Eagle",
-      "url": "https://news.google.com/rss/articles/CBMiiAFBVV95cUxOaV8tVmtsTk9CLUY5QnZVc2dzX25FVXc1OUNiSDM4X1BEejBmVVRhSUozQjZ4bEhGcUpCZVlhbzNfRng3eUpVZHBtWmdSVWtOeDVURFpGWFlBUWV0alRMLWg0WTRSYk5BMElIM2pNTURjQlN6ZElIYkd5aFJzM2QwVkZPcC1Hb0ZV?oc=5",
-      "outlet": "Brooklyn Eagle",
-      "date": "2026-08-11"
-     },
      {
       "title": "Cardi B Spotted Recording Music Video In Sunset Park - News12 | Bronx",
       "url": "https://news.google.com/rss/articles/CBMirwFBVV95cUxOSXppUENmR3puR2Q1VHRIeGxLX0xMb0NQQmZnQjk5ejlrR1ZyektFTW9QblZIbmV1THhrVXQ4LV9MaWU2b3JyYkVHcGp4SE9lUzZnQXRjZTJieHg0d2NzSC1PNW5ZRG1VZ0VkUUt0WXpLTGJqTTQtb2VXbk15QXJTNWRDUlIxRnN2UUhXMk83cGt0aWROOTVfbWRjY2lOTE1nRTRLSkhQXzlCTVBVXzNR?oc=5",
@@ -45607,10 +45647,16 @@
       "date": "2026-08-12"
      },
      {
-      "title": "Sunset Park residents celebrate completion of community solar project - PIX11",
-      "url": "https://news.google.com/rss/articles/CBMipgFBVV95cUxNVmZaamk5OW9kTnhTSmJjLUY4X1JSbXBDUzRtYUx5MXBMMWF2cC00T2kwenJPam1pMXBINWxHTnZZRHhCdTlWQURjUk8wdDRpVFlJRldrYUw1cDVibzFMV29yMm84VGV6OVNqUWtKRzVjdGZaODdmUVYzSTNjTDZwUWlUYnhDRmhCOXliMkJ0Sk9VNDBuNV9UcEZSS0VQdVdCOS0tdm1n?oc=5",
-      "outlet": "PIX11",
-      "date": "2026-08-15"
+      "title": "Police search for hookah-wielding suspect in Sunset Park - Brooklyn Eagle",
+      "url": "https://news.google.com/rss/articles/CBMie0FVX3lxTFAxbkttbXlnTDJJNy1Cc0kwMGdnWDFIMVE4M3lLRWhHMzNXUkdwM0E4RnBBakJCVHRPMzdoLTFaQU8taHFrZW5BOXcyNkJTQ1lXVFFINGZ5T1BTSmNBWXVtdTFtMkRnSldTd0J5and1N1YyZ0wzX2xqdGU5TQ?oc=5",
+      "outlet": "Brooklyn Eagle",
+      "date": "2026-08-12"
+     },
+     {
+      "title": "Sunset Park Man Marched to Bank at Knifepoint, Forced to Withdraw $2,000 - Hoodline",
+      "url": "https://news.google.com/rss/articles/CBMiogFBVV95cUxOWmxqRnU0dk9lQmhrVGpEV2J3eFdYcXFyMG14dTAwc2E3S0taMjdkX3lFQ1B2NHp0R3J5Q1VUYlp3dU0wU0luN1dMU3B1VWR4aEtlVUtvc1RyQ1NHdk52MVNiVVUxaU92MnhKZ1FfazIzRXRnNDlLRTFaMHhFVXVsdHdnRExsSGQxUGl1X1JrWFhMVkYydXVINkNUSkZpZC1tU1E?oc=5",
+      "outlet": "Hoodline",
+      "date": "2026-08-13"
      }
     ],
     "query": "(\"Sunset Park\" OR \"Windsor Terrace\") (NYC OR \"New York\")"
@@ -46847,12 +46893,12 @@
     }
    },
    "attention": {
-    "n7": 11,
+    "n7": 9,
     "top": [
      {
-      "title": "Woman killed in Crown Heights, Brooklyn shooting, police say - cbsnews.com",
+      "title": "Woman killed in Crown Heights, Brooklyn shooting, police say - CBS News",
       "url": "https://news.google.com/rss/articles/CBMingFBVV95cUxNUW9UOVlGei1qdGFiQmNqZFNTR1NJdmRzRkJTQnFva1N2QmpkcW10dTBUcnRWVFRVN3lBajhQVGJuYmFvcDIxa241aFJvak8xWlIzM0RCdm90X3dBX1RmSGZtMEJEMnFOV2NzY0pSdVpsX3VLTUQ3b1VDMk5YNS1hNW1fWWxIVzZVNUNiN1J0LXgyZUM1OC10QWc1T3V1Zw?oc=5",
-      "outlet": "cbsnews.com",
+      "outlet": "CBS News",
       "date": "2026-08-17"
      },
      {
@@ -48040,7 +48086,7 @@
     }
    },
    "attention": {
-    "n7": 8,
+    "n7": 6,
     "top": [
      {
       "title": "Flatbush Businesses Report Less Foot Traffic Amid Trump Immigration Crackdown - The City Reporter",
@@ -48049,22 +48095,22 @@
       "date": "2026-08-17"
      },
      {
-      "title": "Eyes On The Street: How Will Bus Rapid Transit Fit On Flatbush Avenue’s Narrowest Stretch? - Streetsblog New York City",
-      "url": "https://news.google.com/rss/articles/CBMixAFBVV95cUxOSWxYM1NiNjQyMW5oclBPUWotQzJSaHJ0WWpWQ3NPODJPeWZ6ZDFoU1oyUVViVi1XbDVNRGV2TlIzTV9mOF9rNHBWQmFTeHF4bmZuUThtSHFmb3lCM2UweWotNVhiVDlYOEtVT2VnOFZnSDFxNGR5NjFzTDFxUi1CQ1M2Y2RiTmJaN3R3R2JmcHJ2VlcyakxCWnB0LXExWWhNdmRkSVdGazRmTGNqb3UzMTRqa0o5TlpXU01TazhYNktmejUx?oc=5",
-      "outlet": "Streetsblog New York City",
-      "date": "2026-08-11"
-     },
-     {
       "title": "Housing Lottery Launches for 3510 Glenwood Road in East Flatbush, Brooklyn - New York YIMBY",
       "url": "https://news.google.com/rss/articles/CBMisAFBVV95cUxQTlpjNHVVUWJNYUFOSlNTMFVVWlo1OS1QdlBGejZUeE4yWi1ZZ19wYk40Yl9zTzJ2RExsRUNIMVdjOUU2THV6LVhLbmhSNWg2SGR5MEtsRXZNZ2dxUGo1WWRRdVM3cE5nQzYyWUUxRXo0VUhkY0pfVjNrVnRPanNtblRtY09RUjY0N1R3eUY5WGJaT1NOZHJyWFVXZERFTzRPT3JueHJxTDlTMmpaWnh3NQ?oc=5",
       "outlet": "New York YIMBY",
       "date": "2026-08-15"
      },
      {
-      "title": "Permits Filed for 704 Lefferts Avenue in East Flatbush, Brooklyn - New York YIMBY",
-      "url": "https://news.google.com/rss/articles/CBMiswFBVV95cUxOTVNYOS1XNXprcXNWQXcxXzd3Zm1zZkMxU3NfREhWYjRlQUd3UXpTbmtBUHJ1VWpOXzdIWC1nLXN3MVVJcEtfdHNXX0lsODJ0bkhJY1RLaG42bDRsYVBxdmpQcjl6QmdRelpKYWVrN0Z6T0xtbzY2bW5VTHlWUWN3OElDcmRScGZ2QXZZZWJPdFhEM2NMYk9MNkhXVFVfd3VzY0E2RV9vOTdHMjAxcnZaa0dlNA?oc=5",
-      "outlet": "New York YIMBY",
-      "date": "2026-08-11"
+      "title": "‘Flatbush Misdemeanors’ Dan Perlman Wraps On Coming-Of-Age Comedy Featuring Stand-Ups Maria Bamford, Gary Gulman, Jamie Lee, Sean Patton, Yamaneika Saunders & More - IMDb",
+      "url": "https://news.google.com/rss/articles/CBMiZ0FVX3lxTE9iUjJkc3dmZHRrTzREZEU3cGItcjZJdDVpV2NQMmtIeHA3S3lFYXlCMTR4eVNXUnRVbmZKd25KalJObERiR2hJdFdtUnR5bHU4T2pBR1JrSTJIcVlveXBTZmZwRzNoMEk?oc=5",
+      "outlet": "IMDb",
+      "date": "2026-08-18"
+     },
+     {
+      "title": "Stacy Lynn Solomon Obituary | Sherman's Flatbush Memorial Chapel Inc. | Brooklyn, NY - Tribute Archive",
+      "url": "https://news.google.com/rss/articles/CBMivgFBVV95cUxPdHNROGlfa1BNT2sxLVo5RVlGUmRlZDNsejFQeEVtWHNuc1BYWjBUMU5WYVkxRXhxbEQ3UEEzZEhHS3N5d3otSHZFRU41elRQTDB3NlpTN19fa2xyZjh2VlRmTzVMT0oxXzd6LXRKaDRLZEJlQU42N1NMVHNUOXlCVHdzMEVQdjhacS1XUGNxUGRsdDBHZ0VGUjFNVFYzWVp0ZGF4aGhtOXprVFFDSVRKVjItbWxCRHMwc3JndTdn?oc=5",
+      "outlet": "Tribute Archive",
+      "date": "2026-08-14"
      }
     ],
     "query": "(\"Flatbush\" OR \"PLG\" OR \"Crown Heights South\") (NYC OR \"New York\")"
@@ -50254,9 +50300,9 @@
       "date": "2026-08-17"
      },
      {
-      "title": "YOU KNOW, THAT BAKERY OUT IN BENSONHURST to Lead 2026 Moxie Incubator - broadwayworld.com",
+      "title": "YOU KNOW, THAT BAKERY OUT IN BENSONHURST to Lead 2026 Moxie Incubator - BroadwayWorld",
       "url": "https://news.google.com/rss/articles/CBMizAFBVV95cUxOOXlIVXIwVHI0LW5CTTlYVm00TVM2OENSOTFPT2xuWFJZWnNaUExVaVptMExTYzZwM2gyU1hPMkRqX2pRS1JCZmJQRUEzSDkyTHJZOHJ5NG9KSHFOOWR0Tk96a052TkpxaGVtVHpWS3Z3N1hqMlhuVDkxM3hfY1ZNdE12QjNybUxGRmcwXzEwUWp1Qjg2MmdQQnFaMkQ0RGNGV1Y5dVVuTndRVnlZN0V5WnhvWkNZVHFJSVlXdmJ5Y1k3SURqaklnOFJOYkk?oc=5",
-      "outlet": "broadwayworld.com",
+      "outlet": "BroadwayWorld",
       "date": "2026-08-13"
      }
     ],
@@ -52940,7 +52986,7 @@
     }
    },
    "attention": {
-    "n7": 13,
+    "n7": 12,
     "top": [
      {
       "title": "Oceanfront development site on Coney Island Boardwalk changes hands for $20M - The Business Journals",
@@ -52961,9 +53007,9 @@
       "date": "2026-08-14"
      },
      {
-      "title": "Sand, sculptures and summer fun: Coney Island’s 34th annual competition crowns its winners - Brooklyn Paper",
+      "title": "Sand, sculptures and summer fun: Coney Island’s 34th annual competition crowns its winners - brooklynpaper.com",
       "url": "https://news.google.com/rss/articles/CBMigAFBVV95cUxPOHlHb2tIR2VKd3N6WXRUQUxRUFpBTzZkWTdTTUlfdkktcUFiZWRFd195VFhJcVRhT1QyRmEtZktNR1M2WE9QdEFSWGRIX2VpQ2ctQ29aRVJDd1RJLWUzVkwzLTRWWHN3V2taXzYzY2RBREdHcmpXNVV3MEdaTDJOQg?oc=5",
-      "outlet": "Brooklyn Paper",
+      "outlet": "brooklynpaper.com",
       "date": "2026-08-18"
      }
     ],
@@ -56830,20 +56876,8 @@
     }
    },
    "attention": {
-    "n7": 4,
+    "n7": 2,
     "top": [
-     {
-      "title": "250 Ash St Unit 250, Brownsville, TX 78521 - Realtor.com",
-      "url": "https://news.google.com/rss/articles/CBMikgFBVV95cUxNbEwyRjl5cDgyZE0teTJoclp5SlJWSFdEemNBMFJoNUIya0hSbDBrUjM1bWFkeENoMW5uak9UazJoNVJGS2VtcTZXU2MtSGdHSllnSFNwODk2akZsNlhnVnJsRWs0Tl9IUWFPR2JhelBpZDhrd2Z5TU5EcUFXX2VwLWJDb2NhcktRODR1N2Y5cThrZw?oc=5",
-      "outlet": "Realtor.com",
-      "date": "2026-08-11"
-     },
-     {
-      "title": "1701 Canyon Cir Unit 1701, Brownsville, TX 78521 - Realtor.com",
-      "url": "https://news.google.com/rss/articles/CBMimgFBVV95cUxQTGxXeDlwVGxhQ2xnQTFaYTB2NGU4anB1VnBLX0xySGpneHFVcWxUcnlpell6OVRyWnN3bkl0Y0t1WGZjeFk1SXp6dUduNmozZWUwS0w1bldFeEJ1QTFMcVF6RHcyZ1hQbF9SUzhqbUxnek1vbjlMM3ZGemZLNzhFUHAyelhHZXQxeHhRUm5ZT2xyVVE4RHdrbkhR?oc=5",
-      "outlet": "Realtor.com",
-      "date": "2026-08-11"
-     },
      {
       "title": "Brooklyn Salutes Its Hero: Bruce “Shu Shu” Carrington with Massive Parade in Brownsville - wbcboxing.com",
       "url": "https://news.google.com/rss/articles/CBMisAFBVV95cUxOTXFNbmMxVnRJT3VQdk9DdE9vV3FzdDA3QXNWWFFLS2pIOGN2ajRoMXlvSnRyUlN6RVY2XzRxSmZld2VrZExGaEZoN1NxZ3VkQW90aUZCZUZBOTI4cUJ5X2Z2eTgyWWRYWGNhTVVUWThyS2p1c3FzV25LV1pBTHQzal94ck1pZzgzYU1JU0szN2NOZGVEZkU0cWxITzdKak1VUDFZSlV0Ny00ZmdkZlVtcQ?oc=5",
@@ -58069,13 +58103,13 @@
     }
    },
    "attention": {
-    "n7": 8,
+    "n7": 6,
     "top": [
      {
-      "title": "From Draftee to One of MLR’s 'Glue Guys': The John Powers Story - Major League Rugby",
-      "url": "https://news.google.com/rss/articles/CBMimgFBVV95cUxQbjAzSkJ4YmRSRm9sRXdkaFg3NzVlVlY3YTRFYTJZcVFmMHhhQ093WG1PT2NKWW0wSVJjVTZKQ0ZIZWF0VVFTNnJIUWVydEtKS3ppQ29odFRjVC1lM3FlSE9zN0RaSnV0UVJfa3FYZkhLejhUSUgwWXU3emtDTXFfcVZnY1NLVlloSHRBblljd2JmbHljTVZYazZR?oc=5",
-      "outlet": "Major League Rugby",
-      "date": "2026-08-11"
+      "title": "Housing Lottery Launches for 3510 Glenwood Road in East Flatbush, Brooklyn - New York YIMBY",
+      "url": "https://news.google.com/rss/articles/CBMisAFBVV95cUxQTlpjNHVVUWJNYUFOSlNTMFVVWlo1OS1QdlBGejZUeE4yWi1ZZ19wYk40Yl9zTzJ2RExsRUNIMVdjOUU2THV6LVhLbmhSNWg2SGR5MEtsRXZNZ2dxUGo1WWRRdVM3cE5nQzYyWUUxRXo0VUhkY0pfVjNrVnRPanNtblRtY09RUjY0N1R3eUY5WGJaT1NOZHJyWFVXZERFTzRPT3JueHJxTDlTMmpaWnh3NQ?oc=5",
+      "outlet": "New York YIMBY",
+      "date": "2026-08-15"
      },
      {
       "title": "All-Americans Named for Rugbytown - National Collegiate Rugby",
@@ -58090,10 +58124,10 @@
       "date": "2026-08-12"
      },
      {
-      "title": "Housing Lottery Launches for 3510 Glenwood Road in East Flatbush, Brooklyn - New York YIMBY",
-      "url": "https://news.google.com/rss/articles/CBMisAFBVV95cUxQTlpjNHVVUWJNYUFOSlNTMFVVWlo1OS1QdlBGejZUeE4yWi1ZZ19wYk40Yl9zTzJ2RExsRUNIMVdjOUU2THV6LVhLbmhSNWg2SGR5MEtsRXZNZ2dxUGo1WWRRdVM3cE5nQzYyWUUxRXo0VUhkY0pfVjNrVnRPanNtblRtY09RUjY0N1R3eUY5WGJaT1NOZHJyWFVXZERFTzRPT3JueHJxTDlTMmpaWnh3NQ?oc=5",
-      "outlet": "New York YIMBY",
-      "date": "2026-08-15"
+      "title": "Chiefs vs. Chiefs: NZ Rugby continue push for embarrassing NRL name change - sportingnews.com",
+      "url": "https://news.google.com/rss/articles/CBMiywFBVV95cUxOY0t5NlZPQ19feWg2Q1ptUV9Cbm1KWGo1TmhsdEJPUW9PZ29hNUxWSDBoYTlobWd4U0psYXdYOWpxVGgxdHZzY1V3NEJmaXliWXRzTHhJZWpLQVhSdFBSeWY2eFFEUDdhWHNMTW1wX3Qxc29oRkZYQy1oblc3YlYydkYtM3c0ZmFTR2pUaUNMX3RJaU1IU0pDLVBjSnJzTlRpVnZubm5hbUtXNG1tQjZlWFlUNlRtd3F2a1ZOQTVkdHlpdE5YMVBQbk80QQ?oc=5",
+      "outlet": "sportingnews.com",
+      "date": "2026-08-18"
      }
     ],
     "query": "(\"East Flatbush\" OR \"Rugby\") (NYC OR \"New York\")"
@@ -60540,14 +60574,8 @@
     }
    },
    "attention": {
-    "n7": 23,
+    "n7": 17,
     "top": [
-     {
-      "title": "Waldorf Astoria New York Transforms Its Iconic Grand Ballroom into a Tennis Court - Galerie Magazine",
-      "url": "https://news.google.com/rss/articles/CBMingFBVV95cUxOSGxZbDZwYWt1MjRLS0paTlVKejhUalpxWmNJU0NKSmhXOWh4OV9hSVcwT053eXc4d1hRQUJ5dURqM3ZNNGhwS0VZS3VEYnFRVWZMYXdud0gxdVZYOEVEc1VaM19xdlB3RmhHRV9RMEdRZmV5aGN3eVpZNmhCSkRDY09NTkpiX3JvcGxJUW11RTM2VVRNQmc4bEtNZGRrUQ?oc=5",
-      "outlet": "Galerie Magazine",
-      "date": "2026-08-11"
-     },
      {
       "title": "Domain scores $175M in financing for 429-unit Astoria project - The Real Deal",
       "url": "https://news.google.com/rss/articles/CBMingFBVV95cUxQZG1vWE5aamk2U2s0bkhmaENWT2R6SE9TLWRnWWxORmtJS3piVmlmNjR3N3dfNzJ4TmYyb3Z4aTVwbjFOaWFhZjdLVjBFUjloUUY4WEgyZGpSZnJ5Zm81Y3ZsM3VueWZaT0kzd3JXZTdlVm56WGhDaUJ5MF9uUFl1cl9KOVdYMGN1UmNtSXh0T0VmclBFU2duQXk0LW52QQ?oc=5",
@@ -60555,16 +60583,22 @@
       "date": "2026-08-12"
      },
      {
-      "title": "[Award Alert] Waldorf Astoria New York: Book Early 2027 Award Stays From 150K Points - Upgraded Points",
+      "title": "[Award Alert] Waldorf Astoria New York: Book Early 2027 Award Stays From 150K Points - upgradedpoints.com",
       "url": "https://news.google.com/rss/articles/CBMieEFVX3lxTE9QTXF2UUN0RGh5Y3JJTThGak94OE8yTy04M3g4S0FURE9PU280YnNWbEo1UWNJeE11dzhKbExtMzhFUlIxQnZJWl80ODFUc0NfNzl6TGk0bG5halQxSElUeVk4LWppenB3eU9EUFh0WGgyb0FYT25NZg?oc=5",
-      "outlet": "Upgraded Points",
+      "outlet": "upgradedpoints.com",
       "date": "2026-08-12"
      },
      {
-      "title": "Domain Cos. closes $176M in financing to build 429 apartments in Astoria - The Business Journals",
-      "url": "https://news.google.com/rss/articles/CBMiqgFBVV95cUxPWWtUYVJjb1gzMzdkN3ZDOFVJWEc5Qy1wU2xscE5ka2loeU5sMEd6V09Za0lZWFd5MmtTaUMxYUdhY2xFTlZQQnVVWkppVm5KWXdMd3c1LXg2T1FKaklMTFlqNmNNY3Q1d3ppMFpXMG80aU1aUmtOaGNyVU1LcDUxUEh0LTlZeXBXZE1LclF5bWNnTURIcnBVUVBBeWJ6R0owMUdnNEpTeW52QQ?oc=5",
-      "outlet": "The Business Journals",
-      "date": "2026-08-12"
+      "title": "Rendering Revealed for 'Elara' 429-Unit Development at 35-45 41st Street in Astoria, Queens - New York YIMBY",
+      "url": "https://news.google.com/rss/articles/CBMixAFBVV95cUxQNXNhY3lvNF93MFg5T2VXUkJPWG1vLVBiRW9hczlZSkFlV285ZFlxZnB5RGwtcjIxa2lPYjVlam1DaFRlMkVna3pIR1BqU2J6N1hQb2ZRM0xURmFXc0EyZVpGYVV1MThYWVMwd2pkWlVxVHFWNWEzaDRPTTlhRFVaUFVFbTNyUUdyRFhmTG1SaE5ILW9uVkMxRW5sd1FHMER3OXA1WnBxX2pOSlEyWTZZR2JzVXBIUlN1NUdwNTJlemt3WVZF?oc=5",
+      "outlet": "New York YIMBY",
+      "date": "2026-08-13"
+     },
+     {
+      "title": "New mixed-use building planned for Long Island City - Crain's New York Business",
+      "url": "https://news.google.com/rss/articles/CBMiqgFBVV95cUxNUWZhMm1iOEJjMEk0N0ZhWUFvck9mZDNMSVlpaERxVzkxRTRraF9OWXJzTjZ1S3piQ0Y1VUF1X09JbzIzWW8taGk5UnFjWUt3LWtiamotUDd3U01fM1loMG1IQUtZNzQ4NjhZbmJ0QzU3TjZYYmZFcWFfcEFValMwSXF1ZTlZQmR6cUFTQzl6bDhUSElNNWs3Mk9LUDY3dHcwaktBSUMyeFZkUQ?oc=5",
+      "outlet": "Crain's New York Business",
+      "date": "2026-08-14"
      }
     ],
     "query": "(\"Astoria\" OR \"Long Island City\") (NYC OR \"New York\")"
@@ -61792,7 +61826,7 @@
     }
    },
    "attention": {
-    "n7": 6,
+    "n7": 5,
     "top": [
      {
       "title": "What is the Sunnyside Self-Care Fest? - FOX 5 New York",
@@ -61801,22 +61835,22 @@
       "date": "2026-08-12"
      },
      {
-      "title": "A burst of enthusiasm over Sunnyside Yard Queens project, followed by yawning silence - Gothamist",
+      "title": "A burst of enthusiasm over Sunnyside Yard Queens project, followed by yawning silence - gothamist.com",
       "url": "https://news.google.com/rss/articles/CBMisAFBVV95cUxNdmNMX19uTHFsd3UzaFV2LWVvU3k3dDFtT1NtdEI4NWp3RnlHc3dLNmZfU01kS1Z3VUhZZm9NLWlWQ3QwQzFFcmFkU0k1MW10dFRkWG9EVUZPSW1aRXhuRjlDSWdCN0dwdWh3QmF2cUVZcElrOWtHSDVXb2ZaR0hwWjltNG8yMjhkYnNkdzdIamZpYjExODJzWV9ibE0ta1RMUUpPZkxWaHVwWDVtTFlhRA?oc=5",
-      "outlet": "Gothamist",
+      "outlet": "gothamist.com",
       "date": "2026-08-13"
-     },
-     {
-      "title": "Sunnyside Yard’s 12,000-Home Revival Still Has No Federal Commitment for Its $21 Billion Deck - Railway Supply",
-      "url": "https://news.google.com/rss/articles/CBMiugFBVV95cUxNWTBwMHFMbWdKY1c0d180aFA1Vk5XUGRJMDJ3b2Y0b0Z4dFNpVUpfREwtWlFvNGlxb0dxcmltc0Z5YjRYTHJnTUFaSHRobThvWV93T2w1eTRCN0l4NjBwdmFpa3R3amM0VFJCRXJ1RXg3ZWNqUHNrRXU5RlRrNkFSb3ZlSFpram4zdTQwOGlTRm4wRUZzbWtrWWN4a3drZzExV1N0QUxEckV1Z3FZdndZR3VBbU9TT2swWWc?oc=5",
-      "outlet": "Railway Supply",
-      "date": "2026-08-14"
      },
      {
       "title": "Nancy Strobl Obituary - Woodside, NY - Dignity Memorial",
       "url": "https://news.google.com/rss/articles/CBMiggFBVV95cUxOdzlsUFRyNUNmTXdHSTJqZTVCcTdETU1tYllVQ18zRmprMmhUYlQwTTFfcGJfY1Z0NV82YkRLUkpIR1k0bUltMDVxMlBDakpYQ243TFBrY3lHVHB0WDJ6U0lFbU5JOHh4cGNaMUkyakZQVThtVDNGN3VheWNwRzJLenVR?oc=5",
       "outlet": "Dignity Memorial",
       "date": "2026-08-12"
+     },
+     {
+      "title": "Sunnyside Yard’s 12,000-Home Revival Still Has No Federal Commitment for Its $21 Billion Deck - Railway Supply",
+      "url": "https://news.google.com/rss/articles/CBMiugFBVV95cUxNWTBwMHFMbWdKY1c0d180aFA1Vk5XUGRJMDJ3b2Y0b0Z4dFNpVUpfREwtWlFvNGlxb0dxcmltc0Z5YjRYTHJnTUFaSHRobThvWV93T2w1eTRCN0l4NjBwdmFpa3R3amM0VFJCRXJ1RXg3ZWNqUHNrRXU5RlRrNkFSb3ZlSFpram4zdTQwOGlTRm4wRUZzbWtrWWN4a3drZzExV1N0QUxEckV1Z3FZdndZR3VBbU9TT2swWWc?oc=5",
+      "outlet": "Railway Supply",
+      "date": "2026-08-14"
      }
     ],
     "query": "(\"Sunnyside\" OR \"Woodside\") (NYC OR \"New York\")"
@@ -63028,9 +63062,9 @@
     "n7": 9,
     "top": [
      {
-      "title": "Queens community rallies for restoration of Flushing Meadows Corona Park - cbsnews.com",
+      "title": "Queens community rallies for restoration of Flushing Meadows Corona Park - CBS News",
       "url": "https://news.google.com/rss/articles/CBMisAFBVV95cUxONVNkLVp2TmxmMS02a29qODRrVkY3Q1ZvZUZndkU4VGRhd2ZKTXRvR1hwWjJJbHl1ZldPRDBVTTl3dWwwSG1TeDk3VzBhMUEwSmJBcE9LdlhES1ZmVnhHdkMyOXpESzZYSmhtOGhIRmplVWZvUk9DcVl4QlY1ei1Mal9jNVd6MWJpZm1YYXBMUXBqdUJ6dnM1MjRTQkFBQnhqMGNnSldGbVRvRVZsTlNyRQ?oc=5",
-      "outlet": "cbsnews.com",
+      "outlet": "CBS News",
       "date": "2026-08-14"
      },
      {
@@ -64259,14 +64293,8 @@
     }
    },
    "attention": {
-    "n7": 6,
+    "n7": 3,
     "top": [
-     {
-      "title": "Fire erupts in Elmhurst neighborhood - PIX11",
-      "url": "https://news.google.com/rss/articles/CBMiekFVX3lxTE1WcVp4Q2VFUHU4N1F4TWVCclJUZVVuQW5vSGdtVmpnX3FBR3ViRXFnT2VZUUdGUUl5clFlcmw4eXJPNTBXSEFMaFhLZzVrMi00VGtpeTNVUHpvOEwxWHpMd1lXQzY5ejNEWkhSOVg5SVJJUFNmcWkwYXF3?oc=5",
-      "outlet": "PIX11",
-      "date": "2026-08-18"
-     },
      {
       "title": "Immigrant groups canvass East Elmhurst with Know Your Rights information - PIX11",
       "url": "https://news.google.com/rss/articles/CBMiqwFBVV95cUxOV3J5cjlHS1BkX2VRQ2JJT1RBMGlUeG5uUWVuNEtuWnhYMjNiYmNXZGR3bHVpUEY1cU9YX1QyTi1VelhaQjJfNER4LWFfTllzeEVXVXlXYnlXOGJOTnRIYmdZcmFWcTdxYWE2eVRwd0NtRVBZT1hxUnBtOW9tS3drS29sQS1qNnVJRkVYaVItNXNqREd4RDFoUHp2emFONlZwTGdKbU5kc2ZPeWvSAbABQVVfeXFMTUtCVDhvd1lyVFcyVDZDMFVzM1Y3cEVVMkVkTzc2SHdvWXU4eFdDT3BlV2JPTFR4UEo5cXY0b0ZwSkMxSDZxcEJqeGxXX243UEprTEh6SFJ0RURRMmc5UjEwenJILTlMLThGbW1abzI0aFdXVzJyYXpSTGVSN2R0UGRveTEyTW1lUEk3N3VnbkRHQXljY0xkS2VqU20xclVnVU54VUdUTzAyNDN3UTJVUDI?oc=5",
@@ -64274,16 +64302,16 @@
       "date": "2026-08-18"
      },
      {
-      "title": "40-05 Ithaca St Unit 4M, Elmhurst, NY 11373 - Realtor.com",
-      "url": "https://news.google.com/rss/articles/CBMilwFBVV95cUxOLTIyZmppamhBMURPOFVaOWhjYjNVT1RJd1ZaMVoyeDBKUnhocHNYWDdCaEltcUN3bWpRb3hqczVFS1pYbEFlbDYzZVU0Wlp5SDNaNTNtV25weGZFdE5wRF9xNGYyT0hTZ193ZG03Y3VyTFBYX3NoQkU4LUdsLTg1VGNMeGZFUjA4el9na2NjRl83TlYzNjZr?oc=5",
-      "outlet": "Realtor.com",
-      "date": "2026-08-11"
-     },
-     {
       "title": "Esther Melo Obituary | Gerard J. Neufeld, Inc. | Elmhurst, NY - Tribute Archive",
       "url": "https://news.google.com/rss/articles/CBMingFBVV95cUxPZGF0Q0RYd2lJbDJLZmZ1dmhpVEZzREpfS2RBMlFteGw1dWc1ZFpScWIwMmszYnRUVWdlRC1CYWZlU09FTXRtZUNCVVZaUnlyd2c1VTJpQWVHaEZLS2tKcnZydVhLUzhmY2JpNGZPSVUtMnBmNllXYnRUTGN4SWhGYmNtTkcwRDNReE4wYWdEdGkyQnZmak5LYTBkZDc5dw?oc=5",
       "outlet": "Tribute Archive",
       "date": "2026-08-14"
+     },
+     {
+      "title": "East Elmhurst Robbery: NYPD Seeks Suspects in Staged Crash - Hoodline",
+      "url": "https://news.google.com/rss/articles/CBMiowFBVV95cUxPVkJYNGNscWUweDAwekl0RV94M1RJOVBaN0IxYVJfVHVUWEh4bVpzSGRNcjZoY1FCdGN6cG1rd3pRajlFVzFTcHpTaE1fQW0zakNKRmo1QlItTS15YUJQUmEwT3FhMTdyeE9pYjZZRGdvTzhWemVkX0cyNmt0am5qYkNydS0zQ0hvWFZLTUJLWVgwQ1ZlRDJDTk9Ma0VTeVc4LTJV?oc=5",
+      "outlet": "Hoodline",
+      "date": "2026-08-13"
      }
     ],
     "query": "(\"Elmhurst\" OR \"South Corona\") (NYC OR \"New York\")"
@@ -65435,19 +65463,19 @@
     }
    },
    "attention": {
-    "n7": 9,
+    "n7": 6,
     "top": [
-     {
-      "title": "Ridgewood, New York, NY Pollen Forecast | MSN Weather - MSN",
-      "url": "https://news.google.com/rss/articles/CBMid0FVX3lxTE9YbTA1MDJ3ajBIOUkzNXVsbUZRblVGYXJnalR2SURxWE1qYkdnOEVSSkRrSzgyYllld1FOWE9xcm50alBSQThRTVMxMEM2SDFNVXFKdzlfWjhCaG5uakJyNWY5d0JERGNEa3ItRDIzU2ZfNlp6dHo4?oc=5",
-      "outlet": "MSN",
-      "date": "2026-08-12"
-     },
      {
       "title": "Historic crematory in Middle Village honors generations of lives: Our Neighborhood, The Way it Was - qns.com",
       "url": "https://news.google.com/rss/articles/CBMivgFBVV95cUxQWkExcmNRc1JrMzdxcHFlS1JmTDBlZUVJMURpVk9wVjNkcHJ0dWRUcUNmWUxOYWM1aGxTelVhNHY4dGNId2lKMFJlTzNqMjl1U3VkdXhnQmRtUWFmdWZXN1hGNXpyYmFfbWtMLW1ucW9IT09XSzlTajF4c0lNa1dOcmdaRDhNVHlTODhWVWJUWEY5aTZkMHg3S0JqLWpXdlJNTUNveFliUndJZU1hR1JRdnQwaGpRTnhUUTNmN0Vn?oc=5",
       "outlet": "qns.com",
       "date": "2026-08-15"
+     },
+     {
+      "title": "Ridgewood, New York, NY Pollen Forecast | MSN Weather - MSN",
+      "url": "https://news.google.com/rss/articles/CBMid0FVX3lxTE9YbTA1MDJ3ajBIOUkzNXVsbUZRblVGYXJnalR2SURxWE1qYkdnOEVSSkRrSzgyYllld1FOWE9xcm50alBSQThRTVMxMEM2SDFNVXFKdzlfWjhCaG5uakJyNWY5d0JERGNEa3ItRDIzU2ZfNlp6dHo4?oc=5",
+      "outlet": "MSN",
+      "date": "2026-08-12"
      },
      {
       "title": "Gillie and Marc sculptures arrive for year at Westgate in Glendale - yourvalley.net",
@@ -65456,10 +65484,10 @@
       "date": "2026-08-18"
      },
      {
-      "title": "Anthony Trocchia Obituary | Village Chapels Inc | Middle Village, NY - Tribute Archive",
-      "url": "https://news.google.com/rss/articles/CBMidkFVX3lxTE9Ya0NQSWpMQ0tvR0IxZEljd3hiLWw0a0taTFB6V01UZVdHMlZENFhsMnQ4azFsUjhSYVhoSDg3dVk4aUEtVzlTM0l1QmVnbHVManVlNkViUE1DeFFvdmcxV3VJLTZ0ZXFBVnRUUHZvSFhNSlM4cEE?oc=5",
+      "title": "Albert K. Lang Obituary | Village Chapels Inc | Middle Village, NY - Tribute Archive",
+      "url": "https://news.google.com/rss/articles/CBMic0FVX3lxTFA4Si1Qb3Zpb2NoTGkwUDhidHJwN2ZSdnYyeXlkR0lGMHFHem1LUmoyQ0NCOEFWQkR2Q0ktTmdTai1ibXgxY0ZYRDRCbDlvVHA0SVdZQWpHTGlWX08zNkZGTjJNVkp2U01PeUxfZElhWFFtcnc?oc=5",
       "outlet": "Tribute Archive",
-      "date": "2026-08-11"
+      "date": "2026-08-13"
      }
     ],
     "query": "(\"Ridgewood\" OR \"Glendale\" OR \"Middle Village\") (NYC OR \"New York\")"
@@ -66653,7 +66681,7 @@
     }
    },
    "attention": {
-    "n7": 6,
+    "n7": 5,
     "top": [
      {
       "title": "Community Recycling Event - Forest Hills | Events | City of New York - NYC.gov",
@@ -66668,14 +66696,14 @@
       "date": "2026-08-13"
      },
      {
-      "title": "Geese at Forest Hills on October 2nd and 3rd - mxdwn Music",
-      "url": "https://news.google.com/rss/articles/CBMimgFBVV95cUxPQnF0Y3hvc1c3TTBkNS1fZGVBVmo1NGhyTUNQajRjQU56VkxKRlRCUS1yNUw1d2FwbGViWFZZbWY2TTJPOWliN1o5TzhwdjJhMEt2TDhyU2wtRGMtek1nd0V2Ujl1SUZhNllvOWRUdGVCaENUMms0U3RvODZFdi1KRDNHY1ZmT0pqYTJ6ZUlLQWdNekZ1NXhrYWdB0gGfAUFVX3lxTE5ld3BSeXc5dnUtSE1sWXpTdWxwUXRNVlZTRWVHaGJ2bm8tNnVQVmlLVkpRUkk5MXlpUDZYUGljV0lBUW0yeG54OUxSOEZVM2NsamRDZnlsUEZDaWRBRlZVM29SeS1UaGNFZVk4dzNrYnBDWHNwYTYzS0ZCTUFCQVFpTXFtenhlUkxSLUstU3BsLXFEc1l2bDJqTFFPZGRZdw?oc=5",
-      "outlet": "mxdwn Music",
-      "date": "2026-08-11"
-     },
-     {
       "title": "Richard Wojtko Obituary | Leo F Kearns Inc Funeral Homes | Rego Park, NY - Tribute Archive",
       "url": "https://news.google.com/rss/articles/CBMic0FVX3lxTE5NQlZtVlRFQ0NHemxOemw0Z0hDMjcyWEMxSUdEMEZOZkthdWVNMUNzcHd1dGpLdUszV2EwYkJ4Z3JTdHltcTRFT2pZaE9FOWZzejdiNHBrYk1nUExWVEFxRUl3OEFFc0pOT0otYTI2b3J6bXM?oc=5",
+      "outlet": "Tribute Archive",
+      "date": "2026-08-12"
+     },
+     {
+      "title": "Arthur J. \"Artie\" Guy Obituary | Hillebrand Funeral Homes Inc. | Rego Park, NY - Tribute Archive",
+      "url": "https://news.google.com/rss/articles/CBMiggFBVV95cUxQZXJ4UWRvUXlieW9zNERkX1dhUjBueG9mWFFxSVZuRDBBbGpxU3U3WTRsT1NZRXc3dlo4WFNQR2FxSUczVHlmd0t0dzB2dVFTQXVFVXdmMmtWVjBUSjd5RS0wZ2MxYVRPVnJENDRwTDZGVGI5RlpuU2hpTW1PQjB1REJR?oc=5",
       "outlet": "Tribute Archive",
       "date": "2026-08-12"
      }
@@ -67786,7 +67814,7 @@
     }
    },
    "attention": {
-    "n7": 15,
+    "n7": 13,
     "top": [
      {
       "title": "I’m a native New Yorker, and here are 22 things I do to escape the US Open crowds in Flushing - Time Out Worldwide",
@@ -67795,15 +67823,9 @@
       "date": "2026-08-18"
      },
      {
-      "title": "Joseph Acquaviva Obituary - Flushing, NY - Dignity Memorial",
-      "url": "https://news.google.com/rss/articles/CBMihwFBVV95cUxNYU5Bc092dXJUdVUtQloyX0MwZFh2NHFyanRDaHk2dW5mSmVWVVVFQ0JRU1daaUxtbzRtYjU2dUVDcW44RVVPSWZEd2tVYm9uVDNhZEJZWEFDNkJWbGxKTFR5dkpUNDBET2k1bWd2Y1YwSHlPcTlwUmw1b0ZtSXBKT3dlWm03X1E?oc=5",
-      "outlet": "Dignity Memorial",
-      "date": "2026-08-11"
-     },
-     {
-      "title": "Queens community rallies for restoration of Flushing Meadows Corona Park - cbsnews.com",
+      "title": "Queens community rallies for restoration of Flushing Meadows Corona Park - CBS News",
       "url": "https://news.google.com/rss/articles/CBMisAFBVV95cUxONVNkLVp2TmxmMS02a29qODRrVkY3Q1ZvZUZndkU4VGRhd2ZKTXRvR1hwWjJJbHl1ZldPRDBVTTl3dWwwSG1TeDk3VzBhMUEwSmJBcE9LdlhES1ZmVnhHdkMyOXpESzZYSmhtOGhIRmplVWZvUk9DcVl4QlY1ei1Mal9jNVd6MWJpZm1YYXBMUXBqdUJ6dnM1MjRTQkFBQnhqMGNnSldGbVRvRVZsTlNyRQ?oc=5",
-      "outlet": "cbsnews.com",
+      "outlet": "CBS News",
       "date": "2026-08-14"
      },
      {
@@ -67811,6 +67833,12 @@
       "url": "https://news.google.com/rss/articles/CBMiggJBVV95cUxPWFdvTzFfelVfaGtvelFpV0ZQYkh3MHhNLUlpcVI0czlQTnVYeDZiSS01VHJvS2tfNzl1Y0ZvekpMRTVOZEl4cmg2dmtmSE5GMEpMZWRRalk4V3Zzb0RRbEFqZnlhWVByZHUtV1hUQ1dPQW1sd2otWTZaYUhTdkpfSlBSbmh0WWpBWlM1bjhsT241RWxuTU5CWDJVMnI2Qk5QY3FDX2ZxTXhZb3YzSy1tV2d6N3ItUUMyMDZ4eUNwWC1iVmFDSWp1dVNLZlJkTmtMcWNEOF9TVlFjNGZVVmliNzVoaTJBcUJWTUtKVGFfbUhXcnlBdHYtTkZOOU1JbDZZdFE?oc=5",
       "outlet": "Sky Sports",
       "date": "2026-08-18"
+     },
+     {
+      "title": "Rodolfo Raffaele Acampora Obituary | Martin a Gleason Funeral Home LLC | Flushing, NY - Tribute Archive",
+      "url": "https://news.google.com/rss/articles/CBMiwgFBVV95cUxPZElVdWQyQWZCWEF6RE4ya1VOT0xCM1Zoek40a0M2d2NySVduSlAwQVVXWDRER2N1ZnpCWHZhbmFKUWhCY25YeFpKQm9hSzNWdU50SHU5aHg2ODRFLXpmQWs1ay13U2NfRUZneDNrLVJKemJQWlUxSHhoNFVZU01zWEtjaTN2YTcxd211LVV2RXBYRVdtdGI0TzlkbDJUdGVzb2M2UGVEVFJyRU82RXRNbzFIUTNTRkxnN2MyN2VXQXJNZw?oc=5",
+      "outlet": "Tribute Archive",
+      "date": "2026-08-16"
      }
     ],
     "query": "(\"Flushing\" OR \"Murray Hill Queens\") (NYC OR \"New York\")"
@@ -69274,7 +69302,7 @@
     },
     {
      "key": "4067920030",
-     "address": "67-06 Parsons Boulevard",
+     "address": "65-16 Parsons Boulevard",
      "score": 9.6,
      "n_sources": 2,
      "why": [
@@ -70345,19 +70373,13 @@
     }
    },
    "attention": {
-    "n7": 2,
+    "n7": 1,
     "top": [
      {
       "title": "Milagros T Sierra Obituary | Leo F Kearns Inc Funeral Homes | South Richmond Hill, NY - Tribute Archive",
       "url": "https://news.google.com/rss/articles/CBMiwgFBVV95cUxNSHZuNzRDTnZSbzNZNlVqdzlKZGFEQTkzd1NVWDhTdG1HUFF4SS1vWTZndGpXb1RDbUJsN3VpQ3dZc1l6T05KdWFodGp1Z0hrb3pzVDFRamdaeDR0ZGhqaXFleGItOXNRSDRHSmdkM0c0OHFSSnRyd1lfTGYxamE3eUVJUFVIY1MyTnJQVzUwUGZHZ194MUc2dXI1YkJ0QU54dUhVckEydXdvRDNfVGp5ZkZ1cnY2UXg0NG90M0xtVnRiUQ?oc=5",
       "outlet": "Tribute Archive",
       "date": "2026-08-15"
-     },
-     {
-      "title": "Budram Persaud Obituary (2026) - South Richmond Hill, NY - Leo F. Kearns, Inc. Funeral Homes - South Richmond Hill - Legacy obituary",
-      "url": "https://news.google.com/rss/articles/CBMigwFBVV95cUxNeWZpY3FkeXhNeU9aTFBjcVl0eVVDQlJBMTdySTA5U0Y4THk3Qko1T2g1cXZsZWNYSzRWZjdJYkhoMTdJbDNSaFFIQmpfTHZGZk9CZ3ZIMDVEaG96TWJpTzdldWJsTkRWQTJSeFNRRGZQS3BkbnB2b3BiTHpBd011U2VlSQ?oc=5",
-      "outlet": "Legacy obituary",
-      "date": "2026-08-11"
      }
     ],
     "query": "(\"Woodhaven\" OR \"Richmond Hill\") (NYC OR \"New York\")"
@@ -73894,14 +73916,8 @@
     }
    },
    "attention": {
-    "n7": 8,
+    "n7": 6,
     "top": [
-     {
-      "title": "Daniella Levi & Associates Highlights Construction Worker Protections as Jamaica, Queens Redevelopment Boom Continues Near Queens County Civil Court - USA Today",
-      "url": "https://news.google.com/rss/articles/CBMiowJBVV95cUxQZkdvTTdXbFlGdF85VnZtUWVFSnp6VHcyLWlRLU11UnlpckFDQjZUV3RiZWM3Y2c2VTNyOU0zb0NnUG9KMWg5UWFpZWNkOHpJeGhUaElsZlpUWTNqM3NlNERxdmhrdlFFRUs0akRmdUtqNjFSX0ctVDZIaml4cUg3bXE0cTZocC02WDRrVEtjS1NFdUl2dG83UlRGdHRWSHJ6YmFQWkFrMkI3eVk4bWNFN3dDbm9FaVVUSGFaRk14c2VXSXVYS1hMNktSbDN6YmZ1WXZmdWNYNi05dDdCbExPM2tzelR0X0JvaXVKNmRuV3ZrQXVPWG0xd3BSQ0lueTlFSUhMVXBVVTBPaGNvSmxDSGo0cmpwUkphNF8yZ3JJRnJCTEk?oc=5",
-      "outlet": "USA Today",
-      "date": "2026-08-11"
-     },
      {
       "title": "Jalen Brunson could play for Jamaica, Josh Hart hints at Germany in FIBA talk - BasketNews.com",
       "url": "https://news.google.com/rss/articles/CBMikAFBVV95cUxNTEtXa3VTeUpJT1AwQld2LXgyNHFXay0yNklpamROLUROLUNTNHkyOWhSU0tmMFJDSmc3Nm5KeUhWU3B3N0tDZC1wQjRmd2RKTVBYS2toWnl1d0s5SFJxeVlvOWlCOVRCNHhpTHZWdkM1amlEV3BfeGw0TzdrSU9nQ1M0Ty1wbERxLTVwcE5GMnE?oc=5",
@@ -73919,6 +73935,12 @@
       "url": "https://news.google.com/rss/articles/CBMinwFBVV95cUxNd00wQ0lWdlZlcHZyOEpEUXgyNW5QVkQ4RHRIVFNTOF9UMzljWmxYZGY0MDZrX093YkpuTDJ5WVpDZ0FfT2tsdjcyRUFNNzdjaDlkMkpuQVRLdjFPaW1xNktxYm1ucWFvSWI3YmZJcGRUQTI4T1I5TnllS01taDNVNEpPOHVuWkZPR0JrS1lodWJOVC0tTnc2NXlhaEsxSm8?oc=5",
       "outlet": "Jamaica Gleaner",
       "date": "2026-08-17"
+     },
+     {
+      "title": "Thousands Turn Out for Inaugural Jamaican Rising Day Parade in New York - jis.gov.jm",
+      "url": "https://news.google.com/rss/articles/CBMilgFBVV95cUxPNmM4Z3RmUGlxYVNJQW5mbm84bWtna3pfejN5d3ZHZXFwWlp3ZFo4VnZycy0wMml5T3ZHNEE1NGwwcUExYTZGcUtQSFFwNkRramxLZ2JmSFJFcURyaTBLdkJWTHZLdm9IQUMzVE54R20zaHZoUXhiTVMtR0JhNjFkOGR1azBYY1BScm5pQkVhSGtpNDhJbnc?oc=5",
+      "outlet": "jis.gov.jm",
+      "date": "2026-08-12"
      }
     ],
     "query": "(\"Jamaica\" OR \"Hollis\" OR \"St. Albans\") (NYC OR \"New York\")"
@@ -75147,14 +75169,8 @@
     }
    },
    "attention": {
-    "n7": 3,
+    "n7": 2,
     "top": [
-     {
-      "title": "BlaQue Resource Network celebrates long-standing, black-owned Queens Village bicycle repair shop - qns.com",
-      "url": "https://news.google.com/rss/articles/CBMid0FVX3lxTE5ncnlIWDJjekVHdFA1ZlZhZ2NFckpfUlZ1ZjRTbVRNcTBzUE5HLXB4bUh1QTlkNGtQaEVzczZoSXJMQU5ZaUdjY2E3RF90ZVU0Rl9qTml0ZEFJZlQ5ODFXd3B0WDgwWWxJdUlveGlWcnA3LUxyRkhN?oc=5",
-      "outlet": "qns.com",
-      "date": "2026-08-11"
-     },
      {
       "title": "PHOTO GALLERY | Cambria Heights football camp - The Tribune-Democrat",
       "url": "https://news.google.com/rss/articles/CBMixwFBVV95cUxPY3M4TmNTaHBkOGpYSWRpWTBKcklqa2ZnOUc4VDBRTE1EMlI0T0NZVkZXdzBkZlFvTS01ekw2NFpUQnZEVGVVdGtCMjBZVEt0OEt2bXVqZUdqa3RSQ01lYVFSRFZpeG00OFNneWZsTHFKNS15VkRxTmFIZkJqUnByX0FMeWNRNjM3ZHdqSnZTZGp0T3l5YXcyT3VBT01FOTB2TmFGbmlzZFFJTUdHYWg3YWtkWU95UnZDZGh4RzRjeWJoaFBhNWRV?oc=5",
@@ -76381,7 +76397,7 @@
     }
    },
    "attention": {
-    "n7": 18,
+    "n7": 13,
     "top": [
      {
       "title": "Rockaway Beach drowning: 17-year-old boy drowns after mom says he urged lifeguards to save friend - ABC7 New York",
@@ -76390,22 +76406,22 @@
       "date": "2026-08-12"
      },
      {
-      "title": "Drowning teen dies after he’s pulled from water by rescuers at NYC Rockaway Beach - New York Daily News",
-      "url": "https://news.google.com/rss/articles/CBMivAFBVV95cUxPUnBfU3NWaFRYMDB0WGhIeEVxR0tGSEtlVmN6OHBTdW1lR1lxbFhfVlJSUDVEWWdQaVQ4TW9kUlQ2Z1BtQ1d0ZS1wT3pxUllSYzZHeGFQQ3RnYzNhS09nN3B0NXo5TERaTjZSdEtaUW55NEx6YkdMdldFTFlVcU1fVkFFNXVwbDNXNUVsaHJyZGYyb2VOTFAtTEh0LUs0TmVsZFJzQVRwTEFUTnZZS1VVd3pfeTZ5UHNzdGgzZA?oc=5",
-      "outlet": "New York Daily News",
-      "date": "2026-08-11"
-     },
-     {
       "title": "Here’s a preview of the Rockaway Ocean Club after $88M revival of historic bathhouse that sat empty for 54 years - New York Post",
       "url": "https://news.google.com/rss/articles/CBMiqAFBVV95cUxQMmJYQnYzcHBmQmVUSVk5UTVRUzBadUJIQVRWYWU2OElQTFBsT01SWnJFTlpEbFotcURhcEcwMmc1enR2UTNVc0VKR0ZkdWRxU1hWVk50Z0xEbkF0U3NtV2h0SmFhbzA5MjNOU0wyWkp3NXA0N2dpYlJQZXFvbWloX3VXckNLYWVsZWdpbThTaEVDWjE5QmlBeVUxUmdtZ2Y4Z0o3VnRPU24?oc=5",
       "outlet": "New York Post",
       "date": "2026-08-14"
      },
      {
-      "title": "Teen drowns at Rockaway Beach after lifeguards clear their shifts for the day - Gothamist",
-      "url": "https://news.google.com/rss/articles/CBMipwFBVV95cUxQSnc5REZpTUZaM0pVU2dqODVhR2EydTQxc204aHJaNUxQV3ExX1c2WG5mUFVCMWMyWmVJWHVPSnpqNXFKaGJPVlJmN3E2OXBJWnh0b0M2Yi0zQW5pY1g2X2pDMUpNNWNtYjJraGpQM1htQ1pfMUpYRmMxOXZSRnNCcHllWHJ5bjNSYkdVR1BoUHprWTVSZlF6dDFKVEhEbjlDZWg2VWs2Zw?oc=5",
-      "outlet": "Gothamist",
-      "date": "2026-08-11"
+      "title": "New York City Fire Department Uses Drones For Rockaway Rescue (Video) - SURFER Magazine",
+      "url": "https://news.google.com/rss/articles/CBMihgFBVV95cUxNZk1sZGh1eUxDejZ6bERPMDRtSUFCc2FJNUhfaVlVc0lsWVVnZkxPU01ySzBpSmRBdjhVS2F5enFBSldyVGF4OV9YTUQ5eDdEYVBIT2k3MDU1YVRjRFlSQWFkaTdzNkp0bTB5ZUNRZV9PZmJ0NzBzRUFlUkFYVEVITy1fVVRMUQ?oc=5",
+      "outlet": "SURFER Magazine",
+      "date": "2026-08-17"
+     },
+     {
+      "title": "Woman slashes open man's neck in Far Rockaway: police - Audacy",
+      "url": "https://news.google.com/rss/articles/CBMimwFBVV95cUxOYmZIUi1oNHdLZjlCSEk1eXViOTE4S3AzZFdrZm1pN3NuZEtlQWZaN1hmcnBsZjdscVlkMkxNRWNMV290Nk0tYVBIR2NMSjJuMGlsY0RSajNpX2tqVkx2N0p4RWFRUUd3WjMyLThmTjBLbjlsazIwVjEyTmpOMTh5ZFd5TnZWNjJWT3RVLUFwbEJXVXZpYlhSTE5NOA?oc=5",
+      "outlet": "Audacy",
+      "date": "2026-08-14"
      }
     ],
     "query": "(\"Far Rockaway\" OR \"Rockaways\" OR \"Rockaway\") (NYC OR \"New York\")"

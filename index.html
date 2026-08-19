@@ -217,7 +217,7 @@ const LENSES = [
   { id: 'evic',  label: 'Evictions', kind: 'div', value: trendRatio('evictions'), fmt: pct, note: 'residential marshal evictions, 60 days vs prior 60' },
   { id: 'lit',   label: 'HPD litigation', kind: 'div', value: trendRatio('hpd_litigation'), fmt: pct, note: 'cases opened, 30 days vs prior 30' },
   { id: 'dobf',  label: 'New buildings + demolitions', kind: 'div', value: trendRatio('dob_filings'), fmt: pct, note: 'DOB filings, 30 days vs prior 30' },
-  { id: 'deeds', label: 'Deeds recorded', kind: 'div', value: trendRatio('deeds'), fmt: pct, note: 'ACRIS, latest 30 recorded days vs prior 30 (runs 2-3 weeks behind)' },
+  { id: 'deeds', label: 'Deeds recorded', kind: 'div', value: trendRatio('deeds'), fmt: pct, note: 'ACRIS, latest 30 recorded days vs the 30 before — note ACRIS publishes 2–3 weeks behind, so this window ends earlier than the others (dates on the tile)' },
   { id: 'rest',  label: 'Restaurant closures', kind: 'seq', value: trendCur('restaurant_closures'), fmt: v => v == null ? '—' : fmt(v), note: 'closed by DOHMH, last 30 days' },
   { id: 'news',  label: 'In the news', kind: 'seq', value: d => d.attention ? d.attention.n7 : null, fmt: v => v == null ? '—' : fmt(v), note: 'Google News headlines naming the district, 7 days' },
   { id: 'bldg',  label: 'Converging buildings', kind: 'seq', value: d => d.n_places, fmt: v => fmt(v), note: 'tax lots where record families agree' },
@@ -428,7 +428,7 @@ function renderMain() {
       const v = tr[k]; if (!v) return '';
       return tile(k, `${meta[k]?.label || k} · ${dayLabel(k)}`, v.cur, `vs ${fmt(v.prior)} ${priorLabel(k)}`, v.ratio);
     }),
-    dd ? tile('deeds', `Deeds recorded · ${meta.deeds && meta.deeds.window ? meta.deeds.window.start + ' → ' + meta.deeds.window.end : '30 days'}`, dd.cur, `vs ${fmt(dd.prior)} prior 30 recorded days · $${fmt(Math.round((dd.dollar_volume || 0) / 1e6))}M`, dd.ratio) : '',
+    dd ? tile('deeds', `Deeds recorded · ${meta.deeds && meta.deeds.window ? meta.deeds.window.start + ' → ' + meta.deeds.window.end : '30 days'} · ACRIS runs 2–3 weeks behind`, dd.cur, `vs ${fmt(dd.prior)} prior 30 recorded days · $${fmt(Math.round((dd.dollar_volume || 0) / 1e6))}M`, dd.ratio) : '',
     d.attention ? tile('attention', `In the news · ${DT.d7 || '7 days'}`, d.attention.n7, 'headlines naming the district', null) : '',
   ].join('');
 

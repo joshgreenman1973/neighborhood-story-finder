@@ -1,11 +1,11 @@
 {
  "as_of": "2026-08-16",
- "generated": "2026-08-19T01:36:33Z",
+ "generated": "2026-08-19T02:28:16Z",
  "leads": [
   {
    "id": "place:1020350001",
    "kind": "place",
-   "headline": "2588 7 Avenue: 27 311 calls in two weeks; 9 class C violations; 4 evictions",
+   "headline": "2588 7 Avenue in Central Harlem drew 27 311 calls between Aug 3 and Aug 16, 2026, alongside nine class C violations",
    "cd": "110",
    "district": "Central Harlem",
    "borough": "Manhattan",
@@ -131,12 +131,15 @@
      ],
      "query": "https://data.cityofnewyork.us/resource/6z8x-wfk4.json?bbl=1020350001&$order=executed_date DESC"
     }
-   }
+   },
+   "headline_auto": "2588 7 Avenue: 27 311 calls in two weeks; 9 class C violations; 4 evictions",
+   "why_now": "Nine immediately hazardous class C violations among 18 issued between Jul 18 and Aug 16, 2026, plus four residential marshal evictions between Jun 18 and Aug 16, put displacement and habitability in the same building at the same time; three DOB complaints cite plumbing work without a permit. Start with the owner listed in the HPD registration and the Manhattan Community Board 10 district manager, and pull the DOB inspection records on the plumbing complaints.",
+   "confidence": "high"
   },
   {
    "id": "place:3051900075",
    "kind": "place",
-   "headline": "2505 Bedford Avenue: 53 311 calls in two weeks; 19 class C violations; 6 DOB complaints",
+   "headline": "2505 Bedford Avenue in East Flatbush logged 53 311 calls and 46 HPD complaints between Aug 3 and Aug 16, 2026",
    "cd": "317",
    "district": "East Flatbush",
    "borough": "Brooklyn",
@@ -262,12 +265,15 @@
      ],
      "query": "https://data.cityofnewyork.us/resource/6z8x-wfk4.json?bbl=3051900075&$order=executed_date DESC"
     }
-   }
+   },
+   "headline_auto": "2505 Bedford Avenue: 53 311 calls in two weeks; 19 class C violations; 6 DOB complaints",
+   "why_now": "Nineteen of the 34 HPD violations issued between Jul 18 and Aug 16, 2026 were class C, which is a large concentration of immediately hazardous conditions for one address, and six DOB complaints landed in the same window. Call the HPD-registered owner and managing agent, then Brooklyn Community Board 17; the volume of calls could reflect a small number of persistent tenants, so ask HPD which conditions were verified on inspection.",
+   "confidence": "high"
   },
   {
    "id": "district:410:Building/Use",
    "kind": "district",
-   "headline": "Howard Beach / Ozone Park: Building/Use complaints 4.34x normal (1563 in the four weeks to Aug 16)",
+   "headline": "Howard Beach and Ozone Park recorded 1,563 building and use complaints between Jul 20 and Aug 16, 2026, more than four times the recent pace",
    "cd": "410",
    "district": "Howard Beach / Ozone Park",
    "borough": "Queens",
@@ -325,12 +331,15 @@
     "top_descriptor_share": 0.97,
     "concentrated": false
    },
-   "query": "https://data.cityofnewyork.us/resource/erm2-nwe9.json?$where=complaint_type='Building/Use' AND community_board='10 QUEENS' AND created_date >= '2026-07-20'&$order=created_date DESC"
+   "query": "https://data.cityofnewyork.us/resource/erm2-nwe9.json?$where=complaint_type='Building/Use' AND community_board='10 QUEENS' AND created_date >= '2026-07-20'&$order=created_date DESC",
+   "headline_auto": "Howard Beach / Ozone Park: Building/Use complaints 4.34x normal (1563 in the four weeks to Aug 16)",
+   "why_now": "The complaints are spread across 1,538 separate addresses with no concentration at any single one, and 97 percent carry the descriptor for illegal conversion of residential space, a pattern that can indicate a coordinated reporting campaign, a policy change or a data-loading artifact as easily as a real shift in conditions. Before writing anything, ask the Department of Buildings whether the intake or descriptor coding changed, then call the Queens Community Board 10 district manager and the council office about whether they are hearing from residents.",
+   "confidence": "low"
   },
   {
    "id": "place:2028820229",
    "kind": "place",
-   "headline": "20 Richman Plaza: 89 311 calls in two weeks; 19 class C violations; 8 evictions",
+   "headline": "20 Richman Plaza in Fordham drew 89 311 calls and eight residential evictions in the windows ending Aug 16, 2026",
    "cd": "205",
    "district": "Fordham / University Heights",
    "borough": "Bronx",
@@ -376,13 +385,13 @@
        "n": 9
       },
       {
-       "type": "Noise - Street/Sidewalk",
-       "descriptor": "Loud Music/Party",
+       "type": "UNSANITARY CONDITION",
+       "descriptor": "MOLD",
        "n": 6
       },
       {
-       "type": "UNSANITARY CONDITION",
-       "descriptor": "MOLD",
+       "type": "Noise - Street/Sidewalk",
+       "descriptor": "Loud Music/Party",
        "n": 6
       },
       {
@@ -433,12 +442,15 @@
      ],
      "query": "https://data.cityofnewyork.us/resource/6z8x-wfk4.json?bbl=2028820229&$order=executed_date DESC"
     }
-   }
+   },
+   "headline_auto": "20 Richman Plaza: 89 311 calls in two weeks; 19 class C violations; 8 evictions",
+   "why_now": "Eighty-six HPD violations were issued between Jul 18 and Aug 16, 2026, 19 of them class C, while eight marshal evictions were carried out between Jun 18 and Aug 16 at a single address. That combination of conditions and turnover is worth a visit this week; start with the HPD-registered owner and the Bronx Community Board 5 district manager.",
+   "confidence": "high"
   },
   {
    "id": "place:2043420010",
    "kind": "place",
-   "headline": "2300 Olinville Avenue: 25 311 calls in two weeks; 9 class C violations",
+   "headline": "2300 Olinville Avenue in Morris Park logged 311 calls at nearly six times its own prior pace between Aug 3 and Aug 16, 2026",
    "cd": "211",
    "district": "Morris Park / Pelham Parkway",
    "borough": "Bronx",
@@ -550,12 +562,15 @@
      ],
      "query": "https://data.cityofnewyork.us/resource/6z8x-wfk4.json?bbl=2043420010&$order=executed_date DESC"
     }
-   }
+   },
+   "headline_auto": "2300 Olinville Avenue: 25 311 calls in two weeks; 9 class C violations",
+   "why_now": "Twenty-five calls arrived on just six days, at 5.8 times the building's pace over the prior 12 weeks, while 36 violations including nine class C were issued between Jul 18 and Aug 16, 2026. The tight clustering could be one outage or one organized complaint push, so ask HPD what inspectors verified before calling the registered owner and Bronx Community Board 11.",
+   "confidence": "medium"
   },
   {
    "id": "place:2022957501",
    "kind": "place",
-   "headline": "105 Willis Avenue: 43 311 calls in two weeks; 10 class C violations",
+   "headline": "105 Willis Avenue in Mott Haven drew 43 311 calls across 18 complaint types between Aug 3 and Aug 16, 2026",
    "cd": "201",
    "district": "Mott Haven / Melrose",
    "borough": "Bronx",
@@ -674,12 +689,15 @@
      ],
      "query": "https://data.cityofnewyork.us/resource/6z8x-wfk4.json?bbl=2022957501&$order=executed_date DESC"
     }
-   }
+   },
+   "headline_auto": "105 Willis Avenue: 43 311 calls in two weeks; 10 class C violations",
+   "why_now": "The calls span 18 types over 12 days and sit alongside 31 violations, 10 of them class C, issued between Jul 18 and Aug 16, 2026, plus five OATH or ECB violations. That breadth argues against a single persistent complainant. Start with the HPD registration for ownership and Bronx Community Board 1.",
+   "confidence": "high"
   },
   {
    "id": "place:4014300029",
    "kind": "place",
-   "headline": "33-54 83 Street: 30 311 calls in two weeks; 13 class C violations; 5 DOB complaints",
+   "headline": "33-54 83 Street in Jackson Heights logged 311 calls at five times its own prior pace between Aug 3 and Aug 16, 2026",
    "cd": "403",
    "district": "Jackson Heights / Elmhurst / Corona",
    "borough": "Queens",
@@ -791,12 +809,15 @@
      ],
      "query": "https://data.cityofnewyork.us/resource/6bgk-3dad.json?$where=boro='4' AND block='01430' AND lot='0029' AND issue_date >= '20260718'"
     }
-   }
+   },
+   "headline_auto": "33-54 83 Street: 30 311 calls in two weeks; 13 class C violations; 5 DOB complaints",
+   "why_now": "Thirty calls over seven days, 36 violations including 13 class C between Jul 18 and Aug 16, 2026, and five DOB complaints and five OATH or ECB violations in the same period point to an owner under pressure from several agencies at once. Pull the DOB inspection records, then call the HPD-registered owner and Queens Community Board 3.",
+   "confidence": "high"
   },
   {
    "id": "place:2033550090",
    "kind": "place",
-   "headline": "3322 Decatur Avenue: 31 311 calls in two weeks; 5 class C violations; 3 DOB complaints",
+   "headline": "3322 Decatur Avenue in Bedford Park drew 31 311 calls and DOB complaints about a defective sidewalk shed between Aug 3 and Aug 16, 2026",
    "cd": "207",
    "district": "Kingsbridge / Bedford Park",
    "borough": "Bronx",
@@ -917,12 +938,15 @@
      ],
      "query": "https://data.cityofnewyork.us/resource/6z8x-wfk4.json?bbl=2033550090&$order=executed_date DESC"
     }
-   }
+   },
+   "headline_auto": "3322 Decatur Avenue: 31 311 calls in two weeks; 5 class C violations; 3 DOB complaints",
+   "why_now": "Twenty-eight violations, five of them class C, were issued between Jul 18 and Aug 16, 2026, and three DOB complaints in that window concern an inadequate, defective or missing sidewalk shed or scaffold, which is a street-level hazard a reporter can see. Check the DOB permit and inspection history, then call the registered owner and Bronx Community Board 7.",
+   "confidence": "medium"
   },
   {
    "id": "place:3045950215",
    "kind": "place",
-   "headline": "5 East 93 Street: 45 311 calls in two weeks; 17 class C violations; 2 evictions",
+   "headline": "5 East 93 Street in East Flatbush produced 103 HPD complaints between Aug 3 and Aug 16, 2026, with 17 class C violations",
    "cd": "317",
    "district": "East Flatbush",
    "borough": "Brooklyn",
@@ -1033,12 +1057,15 @@
      ],
      "query": "https://data.cityofnewyork.us/resource/6z8x-wfk4.json?bbl=3045950215&$order=executed_date DESC"
     }
-   }
+   },
+   "headline_auto": "5 East 93 Street: 45 311 calls in two weeks; 17 class C violations; 2 evictions",
+   "why_now": "The complaint count is unusually high relative to the 45 311 calls in the same Aug 3 to Aug 16, 2026 window, and 65 violations were issued between Jul 18 and Aug 16 with 17 in the immediately hazardous class C category. First calls: the HPD registration for ownership, then Brooklyn Community Board 17 and the local council office; a building-wide outage such as heat, hot water or elevator can generate many complaints from one incident, so establish what broke and when.",
+   "confidence": "high"
   },
   {
    "id": "place:2039447501",
    "kind": "place",
-   "headline": "1515 Metropolitan Avenue: 75 311 calls in two weeks; 26 class C violations; 4 evictions",
+   "headline": "1515 Metropolitan Avenue in Soundview drew 75 311 calls and 26 class C violations in the windows ending Aug 16, 2026",
    "cd": "209",
    "district": "Parkchester / Soundview",
    "borough": "Bronx",
@@ -1128,12 +1155,15 @@
      ],
      "query": "https://data.cityofnewyork.us/resource/6z8x-wfk4.json?bbl=2039447501&$order=executed_date DESC"
     }
-   }
+   },
+   "headline_auto": "1515 Metropolitan Avenue: 75 311 calls in two weeks; 26 class C violations; 4 evictions",
+   "why_now": "Twenty-six of the 41 violations issued between Jul 18 and Aug 16, 2026 were class C, a high share of immediately hazardous findings, and five evictions including four residential were carried out between Jun 18 and Aug 16. Call the HPD-registered owner and Bronx Community Board 9, and ask HPD whether any of the class C items remain uncorrected.",
+   "confidence": "high"
   },
   {
    "id": "place:4159260001",
    "kind": "place",
-   "headline": "57-07 Shore Front Parkway: 34 311 calls in two weeks; 23 class C violations; 5 evictions",
+   "headline": "57-07 Shore Front Parkway in Far Rockaway received 67 HPD violations, 23 of them class C, between Jul 18 and Aug 16, 2026",
    "cd": "414",
    "district": "Far Rockaway / Rockaways",
    "borough": "Queens",
@@ -1183,6 +1213,11 @@
        "n": 3
       },
       {
+       "type": "UNSANITARY CONDITION",
+       "descriptor": "MOLD",
+       "n": 2
+      },
+      {
        "type": "FLOORING/STAIRS",
        "descriptor": "FLOOR",
        "n": 2
@@ -1190,11 +1225,6 @@
       {
        "type": "ELECTRIC",
        "descriptor": "OUTLET/SWITCH",
-       "n": 2
-      },
-      {
-       "type": "DOOR/WINDOW",
-       "descriptor": "DOOR",
        "n": 2
       }
      ],
@@ -1224,12 +1254,15 @@
      ],
      "query": "https://data.cityofnewyork.us/resource/6z8x-wfk4.json?bbl=4159260001&$order=executed_date DESC"
     }
-   }
+   },
+   "headline_auto": "57-07 Shore Front Parkway: 34 311 calls in two weeks; 23 class C violations; 5 evictions",
+   "why_now": "The violation count is far larger than the 14 HPD complaints logged between Aug 3 and Aug 16, 2026, which usually means an HPD sweep of the building rather than tenant-by-tenant reporting; five residential evictions also occurred between Jun 18 and Aug 16. Ask HPD when it inspected and what it found, then call the registered owner and Queens Community Board 14.",
+   "confidence": "high"
   },
   {
    "id": "place:4156100001",
    "kind": "place",
-   "headline": "711 Seagirt Avenue: 35 311 calls in two weeks; 6 class C violations; 17 evictions",
+   "headline": "711 Seagirt Avenue in Far Rockaway saw 17 residential marshal evictions between Jun 18 and Aug 16, 2026",
    "cd": "414",
    "district": "Far Rockaway / Rockaways",
    "borough": "Queens",
@@ -1280,13 +1313,13 @@
        "n": 3
       },
       {
-       "type": "HEAT/HOT WATER",
-       "descriptor": "APARTMENT ONLY",
+       "type": "Noise - Street/Sidewalk",
+       "descriptor": "Loud Talking",
        "n": 2
       },
       {
-       "type": "Noise - Street/Sidewalk",
-       "descriptor": "Loud Talking",
+       "type": "HEAT/HOT WATER",
+       "descriptor": "APARTMENT ONLY",
        "n": 2
       },
       {
@@ -1331,12 +1364,15 @@
      ],
      "query": "https://data.cityofnewyork.us/resource/6z8x-wfk4.json?bbl=4156100001&$order=executed_date DESC"
     }
-   }
+   },
+   "headline_auto": "711 Seagirt Avenue: 35 311 calls in two weeks; 6 class C violations; 17 evictions",
+   "why_now": "Seventeen evictions at one address in two months is the standout number here, and it sits alongside 35 311 calls and 17 HPD complaints between Aug 3 and Aug 16, 2026. Check the housing court docket for a coordinated round of nonpayment cases, then call the owner via the HPD registration and Queens Community Board 14; large complexes can also show clustered evictions after a management change.",
+   "confidence": "high"
   },
   {
    "id": "place:4097930033",
    "kind": "place",
-   "headline": "89-29 163 Street: 110 311 calls in two weeks; 25 class C violations",
+   "headline": "89-29 163 Street in Jamaica logged 110 311 calls over five days between Aug 3 and Aug 16, 2026",
    "cd": "412",
    "district": "Jamaica / Hollis / St. Albans",
    "borough": "Queens",
@@ -1387,13 +1423,13 @@
        "n": 10
       },
       {
-       "type": "UNSANITARY CONDITION",
-       "descriptor": "MOLD",
+       "type": "WATER LEAK",
+       "descriptor": "HEAVY FLOW",
        "n": 8
       },
       {
-       "type": "WATER LEAK",
-       "descriptor": "HEAVY FLOW",
+       "type": "UNSANITARY CONDITION",
+       "descriptor": "MOLD",
        "n": 8
       },
       {
@@ -1424,12 +1460,15 @@
      ],
      "query": "https://data.cityofnewyork.us/resource/6z8x-wfk4.json?bbl=4097930033&$order=executed_date DESC"
     }
-   }
+   },
+   "headline_auto": "89-29 163 Street: 110 311 calls in two weeks; 25 class C violations",
+   "why_now": "The calls came at three times the building's own pace over the prior 12 weeks and clustered on only five days, which points to one or two building-wide failures rather than a slow decline; 77 violations were issued between Jul 18 and Aug 16, 2026, 25 of them class C. Ask HPD what it found on inspection, then call the registered owner and Queens Community Board 12. A single organizing tenant group or one repeated condition could account for much of the volume.",
+   "confidence": "high"
   },
   {
    "id": "place:2036810001",
    "kind": "place",
-   "headline": "2045 Story Avenue: 25 311 calls in two weeks; 34 class C violations",
+   "headline": "2045 Story Avenue in Soundview received 34 class C violations among 77 issued between Jul 18 and Aug 16, 2026",
    "cd": "209",
    "district": "Parkchester / Soundview",
    "borough": "Bronx",
@@ -1528,12 +1567,15 @@
      ],
      "query": "https://data.cityofnewyork.us/resource/6z8x-wfk4.json?bbl=2036810001&$order=executed_date DESC"
     }
-   }
+   },
+   "headline_auto": "2045 Story Avenue: 25 311 calls in two weeks; 34 class C violations",
+   "why_now": "A DOB complaint in the same window cites blocked or improper egress, which alongside 34 immediately hazardous violations makes this a life-safety question worth checking now. First calls are the HPD-registered owner, DOB for the inspection record on the egress complaint, and Bronx Community Board 9; the violation total may stem from one comprehensive inspection.",
+   "confidence": "high"
   },
   {
    "id": "place:3058720071",
    "kind": "place",
-   "headline": "321 Ovington Avenue: 17 311 calls in two weeks; 17 class C violations; 3 evictions",
+   "headline": "321 Ovington Avenue in Bay Ridge received 75 HPD violations, 17 of them class C, between Jul 18 and Aug 16, 2026",
    "cd": "310",
    "district": "Bay Ridge / Dyker Heights",
    "borough": "Brooklyn",
@@ -1621,12 +1663,15 @@
      ],
      "query": "https://data.cityofnewyork.us/resource/6z8x-wfk4.json?bbl=3058720071&$order=executed_date DESC"
     }
-   }
+   },
+   "headline_auto": "321 Ovington Avenue: 17 311 calls in two weeks; 17 class C violations; 3 evictions",
+   "why_now": "Only 12 HPD complaints and 17 311 calls came in between Aug 3 and Aug 16, 2026, so the 75 violations most likely reflect an inspection sweep rather than rising tenant reports; three residential evictions occurred between Jun 18 and Aug 16. Ask HPD for the inspection date and scope, then call the registered owner and Brooklyn Community Board 10.",
+   "confidence": "medium"
   },
   {
    "id": "place:2051410120",
    "kind": "place",
-   "headline": "140 Benchley Place: 68 311 calls in two weeks; 6 class C violations; 12 evictions",
+   "headline": "140 Benchley Place in Co-op City had 12 residential evictions and 68 311 calls in the windows ending Aug 16, 2026",
    "cd": "210",
    "district": "Throgs Neck / Co-op City",
    "borough": "Bronx",
@@ -1717,12 +1762,15 @@
      ],
      "query": "https://data.cityofnewyork.us/resource/6z8x-wfk4.json?bbl=2051410120&$order=executed_date DESC"
     }
-   }
+   },
+   "headline_auto": "140 Benchley Place: 68 311 calls in two weeks; 6 class C violations; 12 evictions",
+   "why_now": "The 68 calls between Aug 3 and Aug 16, 2026 spanned 24 different complaint types across all 14 days, which suggests broad rather than single-issue problems, and 12 marshal evictions occurred between Jun 18 and Aug 16. Start with the managing entity on the HPD registration and Bronx Community Board 10, and ask whether arrears cases moved as a batch.",
+   "confidence": "high"
   },
   {
    "id": "place:2039377501",
    "kind": "place",
-   "headline": "1919 Mcgraw Avenue: 31 311 calls in two weeks; 6 class C violations; 2 evictions",
+   "headline": "1919 Mcgraw Avenue in Soundview drew 31 311 calls across 14 complaint types between Aug 3 and Aug 16, 2026",
    "cd": "209",
    "district": "Parkchester / Soundview",
    "borough": "Bronx",
@@ -1822,12 +1870,15 @@
      ],
      "query": "https://data.cityofnewyork.us/resource/6z8x-wfk4.json?bbl=2039377501&$order=executed_date DESC"
     }
-   }
+   },
+   "headline_auto": "1919 Mcgraw Avenue: 31 311 calls in two weeks; 6 class C violations; 2 evictions",
+   "why_now": "Only five HPD complaints were logged in the same window and 14 violations, six of them class C, were issued between Jul 18 and Aug 16, 2026, so the 311 volume may be driven by a handful of repeat callers or by non-housing complaint types. Confirm the call breakdown with 311 data, then call the HPD-registered owner and Bronx Community Board 9.",
+   "confidence": "low"
   },
   {
    "id": "place:1016170007",
    "kind": "place",
-   "headline": "15 East 111 Street: 18 311 calls in two weeks; 5 class C violations",
+   "headline": "15 East 111 Street in East Harlem logged 18 311 calls over five days between Aug 3 and Aug 16, 2026, well above its recent pace",
    "cd": "111",
    "district": "East Harlem",
    "borough": "Manhattan",
@@ -1931,12 +1982,15 @@
      ],
      "query": "https://data.cityofnewyork.us/resource/6z8x-wfk4.json?bbl=1016170007&$order=executed_date DESC"
     }
-   }
+   },
+   "headline_auto": "15 East 111 Street: 18 311 calls in two weeks; 5 class C violations",
+   "why_now": "The calls ran at 18 times the building's pace over the prior 12 weeks but covered only six types across five days, which is consistent with one incident or one determined complainant; five of the six violations issued between Jul 18 and Aug 16, 2026 were class C, and four OATH or ECB violations landed in the same period. Ask HPD which conditions were verified, then call the registered owner and Manhattan Community Board 11.",
+   "confidence": "medium"
   },
   {
    "id": "place:3043710001",
    "kind": "place",
-   "headline": "245 Wortman Avenue: 15 311 calls in two weeks; 8 class C violations; 5 evictions",
+   "headline": "245 Wortman Avenue in East New York saw five residential evictions between Jun 18 and Aug 16, 2026, with eight of nine violations class C",
    "cd": "305",
    "district": "East New York / Cypress Hills",
    "borough": "Brooklyn",
@@ -2049,12 +2103,15 @@
      ],
      "query": "https://data.cityofnewyork.us/resource/6z8x-wfk4.json?bbl=3043710001&$order=executed_date DESC"
     }
-   }
+   },
+   "headline_auto": "245 Wortman Avenue: 15 311 calls in two weeks; 8 class C violations; 5 evictions",
+   "why_now": "The raw counts are modest but the composition is not: eight of the nine HPD violations issued between Jul 18 and Aug 16, 2026 were immediately hazardous, and a DOB complaint cites plumbing work without a permit. Start with the HPD registration for ownership, the DOB record on the plumbing complaint, and Brooklyn Community Board 5.",
+   "confidence": "medium"
   },
   {
    "id": "place:2039437501",
    "kind": "place",
-   "headline": "1650 Metropolitan Avenue: 60 311 calls in two weeks; 16 class C violations; 2 evictions",
+   "headline": "1650 Metropolitan Avenue in Soundview drew 60 311 calls across all 14 days between Aug 3 and Aug 16, 2026",
    "cd": "209",
    "district": "Parkchester / Soundview",
    "borough": "Bronx",
@@ -2142,7 +2199,10 @@
      ],
      "query": "https://data.cityofnewyork.us/resource/6z8x-wfk4.json?bbl=2039437501&$order=executed_date DESC"
     }
-   }
+   },
+   "headline_auto": "1650 Metropolitan Avenue: 60 311 calls in two weeks; 16 class C violations; 2 evictions",
+   "why_now": "The 60 calls sit against just six HPD complaints in the same window, a gap worth explaining, while 39 violations including 16 class C were issued between Jul 18 and Aug 16, 2026. Some 311 volume at large complexes reflects street and sanitation calls rather than interior conditions, so check the call types before calling the registered owner and Bronx Community Board 9.",
+   "confidence": "medium"
   },
   {
    "id": "place:2024650025",
@@ -4574,13 +4634,13 @@
        "n": 7
       },
       {
-       "type": "PAINT/PLASTER",
-       "descriptor": "CEILING",
+       "type": "ELECTRIC",
+       "descriptor": "OUTLET/SWITCH",
        "n": 5
       },
       {
-       "type": "ELECTRIC",
-       "descriptor": "OUTLET/SWITCH",
+       "type": "PAINT/PLASTER",
+       "descriptor": "CEILING",
        "n": 5
       },
       {
@@ -6578,9 +6638,9 @@
     "hits": 1,
     "articles": [
      {
-      "title": "Woman dies after receiving injection from unlicensed doctor at Bronx lifestyle business, police say - cbsnews.com",
+      "title": "Woman dies after receiving injection from unlicensed doctor at Bronx lifestyle business, police say - CBS News",
       "url": "https://news.google.com/rss/articles/CBMinAFBVV95cUxNUVhXWWh1RXV4VHJtN1NDZUtWbVNOM3JpdTRHLVJlS05uN1VrakRESFJIUS1yZkJyeXZISGRvcDR1T2xHX3hmVkdkN0FpbkVJRHF2b21zallhRmlnX1l5bm9uUWJMYzdNWWZyYWxwWTkxTDNraUtXdDRSc3RJREJTZDZUQThfVlRmZGVwM2VPUzFzdVVuWXptTDFZTGI?oc=5",
-      "outlet": "cbsnews.com",
+      "outlet": "CBS News",
       "date": "2026-07-21"
      }
     ],
@@ -7688,8 +7748,8 @@
    "complaint_type": "Non-Emergency Police Matter",
    "signal": 0.135,
    "coverage": {
-    "score": 0.7,
-    "hits": 3,
+    "score": 0.93,
+    "hits": 4,
     "articles": [
      {
       "title": "Police investigating death of 2-month-old girl in Brooklyn - ABC7 New York",
@@ -7704,6 +7764,12 @@
       "date": "2026-08-16"
      },
      {
+      "title": "Police say group stole 16 computers from gaming lounge in Gravesend - Brooklyn Eagle",
+      "url": "https://news.google.com/rss/articles/CBMieEFVX3lxTE5HT1hZQ2x0Y3V2LWExRTkxZ2hEWnU4ZnRYTExwTGN3MlhCQlRqamhxMkdQdFg1RktKYzJWUUJaeHAwQ1JFd1FVMmNpZHNZMmRXQVJjcmF3czBxRmJFdGVMN2JqMUdaVktVb2RZNlNBcUM0aC12TGt3bw?oc=5",
+      "outlet": "Brooklyn Eagle",
+      "date": "2026-07-16"
+     },
+     {
       "title": "Woman Fatally Stabbed Inside Brooklyn Park, Police Say - Patch",
       "url": "https://news.google.com/rss/articles/CBMilwFBVV95cUxQc25MSmFFQnY4S2Jzb1FmMmU3SlJybnVBWVNSM0pha3hNZE13RW91eV9xVjcydktTcGd5RVpFdjIwY21QMlQ2OTZjVW1KU2JjdTRRbWxRYmR4LW9fTHlTMzZTYWFncEpoR0laeFg3RGN2V3U3ZTJQNUkzRGdCcTd6R3JYR1dFMWdyVjNXZWktR1RYYVQwX2Q40gGoAUFVX3lxTE1NT3JvU084aXJ5djA5MjdJdnd4R1dZRzhoTFZ0S01XUlhRLVFxQWRWT19ZcW5raXhxamtQU2UxVDUxSHA4b0d5TGUyc3MzUm4ya2ZPN1hPUVh6MlRXV19zSzMtRHZEMFpBdXhGal81ZVVZMEJ4SHBCc1g4T0NEQTA4X21uV1pxYTV4czVkNDNvWHVJTVZKbWFtMC1zbjRnUXlZUzZfVGpBcw?oc=5",
       "outlet": "Patch",
@@ -7713,7 +7779,7 @@
     "status": "ok",
     "query": "(\"Borough Park\" OR \"Kensington\") (\"police\") NYC"
    },
-   "rank": 0.064,
+   "rank": 0.041,
    "why": [
     "38 complaints Jul 20–Aug 16, 2026 vs an expected 15.0 (same weeks in prior years, drift-adjusted: 13.3; recent 8-week pace: 15.0)",
     "Aug 10–16, 2026: 7 vs 10.3/week over the three weeks before",
@@ -7774,9 +7840,9 @@
     "hits": 9,
     "articles": [
      {
-      "title": "Harlem parents who complained of trash, encampment outside school see progress, but want long-term change - cbsnews.com",
+      "title": "Harlem parents who complained of trash, encampment outside school see progress, but want long-term change - CBS News",
       "url": "https://news.google.com/rss/articles/CBMihAFBVV95cUxQSk54M0xZd1hXaG5BWnVRMUpfVHBHZzVVWExoLVhQOUZSU3JCRURPci1JWG1teUQtRmswaHp2MHExQUItdHV3VGdydmd3Y3FVTzF6Q0FiLTNGY3c4T0FKcnVkaEk5UmxLTy00ajBTTmlUSVEtUmNUdXdfcUhGRXJvYXh3S0Y?oc=5",
-      "outlet": "cbsnews.com",
+      "outlet": "CBS News",
       "date": "2026-07-22"
      },
      {
@@ -7880,9 +7946,9 @@
       "date": "2026-08-05"
      },
      {
-      "title": "Manhattan roads close for NYC Summer Streets for 2nd weekend - cbsnews.com",
+      "title": "Manhattan roads close for NYC Summer Streets for 2nd weekend - CBS News",
       "url": "https://news.google.com/rss/articles/CBMihAFBVV95cUxORnVUTmZHem9xRTh3QUhEY3U1eEpCd0w3S21fYkFjWnFrdlZGbjZLU0ozRjNUYUZjcTRhZ3g4MVZ3bWNQZjRENDRtRk1Ja3V4eE8wZ0NJYkpHTHJfcVlTRlJRUm5saVNPM2otZWZjUUFLOFpDVDJuazhzYmhrNkNBUkFxTl8?oc=5",
-      "outlet": "cbsnews.com",
+      "outlet": "CBS News",
       "date": "2026-08-07"
      }
     ],

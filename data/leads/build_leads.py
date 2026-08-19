@@ -29,13 +29,14 @@ from datetime import datetime, timezone
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
 
-from common import (BORO_NAME, CD_NAMES, OUTPUT_DIR, cd_search_names, data_end, iso, neighborhoods_for,
-                    save_json)  # noqa: E402
+from common import (BORO_NAME, CD_NAMES, OUTPUT_DIR, cd_search_names, data_end, date_range, iso, neighborhoods_for,
+                    save_json, span, window)  # noqa: E402
 from coverage import CoverageChecker, TOPIC_KEYWORDS, query_for_place, query_for_topic  # noqa: E402
 from feeds import collect_feeds  # noqa: E402
 from places import collect_places  # noqa: E402
 from seasonal import detect_novelty, detect_seasonal  # noqa: E402
 from district_stats import collect_district_stats  # noqa: E402
+from attention import collect_attention  # noqa: E402
 
 N_PLACE_LEADS = 45
 N_DISTRICT_LEADS = 45
@@ -112,7 +113,7 @@ def _place_headline(p):
 def _district_headline(a):
     t = a["complaint_type"]
     how = f"{a['ratio']}x normal" if a["ratio"] < 10 else f"{int(a['ratio'])}x normal"
-    return f"{a['district']}: {t} complaints {how} ({a['cur28']} in four weeks)"
+    return f"{a['district']}: {t} complaints {how} ({a['cur28']} in the four weeks to {END_LABEL})"
 
 
 def _place_terms(p):
@@ -155,8 +156,14 @@ def enrich_anomalies(anomalies, start):
         a["concentrated"] = bool(a.get("top_address_share", 0) >= 0.4 and a["cur28"] >= 20)
 
 
+END_LABEL = ""
+
+
 def build(no_claude=False):
+    global END_LABEL
     end = data_end()
+    END_LABEL = f"{end.strftime('%b')} {end.day}"
+    D28, D56, D14 = span(end, 28), span(end, 56), span(end, 14)
     print(f"=== leads build as of {iso(end)} ===")
     seasonal = detect_seasonal(end)
     enrich_anomalies(seasonal["anomalies"], seasonal["window"]["start"])
@@ -164,6 +171,7 @@ def build(no_claude=False):
     places = collect_places(end)
     feeds = collect_feeds(end)
     dstats = collect_district_stats(end)
+    attention = collect_attention()
 
     checker = CoverageChecker()
     leads = []
@@ -198,9 +206,9 @@ def build(no_claude=False):
             "cd": a["cd"], "district": a["district"], "borough": BORO_NAME[a["cd"][0]],
             "complaint_type": a["complaint_type"],
             "signal": round(sig, 3), "coverage": cov, "rank": _rank(sig, cov),
-            "why": [f"{a['cur28']} complaints in the last 28 days vs an expected {a['expected']}"
+            "why": [f"{a['cur28']} complaints {D28} vs an expected {a['expected']}"
                     + (f" (same weeks in prior years, drift-adjusted: {a['exp_seasonal']}; recent 8-week pace: {a['exp_recent']})" if a['exp_seasonal'] is not None else f" (recent 8-week pace: {a['exp_recent']}; no prior-year history for this type)"),
-                    f"last 7 days: {a['last7']} vs {a['prior3wk_avg']}/week over the prior three weeks" + (" — accelerating" if a["accelerating"] else ""),
+                    f"{span(end, 7)}: {a['last7']} vs {a['prior3wk_avg']}/week over the three weeks before" + (" — accelerating" if a["accelerating"] else ""),
                     ] + ([f"spread across {a['distinct_addresses']} addresses" + (f"; top address {a['top_address']} has {int(round(a['top_address_share']*100))}%" if a.get("top_address") else "") + (" — likely one caller" if a.get("concentrated") else "") + (f"; top descriptor: {a['top_descriptor']} ({int(round(a['top_descriptor_share']*100))}%)" if a.get("top_descriptor") else "")] if a.get("distinct_addresses") is not None else []),
             "stats": a,
             "query": (f"https://data.cityofnewyork.us/resource/erm2-nwe9.json?$where=complaint_type='{a['complaint_type']}' AND "
@@ -217,11 +225,11 @@ def build(no_claude=False):
         leads.append({
             "id": f"novel:{n['complaint_type']}:{n['descriptor']}",
             "kind": "novelty",
-            "headline": f"New in 311: \"{n['descriptor']}\" ({n['complaint_type']}) — {n['cur56']} reports in eight weeks" + (f", led by {top['district']}" if top else ""),
+            "headline": f"New in 311: \"{n['descriptor']}\" ({n['complaint_type']}) — {n['cur56']} reports {D56}" + (f", led by {top['district']}" if top else ""),
             "cd": top["cd"] if top else None, "district": top["district"] if top else "Citywide",
             "borough": BORO_NAME[top["cd"][0]] if top else None,
             "signal": round(sig, 3), "coverage": cov, "rank": _rank(sig, cov),
-            "why": [f"{n['cur56']} reports in the last 56 days vs {n['base_same_window']} in the same weeks of the prior two years (volume-adjusted)" + (f" — {n['rate_ratio']}x" if n.get("rate_ratio") else " — not seen in either prior year"),
+            "why": [f"{n['cur56']} reports {D56} vs {n['base_same_window']} in the same weeks of the prior two years (volume-adjusted)" + (f" — {n['rate_ratio']}x" if n.get("rate_ratio") else " — not seen in either prior year"),
                     "top districts: " + ", ".join(f"{x['district']} ({x['n']})" for x in n.get("by_cd", [])[:4])],
             "by_cd": n.get("by_cd", []),
         })
@@ -260,6 +268,7 @@ def build(no_claude=False):
             "anomalies": [a for a in seasonal["anomalies"] if a["cd"] == cd][:12],
             "three11": seasonal["district_311"][cd],
             "trends": {k: v["by_cd"][cd] for k, v in dstats.items() if k != "as_of"},
+            "attention": attention.get(cd),
             "places": [{"key": p["key"], "address": _tidy_addr(p.get("address")), "score": p["score"],
                         "n_sources": p["n_sources"], "why": p["why"]} for p in places["places"] if p["cd"] == cd][:15],
             "sla_pending": places["sla_by_cd"].get(cd, [])[:12],
@@ -272,8 +281,12 @@ def build(no_claude=False):
         "as_of": iso(end),
         "generated": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
         "week_labels": seasonal["week_labels"],
-        "trend_meta": {k: {"label": v["label"], "days": v["days"]} for k, v in dstats.items() if k != "as_of"},
+        "trend_meta": {k: {kk: vv for kk, vv in v.items() if kk != "by_cd"} for k, v in dstats.items() if k != "as_of"},
         "windows": {"place_311_days": 14, "district_days": seasonal["window"]["days"],
+                    "dates": {"d7": span(end, 7), "d14": D14, "d28": D28, "d30": span(end, 30), "d56": D56, "d60": span(end, 60),
+                              "prior30": date_range(window(end, 30)[0] - __import__('datetime').timedelta(days=30), window(end, 30)[0] - __import__('datetime').timedelta(days=1)),
+                              "prior28": date_range(window(end, 28)[0] - __import__('datetime').timedelta(days=28), window(end, 28)[0] - __import__('datetime').timedelta(days=1)),
+                              "prior60": date_range(window(end, 60)[0] - __import__('datetime').timedelta(days=60), window(end, 60)[0] - __import__('datetime').timedelta(days=1))},
                     "seasonal_windows": seasonal["seasonal_windows"], "novelty_days": novelty["window"]["days"],
                     "coverage_lookback_days": 42},
         "coverage_backend": "ok" if checker.backend_ok else "unavailable",
@@ -301,8 +314,10 @@ def build(no_claude=False):
 
 SYNTH_SYSTEM = """You are the desk editor for a New York City local-news early-warning system. You receive machine-detected leads: each is a building or a community district plus the raw evidence (counts from 311, HPD, DOB, OATH, marshal evictions, state liquor-license filings) and a coverage check (news articles found, if any).
 
+Every count in the evidence carries its exact date range. When you cite a number, cite its date range in words (e.g. "between Aug 3 and Aug 16") — never a bare "in 14 days" or "in 30 days". Do not use the words "surge", "spike", "explosion" or "soar"; say what changed and by how much.
+
 For each lead write:
-- "headline": one plain sentence, sentence case, no colon-hype, naming the place or district and the specific thing the numbers show. Never invent facts; use only the evidence given.
+- "headline": one plain sentence, sentence case, no colon-hype, naming the place or district and the specific thing the numbers show, with the date range. Never invent facts; use only the evidence given.
 - "why_now": one or two sentences on why a reporter should look this week and what the first call is (the building's owner via HPD registration, the community board district manager, the council office, DOB inspection records). Say plainly when the pattern could be one persistent complainant or a data artifact.
 - "confidence": "high", "medium" or "low" for whether this is a real story rather than noise.
 Write in a measured newsroom register. No exclamation points. Use "New York City" in full. Straight quotes only."""

@@ -32,10 +32,6 @@ jobs:
           SOCRATA_APP_TOKEN: ${{ secrets.SOCRATA_APP_TOKEN }}
         run: python data/leads/build_leads.py
 
-      - name: Refresh the district map (311 spikes, no AI synthesis)
-        continue-on-error: true
-        run: python data/pipeline.py --no-cb --no-claude
-
       - name: Commit
         run: |
           git config user.name "github-actions"

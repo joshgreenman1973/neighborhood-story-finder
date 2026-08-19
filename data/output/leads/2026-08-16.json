@@ -1,11 +1,11 @@
 {
  "as_of": "2026-08-16",
- "generated": "2026-08-18T23:53:02Z",
+ "generated": "2026-08-19T01:04:11Z",
  "leads": [
   {
    "id": "district:410:Building/Use",
    "kind": "district",
-   "headline": "Illegal conversion complaints in Howard Beach and Ozone Park ran more than four times the normal pace over four weeks",
+   "headline": "Howard Beach / Ozone Park: Building/Use complaints 4.34x normal (1563 in the four weeks to Aug 16)",
    "cd": "410",
    "district": "Howard Beach / Ozone Park",
    "borough": "Queens",
@@ -20,8 +20,8 @@
    },
    "rank": 1.0,
    "why": [
-    "1563 complaints in the last 28 days vs an expected 360.5 (same weeks in prior years, drift-adjusted: 203.1; recent 8-week pace: 360.5)",
-    "last 7 days: 491 vs 357.3/week over the prior three weeks — accelerating",
+    "1563 complaints Jul 20–Aug 16, 2026 vs an expected 360.5 (same weeks in prior years, drift-adjusted: 203.1; recent 8-week pace: 360.5)",
+    "Aug 10–16, 2026: 491 vs 357.3/week over the three weeks before — accelerating",
     "spread across 1538 addresses; top address 107-13 111 Street has 0%; top descriptor: Illegal Conversion Of Residential Building/Space (97%)"
    ],
    "stats": {
@@ -63,15 +63,12 @@
     "top_descriptor_share": 0.97,
     "concentrated": false
    },
-   "query": "https://data.cityofnewyork.us/resource/erm2-nwe9.json?$where=complaint_type='Building/Use' AND community_board='10 QUEENS' AND created_date >= '2026-07-20'&$order=created_date DESC",
-   "headline_auto": "Howard Beach / Ozone Park: Building/Use complaints 4.34x normal (1563 in four weeks)",
-   "why_now": "There were 1,563 building and use complaints in 28 days against an expected 360, with 491 in the last seven days alone and 97 percent flagged as illegal conversion of residential space, spread across 1,538 separate addresses. That spread argues against a single persistent complainant, but a jump this sharp in one descriptor can also be an intake or reclassification artifact, so start with the Queens Community Board 10 district manager and the Department of Buildings borough office to ask whether a sweep or a new complaint-routing rule explains it.",
-   "confidence": "medium"
+   "query": "https://data.cityofnewyork.us/resource/erm2-nwe9.json?$where=complaint_type='Building/Use' AND community_board='10 QUEENS' AND created_date >= '2026-07-20'&$order=created_date DESC"
   },
   {
    "id": "place:1020350001",
    "kind": "place",
-   "headline": "2588 7 Avenue in Central Harlem had nine class C violations and four residential evictions",
+   "headline": "2588 7 Avenue: 27 311 calls in two weeks; 9 class C violations; 4 evictions",
    "cd": "110",
    "district": "Central Harlem",
    "borough": "Manhattan",
@@ -93,12 +90,12 @@
    ],
    "n_sources": 3,
    "why": [
-    "27 311 calls in 14 days (14 types over 10 days)",
-    "18 HPD violations in 30 days (9 class C)",
-    "11 HPD complaints in 14 days",
-    "3 DOB complaints in 30 days (Plumbing work – illegal/no permit)",
-    "2 OATH/ECB violations in 30 days",
-    "4 marshal evictions in 60 days (4 residential)"
+    "27 311 calls Aug 3–16, 2026 (14 types over 10 days)",
+    "18 HPD violations issued Jul 18–Aug 16, 2026 (9 class C)",
+    "11 HPD complaints Aug 3–16, 2026",
+    "3 DOB complaints Jul 18–Aug 16, 2026 (Plumbing work – illegal/no permit)",
+    "2 OATH/ECB violations Jul 18–Aug 16, 2026",
+    "4 marshal evictions Jun 18–Aug 16, 2026 (4 residential)"
    ],
    "sources": {
     "311": {
@@ -197,15 +194,12 @@
      ],
      "query": "https://data.cityofnewyork.us/resource/6z8x-wfk4.json?bbl=1020350001&$order=executed_date DESC"
     }
-   },
-   "headline_auto": "2588 7 Avenue: 27 311 calls in two weeks; 9 class C violations; 4 evictions",
-   "why_now": "Eighteen violations in 30 days, unpermitted plumbing work flagged by the Department of Buildings, and four evictions in 60 days in one Harlem building is a compact pattern worth an afternoon. Pull the DOB complaint file and call the owner via HPD registration; the numbers are modest, so confirm the 311 calls come from more than one unit.",
-   "confidence": "medium"
+   }
   },
   {
    "id": "place:3051900075",
    "kind": "place",
-   "headline": "2505 Bedford Avenue in East Flatbush drew 46 HPD complaints in two weeks and 19 class C violations",
+   "headline": "2505 Bedford Avenue: 53 311 calls in two weeks; 19 class C violations; 6 DOB complaints",
    "cd": "317",
    "district": "East Flatbush",
    "borough": "Brooklyn",
@@ -227,12 +221,12 @@
    ],
    "n_sources": 3,
    "why": [
-    "53 311 calls in 14 days (11 types over 10 days)",
-    "34 HPD violations in 30 days (19 class C)",
-    "46 HPD complaints in 14 days",
-    "6 DOB complaints in 30 days (6S)",
-    "2 OATH/ECB violations in 30 days",
-    "1 marshal evictions in 60 days (1 residential)"
+    "53 311 calls Aug 3–16, 2026 (11 types over 10 days)",
+    "34 HPD violations issued Jul 18–Aug 16, 2026 (19 class C)",
+    "46 HPD complaints Aug 3–16, 2026",
+    "6 DOB complaints Jul 18–Aug 16, 2026 (6S)",
+    "2 OATH/ECB violations Jul 18–Aug 16, 2026",
+    "1 marshal evictions Jun 18–Aug 16, 2026 (1 residential)"
    ],
    "sources": {
     "311": {
@@ -331,15 +325,12 @@
      ],
      "query": "https://data.cityofnewyork.us/resource/6z8x-wfk4.json?bbl=3051900075&$order=executed_date DESC"
     }
-   },
-   "headline_auto": "2505 Bedford Avenue: 53 311 calls in two weeks; 19 class C violations; 6 DOB complaints",
-   "why_now": "Thirty-four violations in 30 days, 19 of them immediately hazardous, plus six Department of Buildings complaints, suggest conditions the agencies are already documenting. Pull the DOB inspection records and call the owner via HPD registration; the East Flatbush community board can say whether tenants have been organizing.",
-   "confidence": "high"
+   }
   },
   {
    "id": "place:2028820229",
    "kind": "place",
-   "headline": "20 Richman Plaza in the Bronx logged 89 311 calls, 86 HPD violations and eight residential evictions",
+   "headline": "20 Richman Plaza: 89 311 calls in two weeks; 19 class C violations; 8 evictions",
    "cd": "205",
    "district": "Fordham / University Heights",
    "borough": "Bronx",
@@ -361,11 +352,11 @@
    ],
    "n_sources": 3,
    "why": [
-    "89 311 calls in 14 days (17 types over 13 days)",
-    "86 HPD violations in 30 days (19 class C)",
-    "67 HPD complaints in 14 days",
-    "4 OATH/ECB violations in 30 days",
-    "8 marshal evictions in 60 days (8 residential)"
+    "89 311 calls Aug 3–16, 2026 (17 types over 13 days)",
+    "86 HPD violations issued Jul 18–Aug 16, 2026 (19 class C)",
+    "67 HPD complaints Aug 3–16, 2026",
+    "4 OATH/ECB violations Jul 18–Aug 16, 2026",
+    "8 marshal evictions Jun 18–Aug 16, 2026 (8 residential)"
    ],
    "sources": {
     "311": {
@@ -385,13 +376,13 @@
        "n": 9
       },
       {
-       "type": "UNSANITARY CONDITION",
-       "descriptor": "MOLD",
+       "type": "Noise - Street/Sidewalk",
+       "descriptor": "Loud Music/Party",
        "n": 6
       },
       {
-       "type": "Noise - Street/Sidewalk",
-       "descriptor": "Loud Music/Party",
+       "type": "UNSANITARY CONDITION",
+       "descriptor": "MOLD",
        "n": 6
       },
       {
@@ -442,15 +433,12 @@
      ],
      "query": "https://data.cityofnewyork.us/resource/6z8x-wfk4.json?bbl=2028820229&$order=executed_date DESC"
     }
-   },
-   "headline_auto": "20 Richman Plaza: 89 311 calls in two weeks; 19 class C violations; 8 evictions",
-   "why_now": "Nineteen class C violations plus eight marshal evictions in 60 days in one building is a habitability and displacement story at the same time. First calls are the managing agent in the HPD registration and the Bronx Community Board 5 district manager; the complaints spread over 17 types and 13 days, so this is not one caller.",
-   "confidence": "high"
+   }
   },
   {
    "id": "place:2043420010",
    "kind": "place",
-   "headline": "2300 Olinville Avenue in the Bronx saw 311 calls run nearly six times its own recent pace",
+   "headline": "2300 Olinville Avenue: 25 311 calls in two weeks; 9 class C violations",
    "cd": "211",
    "district": "Morris Park / Pelham Parkway",
    "borough": "Bronx",
@@ -472,13 +460,13 @@
    ],
    "n_sources": 3,
    "why": [
-    "311 calls 5.8x the building's prior 12-week pace",
-    "25 311 calls in 14 days (13 types over 6 days)",
-    "36 HPD violations in 30 days (9 class C)",
-    "20 HPD complaints in 14 days",
-    "1 DOB complaints in 30 days (6M)",
-    "1 OATH/ECB violations in 30 days",
-    "1 marshal evictions in 60 days (1 residential)"
+    "311 calls 5.8x the building's pace over the prior 12 weeks",
+    "25 311 calls Aug 3–16, 2026 (13 types over 6 days)",
+    "36 HPD violations issued Jul 18–Aug 16, 2026 (9 class C)",
+    "20 HPD complaints Aug 3–16, 2026",
+    "1 DOB complaints Jul 18–Aug 16, 2026 (6M)",
+    "1 OATH/ECB violations Jul 18–Aug 16, 2026",
+    "1 marshal evictions Jun 18–Aug 16, 2026 (1 residential)"
    ],
    "sources": {
     "311": {
@@ -562,15 +550,12 @@
      ],
      "query": "https://data.cityofnewyork.us/resource/6z8x-wfk4.json?bbl=2043420010&$order=executed_date DESC"
     }
-   },
-   "headline_auto": "2300 Olinville Avenue: 25 311 calls in two weeks; 9 class C violations",
-   "why_now": "Twenty-five calls in 14 days but concentrated on only six days, alongside 36 violations including nine class C, so the surge may be a handful of tenants filing in bursts. Check the HPD complaint types for a single failing system such as heat or elevator, then call the owner in the HPD registration.",
-   "confidence": "medium"
+   }
   },
   {
    "id": "place:2022957501",
    "kind": "place",
-   "headline": "105 Willis Avenue in Mott Haven drew 43 311 calls across 18 complaint types and five OATH violations",
+   "headline": "105 Willis Avenue: 43 311 calls in two weeks; 10 class C violations",
    "cd": "201",
    "district": "Mott Haven / Melrose",
    "borough": "Bronx",
@@ -592,12 +577,12 @@
    ],
    "n_sources": 3,
    "why": [
-    "43 311 calls in 14 days (18 types over 12 days)",
-    "31 HPD violations in 30 days (10 class C)",
-    "30 HPD complaints in 14 days",
-    "1 DOB complaints in 30 days (6M)",
-    "5 OATH/ECB violations in 30 days",
-    "1 marshal evictions in 60 days (1 residential)"
+    "43 311 calls Aug 3–16, 2026 (18 types over 12 days)",
+    "31 HPD violations issued Jul 18–Aug 16, 2026 (10 class C)",
+    "30 HPD complaints Aug 3–16, 2026",
+    "1 DOB complaints Jul 18–Aug 16, 2026 (6M)",
+    "5 OATH/ECB violations Jul 18–Aug 16, 2026",
+    "1 marshal evictions Jun 18–Aug 16, 2026 (1 residential)"
    ],
    "sources": {
     "311": {
@@ -689,15 +674,12 @@
      ],
      "query": "https://data.cityofnewyork.us/resource/6z8x-wfk4.json?bbl=2022957501&$order=executed_date DESC"
     }
-   },
-   "headline_auto": "105 Willis Avenue: 43 311 calls in two weeks; 10 class C violations",
-   "why_now": "The breadth of complaint types over 12 days, plus 10 class C violations and five OATH cases in a month, suggests broad neglect rather than one dispute. Start with the owner in HPD registration and the Bronx Community Board 1 district manager.",
-   "confidence": "medium"
+   }
   },
   {
    "id": "place:4014300029",
    "kind": "place",
-   "headline": "33-54 83 Street in Jackson Heights saw 311 calls at five times its recent pace and five DOB complaints",
+   "headline": "33-54 83 Street: 30 311 calls in two weeks; 13 class C violations; 5 DOB complaints",
    "cd": "403",
    "district": "Jackson Heights / Elmhurst / Corona",
    "borough": "Queens",
@@ -718,12 +700,12 @@
    ],
    "n_sources": 2,
    "why": [
-    "311 calls 5.0x the building's prior 12-week pace",
-    "30 311 calls in 14 days (11 types over 7 days)",
-    "36 HPD violations in 30 days (13 class C)",
-    "28 HPD complaints in 14 days",
-    "5 DOB complaints in 30 days (1X)",
-    "5 OATH/ECB violations in 30 days"
+    "311 calls 5.0x the building's pace over the prior 12 weeks",
+    "30 311 calls Aug 3–16, 2026 (11 types over 7 days)",
+    "36 HPD violations issued Jul 18–Aug 16, 2026 (13 class C)",
+    "28 HPD complaints Aug 3–16, 2026",
+    "5 DOB complaints Jul 18–Aug 16, 2026 (1X)",
+    "5 OATH/ECB violations Jul 18–Aug 16, 2026"
    ],
    "sources": {
     "311": {
@@ -809,15 +791,12 @@
      ],
      "query": "https://data.cityofnewyork.us/resource/6bgk-3dad.json?$where=boro='4' AND block='01430' AND lot='0029' AND issue_date >= '20260718'"
     }
-   },
-   "headline_auto": "33-54 83 Street: 30 311 calls in two weeks; 13 class C violations; 5 DOB complaints",
-   "why_now": "Thirty-six violations including 13 class C, five Department of Buildings complaints and five OATH cases in 30 days is a lot of simultaneous agency attention on one building. Pull the DOB inspection records and call the owner via HPD registration; note the 311 calls cluster on seven days, so a small group of tenants may be driving the count.",
-   "confidence": "medium"
+   }
   },
   {
    "id": "place:2033550090",
    "kind": "place",
-   "headline": "3322 Decatur Avenue in Bedford Park drew 31 311 calls and a complaint about a defective sidewalk shed",
+   "headline": "3322 Decatur Avenue: 31 311 calls in two weeks; 5 class C violations; 3 DOB complaints",
    "cd": "207",
    "district": "Kingsbridge / Bedford Park",
    "borough": "Bronx",
@@ -839,12 +818,12 @@
    ],
    "n_sources": 3,
    "why": [
-    "31 311 calls in 14 days (13 types over 11 days)",
-    "28 HPD violations in 30 days (5 class C)",
-    "22 HPD complaints in 14 days",
-    "3 DOB complaints in 30 days (Sidewalk shed/supported scaffold/inadequate defective/none)",
-    "1 OATH/ECB violations in 30 days",
-    "1 marshal evictions in 60 days (1 residential)"
+    "31 311 calls Aug 3–16, 2026 (13 types over 11 days)",
+    "28 HPD violations issued Jul 18–Aug 16, 2026 (5 class C)",
+    "22 HPD complaints Aug 3–16, 2026",
+    "3 DOB complaints Jul 18–Aug 16, 2026 (Sidewalk shed/supported scaffold/inadequate defective/none)",
+    "1 OATH/ECB violations Jul 18–Aug 16, 2026",
+    "1 marshal evictions Jun 18–Aug 16, 2026 (1 residential)"
    ],
    "sources": {
     "311": {
@@ -938,15 +917,12 @@
      ],
      "query": "https://data.cityofnewyork.us/resource/6z8x-wfk4.json?bbl=2033550090&$order=executed_date DESC"
     }
-   },
-   "headline_auto": "3322 Decatur Avenue: 31 311 calls in two weeks; 5 class C violations; 3 DOB complaints",
-   "why_now": "Twenty-eight violations in 30 days plus Department of Buildings complaints about scaffolding raise the question of whether repair work is stalled while tenants live with the conditions. Check the DOB permit and inspection history, then call the owner listed with HPD.",
-   "confidence": "medium"
+   }
   },
   {
    "id": "place:3045950215",
    "kind": "place",
-   "headline": "5 East 93 Street in East Flatbush recorded 103 HPD complaints in two weeks and 65 violations",
+   "headline": "5 East 93 Street: 45 311 calls in two weeks; 17 class C violations; 2 evictions",
    "cd": "317",
    "district": "East Flatbush",
    "borough": "Brooklyn",
@@ -968,12 +944,12 @@
    ],
    "n_sources": 3,
    "why": [
-    "45 311 calls in 14 days (11 types over 11 days)",
-    "65 HPD violations in 30 days (17 class C)",
-    "103 HPD complaints in 14 days",
-    "1 DOB complaints in 30 days (6M)",
-    "1 OATH/ECB violations in 30 days",
-    "2 marshal evictions in 60 days (2 residential)"
+    "45 311 calls Aug 3–16, 2026 (11 types over 11 days)",
+    "65 HPD violations issued Jul 18–Aug 16, 2026 (17 class C)",
+    "103 HPD complaints Aug 3–16, 2026",
+    "1 DOB complaints Jul 18–Aug 16, 2026 (6M)",
+    "1 OATH/ECB violations Jul 18–Aug 16, 2026",
+    "2 marshal evictions Jun 18–Aug 16, 2026 (2 residential)"
    ],
    "sources": {
     "311": {
@@ -1057,15 +1033,12 @@
      ],
      "query": "https://data.cityofnewyork.us/resource/6z8x-wfk4.json?bbl=3045950215&$order=executed_date DESC"
     }
-   },
-   "headline_auto": "5 East 93 Street: 45 311 calls in two weeks; 17 class C violations; 2 evictions",
-   "why_now": "The complaint count far exceeds the 45 311 calls, which usually means many units filing repeatedly on the same conditions; 17 class C violations and two evictions make it worth a visit. First call is the owner in the HPD registration, then HPD press for the inspection history.",
-   "confidence": "high"
+   }
   },
   {
    "id": "place:2039447501",
    "kind": "place",
-   "headline": "1515 Metropolitan Avenue in Soundview had 26 class C violations in 30 days and five evictions",
+   "headline": "1515 Metropolitan Avenue: 75 311 calls in two weeks; 26 class C violations; 4 evictions",
    "cd": "209",
    "district": "Parkchester / Soundview",
    "borough": "Bronx",
@@ -1087,10 +1060,10 @@
    ],
    "n_sources": 3,
    "why": [
-    "75 311 calls in 14 days (13 types over 11 days)",
-    "41 HPD violations in 30 days (26 class C)",
-    "30 HPD complaints in 14 days",
-    "5 marshal evictions in 60 days (4 residential)"
+    "75 311 calls Aug 3–16, 2026 (13 types over 11 days)",
+    "41 HPD violations issued Jul 18–Aug 16, 2026 (26 class C)",
+    "30 HPD complaints Aug 3–16, 2026",
+    "5 marshal evictions Jun 18–Aug 16, 2026 (4 residential)"
    ],
    "sources": {
     "311": {
@@ -1155,15 +1128,12 @@
      ],
      "query": "https://data.cityofnewyork.us/resource/6z8x-wfk4.json?bbl=2039447501&$order=executed_date DESC"
     }
-   },
-   "headline_auto": "1515 Metropolitan Avenue: 75 311 calls in two weeks; 26 class C violations; 4 evictions",
-   "why_now": "Most of the building's 41 violations are immediately hazardous, an unusually high share worth asking HPD to explain. Contact the owner through HPD registration and the Bronx Community Board 9 district manager about heat, hot water or mold conditions this week.",
-   "confidence": "high"
+   }
   },
   {
    "id": "place:4159260001",
    "kind": "place",
-   "headline": "57-07 Shore Front Parkway in Far Rockaway logged 23 class C violations and five evictions",
+   "headline": "57-07 Shore Front Parkway: 34 311 calls in two weeks; 23 class C violations; 5 evictions",
    "cd": "414",
    "district": "Far Rockaway / Rockaways",
    "borough": "Queens",
@@ -1185,10 +1155,10 @@
    ],
    "n_sources": 3,
    "why": [
-    "34 311 calls in 14 days (13 types over 12 days)",
-    "67 HPD violations in 30 days (23 class C)",
-    "14 HPD complaints in 14 days",
-    "5 marshal evictions in 60 days (5 residential)"
+    "34 311 calls Aug 3–16, 2026 (13 types over 12 days)",
+    "67 HPD violations issued Jul 18–Aug 16, 2026 (23 class C)",
+    "14 HPD complaints Aug 3–16, 2026",
+    "5 marshal evictions Jun 18–Aug 16, 2026 (5 residential)"
    ],
    "sources": {
     "311": {
@@ -1213,11 +1183,6 @@
        "n": 3
       },
       {
-       "type": "UNSANITARY CONDITION",
-       "descriptor": "MOLD",
-       "n": 2
-      },
-      {
        "type": "FLOORING/STAIRS",
        "descriptor": "FLOOR",
        "n": 2
@@ -1225,6 +1190,11 @@
       {
        "type": "ELECTRIC",
        "descriptor": "OUTLET/SWITCH",
+       "n": 2
+      },
+      {
+       "type": "DOOR/WINDOW",
+       "descriptor": "DOOR",
        "n": 2
       }
      ],
@@ -1254,15 +1224,12 @@
      ],
      "query": "https://data.cityofnewyork.us/resource/6z8x-wfk4.json?bbl=4159260001&$order=executed_date DESC"
     }
-   },
-   "headline_auto": "57-07 Shore Front Parkway: 34 311 calls in two weeks; 23 class C violations; 5 evictions",
-   "why_now": "Sixty-seven violations in 30 days against only 14 HPD complaints suggests an inspection sweep rather than a complaint surge, so ask HPD what prompted the visits. The owner listed in HPD registration and the Queens Community Board 14 district manager are the first calls.",
-   "confidence": "medium"
+   }
   },
   {
    "id": "place:4156100001",
    "kind": "place",
-   "headline": "711 Seagirt Avenue in Far Rockaway saw 17 residential marshal evictions in 60 days",
+   "headline": "711 Seagirt Avenue: 35 311 calls in two weeks; 6 class C violations; 17 evictions",
    "cd": "414",
    "district": "Far Rockaway / Rockaways",
    "borough": "Queens",
@@ -1284,11 +1251,11 @@
    ],
    "n_sources": 3,
    "why": [
-    "35 311 calls in 14 days (13 types over 11 days)",
-    "17 HPD violations in 30 days (6 class C)",
-    "17 HPD complaints in 14 days",
-    "1 DOB complaints in 30 days (6M)",
-    "17 marshal evictions in 60 days (17 residential)"
+    "35 311 calls Aug 3–16, 2026 (13 types over 11 days)",
+    "17 HPD violations issued Jul 18–Aug 16, 2026 (6 class C)",
+    "17 HPD complaints Aug 3–16, 2026",
+    "1 DOB complaints Jul 18–Aug 16, 2026 (6M)",
+    "17 marshal evictions Jun 18–Aug 16, 2026 (17 residential)"
    ],
    "sources": {
     "311": {
@@ -1313,13 +1280,13 @@
        "n": 3
       },
       {
-       "type": "Noise - Street/Sidewalk",
-       "descriptor": "Loud Talking",
+       "type": "HEAT/HOT WATER",
+       "descriptor": "APARTMENT ONLY",
        "n": 2
       },
       {
-       "type": "HEAT/HOT WATER",
-       "descriptor": "APARTMENT ONLY",
+       "type": "Noise - Street/Sidewalk",
+       "descriptor": "Loud Talking",
        "n": 2
       },
       {
@@ -1364,15 +1331,12 @@
      ],
      "query": "https://data.cityofnewyork.us/resource/6z8x-wfk4.json?bbl=4156100001&$order=executed_date DESC"
     }
-   },
-   "headline_auto": "711 Seagirt Avenue: 35 311 calls in two weeks; 6 class C violations; 17 evictions",
-   "why_now": "Seventeen executed evictions at a single address in two months is the strongest signal here and is worth checking against housing court filings this week. Ask the owner of record in HPD registration whether the building is being emptied, and confirm the eviction count with the city marshals' reports in case multiple units were bundled into one filing.",
-   "confidence": "high"
+   }
   },
   {
    "id": "place:4097930033",
    "kind": "place",
-   "headline": "A Jamaica apartment building at 89-29 163 Street drew 110 311 calls in two weeks and 25 class C violations",
+   "headline": "89-29 163 Street: 110 311 calls in two weeks; 25 class C violations",
    "cd": "412",
    "district": "Jamaica / Hollis / St. Albans",
    "borough": "Queens",
@@ -1394,11 +1358,11 @@
    ],
    "n_sources": 3,
    "why": [
-    "311 calls 3.0x the building's prior 12-week pace",
-    "110 311 calls in 14 days (14 types over 5 days)",
-    "77 HPD violations in 30 days (25 class C)",
-    "109 HPD complaints in 14 days",
-    "1 marshal evictions in 60 days (1 residential)"
+    "311 calls 3.0x the building's pace over the prior 12 weeks",
+    "110 311 calls Aug 3–16, 2026 (14 types over 5 days)",
+    "77 HPD violations issued Jul 18–Aug 16, 2026 (25 class C)",
+    "109 HPD complaints Aug 3–16, 2026",
+    "1 marshal evictions Jun 18–Aug 16, 2026 (1 residential)"
    ],
    "sources": {
     "311": {
@@ -1423,13 +1387,13 @@
        "n": 10
       },
       {
-       "type": "WATER LEAK",
-       "descriptor": "HEAVY FLOW",
+       "type": "UNSANITARY CONDITION",
+       "descriptor": "MOLD",
        "n": 8
       },
       {
-       "type": "UNSANITARY CONDITION",
-       "descriptor": "MOLD",
+       "type": "WATER LEAK",
+       "descriptor": "HEAVY FLOW",
        "n": 8
       },
       {
@@ -1460,15 +1424,12 @@
      ],
      "query": "https://data.cityofnewyork.us/resource/6z8x-wfk4.json?bbl=4097930033&$order=executed_date DESC"
     }
-   },
-   "headline_auto": "89-29 163 Street: 110 311 calls in two weeks; 25 class C violations",
-   "why_now": "The 311 volume is three times the building's own prior 12-week pace and 109 HPD complaints landed in 14 days, with the calls clustered on five days, which can mean a coordinated tenant filing rather than 110 separate problems. Call the owner listed in the HPD registration and ask the Jamaica council office whether tenants have organized; 25 immediately hazardous violations in 30 days is the thing to check against HPD inspection records.",
-   "confidence": "high"
+   }
   },
   {
    "id": "place:2036810001",
    "kind": "place",
-   "headline": "2045 Story Avenue in Soundview had 34 immediately hazardous violations in 30 days and a blocked-egress complaint",
+   "headline": "2045 Story Avenue: 25 311 calls in two weeks; 34 class C violations",
    "cd": "209",
    "district": "Parkchester / Soundview",
    "borough": "Bronx",
@@ -1490,11 +1451,11 @@
    ],
    "n_sources": 3,
    "why": [
-    "25 311 calls in 14 days (12 types over 8 days)",
-    "77 HPD violations in 30 days (34 class C)",
-    "16 HPD complaints in 14 days",
-    "1 DOB complaints in 30 days (Egress – locked/blocked/improper/no secondary means)",
-    "1 marshal evictions in 60 days (1 residential)"
+    "25 311 calls Aug 3–16, 2026 (12 types over 8 days)",
+    "77 HPD violations issued Jul 18–Aug 16, 2026 (34 class C)",
+    "16 HPD complaints Aug 3–16, 2026",
+    "1 DOB complaints Jul 18–Aug 16, 2026 (Egress – locked/blocked/improper/no secondary means)",
+    "1 marshal evictions Jun 18–Aug 16, 2026 (1 residential)"
    ],
    "sources": {
     "311": {
@@ -1567,15 +1528,12 @@
      ],
      "query": "https://data.cityofnewyork.us/resource/6z8x-wfk4.json?bbl=2036810001&$order=executed_date DESC"
     }
-   },
-   "headline_auto": "2045 Story Avenue: 25 311 calls in two weeks; 34 class C violations",
-   "why_now": "Thirty-four class C violations out of 77, plus a Department of Buildings complaint about locked or blocked egress, is a life-safety combination that should be checked against the DOB inspection result. Start with the owner in HPD registration and ask DOB whether the egress complaint was resolved.",
-   "confidence": "high"
+   }
   },
   {
    "id": "place:3058720071",
    "kind": "place",
-   "headline": "321 Ovington Avenue in Bay Ridge accumulated 75 HPD violations in 30 days and three evictions",
+   "headline": "321 Ovington Avenue: 17 311 calls in two weeks; 17 class C violations; 3 evictions",
    "cd": "310",
    "district": "Bay Ridge / Dyker Heights",
    "borough": "Brooklyn",
@@ -1597,10 +1555,10 @@
    ],
    "n_sources": 3,
    "why": [
-    "17 311 calls in 14 days (9 types over 8 days)",
-    "75 HPD violations in 30 days (17 class C)",
-    "12 HPD complaints in 14 days",
-    "3 marshal evictions in 60 days (3 residential)"
+    "17 311 calls Aug 3–16, 2026 (9 types over 8 days)",
+    "75 HPD violations issued Jul 18–Aug 16, 2026 (17 class C)",
+    "12 HPD complaints Aug 3–16, 2026",
+    "3 marshal evictions Jun 18–Aug 16, 2026 (3 residential)"
    ],
    "sources": {
     "311": {
@@ -1663,15 +1621,12 @@
      ],
      "query": "https://data.cityofnewyork.us/resource/6z8x-wfk4.json?bbl=3058720071&$order=executed_date DESC"
     }
-   },
-   "headline_auto": "321 Ovington Avenue: 17 311 calls in two weeks; 17 class C violations; 3 evictions",
-   "why_now": "Seventy-five violations against only 12 tenant complaints points to a targeted inspection or a court-ordered review, which is itself the story. Ask HPD what triggered the inspections and reach the owner through the HPD registration.",
-   "confidence": "medium"
+   }
   },
   {
    "id": "place:2051410120",
    "kind": "place",
-   "headline": "140 Benchley Place in Co-op City had 12 residential evictions and 68 311 calls in two weeks",
+   "headline": "140 Benchley Place: 68 311 calls in two weeks; 6 class C violations; 12 evictions",
    "cd": "210",
    "district": "Throgs Neck / Co-op City",
    "borough": "Bronx",
@@ -1693,10 +1648,10 @@
    ],
    "n_sources": 3,
    "why": [
-    "68 311 calls in 14 days (24 types over 14 days)",
-    "22 HPD violations in 30 days (6 class C)",
-    "31 HPD complaints in 14 days",
-    "12 marshal evictions in 60 days (12 residential)"
+    "68 311 calls Aug 3–16, 2026 (24 types over 14 days)",
+    "22 HPD violations issued Jul 18–Aug 16, 2026 (6 class C)",
+    "31 HPD complaints Aug 3–16, 2026",
+    "12 marshal evictions Jun 18–Aug 16, 2026 (12 residential)"
    ],
    "sources": {
     "311": {
@@ -1762,15 +1717,12 @@
      ],
      "query": "https://data.cityofnewyork.us/resource/6z8x-wfk4.json?bbl=2051410120&$order=executed_date DESC"
     }
-   },
-   "headline_auto": "140 Benchley Place: 68 311 calls in two weeks; 6 class C violations; 12 evictions",
-   "why_now": "Twelve evictions in 60 days alongside 24 different complaint types spread evenly across all 14 days points to a building-wide breakdown rather than a single dispute. Start with Riverbay Corporation management and the Bronx Community Board 10 district manager.",
-   "confidence": "high"
+   }
   },
   {
    "id": "place:2039377501",
    "kind": "place",
-   "headline": "1919 Mcgraw Avenue in Soundview drew 31 311 calls across 14 types with only five HPD complaints",
+   "headline": "1919 Mcgraw Avenue: 31 311 calls in two weeks; 6 class C violations; 2 evictions",
    "cd": "209",
    "district": "Parkchester / Soundview",
    "borough": "Bronx",
@@ -1792,11 +1744,11 @@
    ],
    "n_sources": 3,
    "why": [
-    "31 311 calls in 14 days (14 types over 11 days)",
-    "14 HPD violations in 30 days (6 class C)",
-    "5 HPD complaints in 14 days",
-    "2 DOB complaints in 30 days (6M)",
-    "2 marshal evictions in 60 days (2 residential)"
+    "31 311 calls Aug 3–16, 2026 (14 types over 11 days)",
+    "14 HPD violations issued Jul 18–Aug 16, 2026 (6 class C)",
+    "5 HPD complaints Aug 3–16, 2026",
+    "2 DOB complaints Jul 18–Aug 16, 2026 (6M)",
+    "2 marshal evictions Jun 18–Aug 16, 2026 (2 residential)"
    ],
    "sources": {
     "311": {
@@ -1870,15 +1822,12 @@
      ],
      "query": "https://data.cityofnewyork.us/resource/6z8x-wfk4.json?bbl=2039377501&$order=executed_date DESC"
     }
-   },
-   "headline_auto": "1919 Mcgraw Avenue: 31 311 calls in two weeks; 6 class C violations; 2 evictions",
-   "why_now": "The spread of complaint types is wide but the HPD and violation counts are modest, so this may be ordinary churn in a large building. Worth a look at the 311 descriptors before spending time; the owner in HPD registration is the first call if the calls concern building systems.",
-   "confidence": "low"
+   }
   },
   {
    "id": "place:1016170007",
    "kind": "place",
-   "headline": "15 East 111 Street in East Harlem saw 311 calls jump to 18 times its prior pace",
+   "headline": "15 East 111 Street: 18 311 calls in two weeks; 5 class C violations",
    "cd": "111",
    "district": "East Harlem",
    "borough": "Manhattan",
@@ -1900,12 +1849,12 @@
    ],
    "n_sources": 3,
    "why": [
-    "311 calls 18.0x the building's prior 12-week pace",
-    "18 311 calls in 14 days (6 types over 5 days)",
-    "6 HPD violations in 30 days (5 class C)",
-    "16 HPD complaints in 14 days",
-    "4 OATH/ECB violations in 30 days",
-    "1 marshal evictions in 60 days (1 residential)"
+    "311 calls 18.0x the building's pace over the prior 12 weeks",
+    "18 311 calls Aug 3–16, 2026 (6 types over 5 days)",
+    "6 HPD violations issued Jul 18–Aug 16, 2026 (5 class C)",
+    "16 HPD complaints Aug 3–16, 2026",
+    "4 OATH/ECB violations Jul 18–Aug 16, 2026",
+    "1 marshal evictions Jun 18–Aug 16, 2026 (1 residential)"
    ],
    "sources": {
     "311": {
@@ -1982,15 +1931,12 @@
      ],
      "query": "https://data.cityofnewyork.us/resource/6z8x-wfk4.json?bbl=1016170007&$order=executed_date DESC"
     }
-   },
-   "headline_auto": "15 East 111 Street: 18 311 calls in two weeks; 5 class C violations",
-   "why_now": "The multiple is dramatic but the base was near zero, and 18 calls over six types on five days could be one or two households filing repeatedly; five class C violations and four OATH cases are the harder facts. Read the complaint descriptors first, then call the owner in the HPD registration.",
-   "confidence": "low"
+   }
   },
   {
    "id": "place:3043710001",
    "kind": "place",
-   "headline": "245 Wortman Avenue in East New York had five residential evictions and eight class C violations",
+   "headline": "245 Wortman Avenue: 15 311 calls in two weeks; 8 class C violations; 5 evictions",
    "cd": "305",
    "district": "East New York / Cypress Hills",
    "borough": "Brooklyn",
@@ -2012,12 +1958,12 @@
    ],
    "n_sources": 3,
    "why": [
-    "15 311 calls in 14 days (10 types over 7 days)",
-    "9 HPD violations in 30 days (8 class C)",
-    "7 HPD complaints in 14 days",
-    "1 DOB complaints in 30 days (Plumbing work – illegal/no permit)",
-    "1 OATH/ECB violations in 30 days",
-    "5 marshal evictions in 60 days (5 residential)"
+    "15 311 calls Aug 3–16, 2026 (10 types over 7 days)",
+    "9 HPD violations issued Jul 18–Aug 16, 2026 (8 class C)",
+    "7 HPD complaints Aug 3–16, 2026",
+    "1 DOB complaints Jul 18–Aug 16, 2026 (Plumbing work – illegal/no permit)",
+    "1 OATH/ECB violations Jul 18–Aug 16, 2026",
+    "5 marshal evictions Jun 18–Aug 16, 2026 (5 residential)"
    ],
    "sources": {
     "311": {
@@ -2103,15 +2049,12 @@
      ],
      "query": "https://data.cityofnewyork.us/resource/6z8x-wfk4.json?bbl=3043710001&$order=executed_date DESC"
     }
-   },
-   "headline_auto": "245 Wortman Avenue: 15 311 calls in two weeks; 8 class C violations; 5 evictions",
-   "why_now": "Almost every violation at the building is immediately hazardous and five households were evicted in 60 days, a small but pointed pattern. Call the owner via HPD registration and the Brooklyn Community Board 5 district manager; with only 15 311 calls, confirm this is more than one household's dispute.",
-   "confidence": "medium"
+   }
   },
   {
    "id": "place:2039437501",
    "kind": "place",
-   "headline": "1650 Metropolitan Avenue in Soundview logged 60 311 calls in two weeks but only six HPD complaints",
+   "headline": "1650 Metropolitan Avenue: 60 311 calls in two weeks; 16 class C violations; 2 evictions",
    "cd": "209",
    "district": "Parkchester / Soundview",
    "borough": "Bronx",
@@ -2133,10 +2076,10 @@
    ],
    "n_sources": 3,
    "why": [
-    "60 311 calls in 14 days (15 types over 14 days)",
-    "39 HPD violations in 30 days (16 class C)",
-    "6 HPD complaints in 14 days",
-    "2 marshal evictions in 60 days (2 residential)"
+    "60 311 calls Aug 3–16, 2026 (15 types over 14 days)",
+    "39 HPD violations issued Jul 18–Aug 16, 2026 (16 class C)",
+    "6 HPD complaints Aug 3–16, 2026",
+    "2 marshal evictions Jun 18–Aug 16, 2026 (2 residential)"
    ],
    "sources": {
     "311": {
@@ -2199,10 +2142,7 @@
      ],
      "query": "https://data.cityofnewyork.us/resource/6z8x-wfk4.json?bbl=2039437501&$order=executed_date DESC"
     }
-   },
-   "headline_auto": "1650 Metropolitan Avenue: 60 311 calls in two weeks; 16 class C violations; 2 evictions",
-   "why_now": "The gap between 60 311 calls and six HPD complaints means much of the volume may be non-housing calls or duplicates, so read the call types before writing anything. Sixteen class C violations still justify a call to the owner in the HPD registration.",
-   "confidence": "medium"
+   }
   },
   {
    "id": "place:2024650025",
@@ -2229,11 +2169,11 @@
    ],
    "n_sources": 3,
    "why": [
-    "14 311 calls in 14 days (8 types over 6 days)",
-    "29 HPD violations in 30 days (10 class C)",
-    "11 HPD complaints in 14 days",
-    "1 DOB complaints in 30 days (6M)",
-    "1 marshal evictions in 60 days (1 residential)"
+    "14 311 calls Aug 3–16, 2026 (8 types over 6 days)",
+    "29 HPD violations issued Jul 18–Aug 16, 2026 (10 class C)",
+    "11 HPD complaints Aug 3–16, 2026",
+    "1 DOB complaints Jul 18–Aug 16, 2026 (6M)",
+    "1 marshal evictions Jun 18–Aug 16, 2026 (1 residential)"
    ],
    "sources": {
     "311": {
@@ -2332,12 +2272,12 @@
    ],
    "n_sources": 2,
    "why": [
-    "311 calls 12.0x the building's prior 12-week pace",
-    "60 311 calls in 14 days (9 types over 10 days)",
-    "14 HPD violations in 30 days (5 class C)",
-    "6 HPD complaints in 14 days",
-    "3 DOB complaints in 30 days (Sidewalk shed/supported scaffold/inadequate defective/none)",
-    "2 OATH/ECB violations in 30 days"
+    "311 calls 12.0x the building's pace over the prior 12 weeks",
+    "60 311 calls Aug 3–16, 2026 (9 types over 10 days)",
+    "14 HPD violations issued Jul 18–Aug 16, 2026 (5 class C)",
+    "6 HPD complaints Aug 3–16, 2026",
+    "3 DOB complaints Jul 18–Aug 16, 2026 (Sidewalk shed/supported scaffold/inadequate defective/none)",
+    "2 OATH/ECB violations Jul 18–Aug 16, 2026"
    ],
    "sources": {
     "311": {
@@ -2448,11 +2388,11 @@
    ],
    "n_sources": 2,
    "why": [
-    "26 311 calls in 14 days (9 types over 9 days)",
-    "25 HPD violations in 30 days (11 class C)",
-    "10 HPD complaints in 14 days",
-    "1 DOB complaints in 30 days (6M)",
-    "5 OATH/ECB violations in 30 days"
+    "26 311 calls Aug 3–16, 2026 (9 types over 9 days)",
+    "25 HPD violations issued Jul 18–Aug 16, 2026 (11 class C)",
+    "10 HPD complaints Aug 3–16, 2026",
+    "1 DOB complaints Jul 18–Aug 16, 2026 (6M)",
+    "5 OATH/ECB violations Jul 18–Aug 16, 2026"
    ],
    "sources": {
     "311": {
@@ -2559,10 +2499,10 @@
    ],
    "n_sources": 3,
    "why": [
-    "42 311 calls in 14 days (16 types over 12 days)",
-    "29 HPD violations in 30 days (5 class C)",
-    "6 HPD complaints in 14 days",
-    "3 marshal evictions in 60 days (3 residential)"
+    "42 311 calls Aug 3–16, 2026 (16 types over 12 days)",
+    "29 HPD violations issued Jul 18–Aug 16, 2026 (5 class C)",
+    "6 HPD complaints Aug 3–16, 2026",
+    "3 marshal evictions Jun 18–Aug 16, 2026 (3 residential)"
    ],
    "sources": {
     "311": {
@@ -2653,9 +2593,9 @@
    ],
    "n_sources": 3,
    "why": [
-    "6 311 calls in 14 days (3 types over 4 days)",
-    "22 HPD violations in 30 days (17 class C)",
-    "3 DOB complaints in 30 days (Building shaking/vibrating/structural stability affected)",
+    "6 311 calls Aug 3–16, 2026 (3 types over 4 days)",
+    "22 HPD violations issued Jul 18–Aug 16, 2026 (17 class C)",
+    "3 DOB complaints Jul 18–Aug 16, 2026 (Building shaking/vibrating/structural stability affected)",
     "vacate order 2026-07-27 (Fire Damage, Partial, 6 units)"
    ],
    "sources": {
@@ -2756,10 +2696,10 @@
    ],
    "n_sources": 3,
    "why": [
-    "25 311 calls in 14 days (9 types over 8 days)",
-    "17 HPD violations in 30 days (2 class C)",
-    "20 HPD complaints in 14 days",
-    "8 marshal evictions in 60 days (8 residential)"
+    "25 311 calls Aug 3–16, 2026 (9 types over 8 days)",
+    "17 HPD violations issued Jul 18–Aug 16, 2026 (2 class C)",
+    "20 HPD complaints Aug 3–16, 2026",
+    "8 marshal evictions Jun 18–Aug 16, 2026 (8 residential)"
    ],
    "sources": {
     "311": {
@@ -2849,12 +2789,12 @@
    ],
    "n_sources": 2,
    "why": [
-    "311 calls 3.8x the building's prior 12-week pace",
-    "18 311 calls in 14 days (12 types over 4 days)",
-    "20 HPD violations in 30 days (5 class C)",
-    "12 HPD complaints in 14 days",
-    "1 DOB complaints in 30 days (Building shaking/vibrating/structural stability affected)",
-    "4 OATH/ECB violations in 30 days"
+    "311 calls 3.8x the building's pace over the prior 12 weeks",
+    "18 311 calls Aug 3–16, 2026 (12 types over 4 days)",
+    "20 HPD violations issued Jul 18–Aug 16, 2026 (5 class C)",
+    "12 HPD complaints Aug 3–16, 2026",
+    "1 DOB complaints Jul 18–Aug 16, 2026 (Building shaking/vibrating/structural stability affected)",
+    "4 OATH/ECB violations Jul 18–Aug 16, 2026"
    ],
    "sources": {
     "311": {
@@ -2961,12 +2901,12 @@
    ],
    "n_sources": 3,
    "why": [
-    "311 calls 9.3x the building's prior 12-week pace",
-    "14 311 calls in 14 days (7 types over 2 days)",
-    "14 HPD complaints in 14 days",
-    "1 DOB complaints in 30 days (6Y)",
-    "2 OATH/ECB violations in 30 days",
-    "3 marshal evictions in 60 days (3 residential)"
+    "311 calls 9.3x the building's pace over the prior 12 weeks",
+    "14 311 calls Aug 3–16, 2026 (7 types over 2 days)",
+    "14 HPD complaints Aug 3–16, 2026",
+    "1 DOB complaints Jul 18–Aug 16, 2026 (6Y)",
+    "2 OATH/ECB violations Jul 18–Aug 16, 2026",
+    "3 marshal evictions Jun 18–Aug 16, 2026 (3 residential)"
    ],
    "sources": {
     "311": {
@@ -3072,10 +3012,10 @@
    ],
    "n_sources": 3,
    "why": [
-    "36 311 calls in 14 days (9 types over 14 days)",
-    "58 HPD violations in 30 days (22 class C)",
-    "9 HPD complaints in 14 days",
-    "1 marshal evictions in 60 days (0 residential)"
+    "36 311 calls Aug 3–16, 2026 (9 types over 14 days)",
+    "58 HPD violations issued Jul 18–Aug 16, 2026 (22 class C)",
+    "9 HPD complaints Aug 3–16, 2026",
+    "1 marshal evictions Jun 18–Aug 16, 2026 (0 residential)"
    ],
    "sources": {
     "311": {
@@ -3163,11 +3103,11 @@
    ],
    "n_sources": 2,
    "why": [
-    "311 calls 5.9x the building's prior 12-week pace",
-    "22 311 calls in 14 days (11 types over 4 days)",
-    "33 HPD violations in 30 days (5 class C)",
-    "24 HPD complaints in 14 days",
-    "2 DOB complaints in 30 days (7J)"
+    "311 calls 5.9x the building's pace over the prior 12 weeks",
+    "22 311 calls Aug 3–16, 2026 (11 types over 4 days)",
+    "33 HPD violations issued Jul 18–Aug 16, 2026 (5 class C)",
+    "24 HPD complaints Aug 3–16, 2026",
+    "2 DOB complaints Jul 18–Aug 16, 2026 (7J)"
    ],
    "sources": {
     "311": {
@@ -3264,10 +3204,10 @@
    ],
    "n_sources": 3,
    "why": [
-    "20 311 calls in 14 days (9 types over 8 days)",
-    "73 HPD violations in 30 days (18 class C)",
-    "1 DOB complaints in 30 days (2U)",
-    "1 marshal evictions in 60 days (1 residential)"
+    "20 311 calls Aug 3–16, 2026 (9 types over 8 days)",
+    "73 HPD violations issued Jul 18–Aug 16, 2026 (18 class C)",
+    "1 DOB complaints Jul 18–Aug 16, 2026 (2U)",
+    "1 marshal evictions Jun 18–Aug 16, 2026 (1 residential)"
    ],
    "sources": {
     "311": {
@@ -3363,9 +3303,9 @@
    ],
    "n_sources": 3,
    "why": [
-    "10 311 calls in 14 days (6 types over 2 days)",
-    "47 HPD violations in 30 days (30 class C)",
-    "8 HPD complaints in 14 days",
+    "10 311 calls Aug 3–16, 2026 (6 types over 2 days)",
+    "47 HPD violations issued Jul 18–Aug 16, 2026 (30 class C)",
+    "8 HPD complaints Aug 3–16, 2026",
     "vacate order 2026-07-23 (Fire Damage, Partial, 3 units)"
    ],
    "sources": {
@@ -3458,11 +3398,11 @@
    ],
    "n_sources": 2,
    "why": [
-    "311 calls 55.0x the building's prior 12-week pace",
-    "55 311 calls in 14 days (11 types over 9 days)",
-    "19 HPD violations in 30 days (8 class C)",
-    "51 HPD complaints in 14 days",
-    "1 DOB complaints in 30 days (6S)"
+    "311 calls 55.0x the building's pace over the prior 12 weeks",
+    "55 311 calls Aug 3–16, 2026 (11 types over 9 days)",
+    "19 HPD violations issued Jul 18–Aug 16, 2026 (8 class C)",
+    "51 HPD complaints Aug 3–16, 2026",
+    "1 DOB complaints Jul 18–Aug 16, 2026 (6S)"
    ],
    "sources": {
     "311": {
@@ -3554,10 +3494,10 @@
    ],
    "n_sources": 3,
    "why": [
-    "14 311 calls in 14 days (8 types over 3 days)",
-    "30 HPD violations in 30 days (10 class C)",
-    "11 HPD complaints in 14 days",
-    "1 marshal evictions in 60 days (1 residential)"
+    "14 311 calls Aug 3–16, 2026 (8 types over 3 days)",
+    "30 HPD violations issued Jul 18–Aug 16, 2026 (10 class C)",
+    "11 HPD complaints Aug 3–16, 2026",
+    "1 marshal evictions Jun 18–Aug 16, 2026 (1 residential)"
    ],
    "sources": {
     "311": {
@@ -3645,11 +3585,11 @@
    ],
    "n_sources": 2,
    "why": [
-    "311 calls 9.0x the building's prior 12-week pace",
-    "18 311 calls in 14 days (5 types over 4 days)",
-    "49 HPD violations in 30 days (13 class C)",
-    "17 HPD complaints in 14 days",
-    "1 DOB complaints in 30 days (Egress – locked/blocked/improper/no secondary means)"
+    "311 calls 9.0x the building's pace over the prior 12 weeks",
+    "18 311 calls Aug 3–16, 2026 (5 types over 4 days)",
+    "49 HPD violations issued Jul 18–Aug 16, 2026 (13 class C)",
+    "17 HPD complaints Aug 3–16, 2026",
+    "1 DOB complaints Jul 18–Aug 16, 2026 (Egress – locked/blocked/improper/no secondary means)"
    ],
    "sources": {
     "311": {
@@ -3719,7 +3659,7 @@
   {
    "id": "district:205:Graffiti",
    "kind": "district",
-   "headline": "Fordham / University Heights: Graffiti complaints 7.81x normal (82 in four weeks)",
+   "headline": "Fordham / University Heights: Graffiti complaints 7.81x normal (82 in the four weeks to Aug 16)",
    "cd": "205",
    "district": "Fordham / University Heights",
    "borough": "Bronx",
@@ -3734,8 +3674,8 @@
    },
    "rank": 0.642,
    "why": [
-    "82 complaints in the last 28 days vs an expected 10.5 (same weeks in prior years, drift-adjusted: 8.1; recent 8-week pace: 10.5)",
-    "last 7 days: 75 vs 2.3/week over the prior three weeks — accelerating",
+    "82 complaints Jul 20–Aug 16, 2026 vs an expected 10.5 (same weeks in prior years, drift-adjusted: 8.1; recent 8-week pace: 10.5)",
+    "Aug 10–16, 2026: 75 vs 2.3/week over the three weeks before — accelerating",
     "spread across 81 addresses; top address 2440 Jerome Avenue has 2%; top descriptor: Graffiti (100%)"
    ],
    "stats": {
@@ -3803,11 +3743,11 @@
    ],
    "n_sources": 2,
    "why": [
-    "311 calls 4.4x the building's prior 12-week pace",
-    "35 311 calls in 14 days (8 types over 8 days)",
-    "8 HPD violations in 30 days (4 class C)",
-    "12 HPD complaints in 14 days",
-    "19 DOB complaints in 30 days (6M)"
+    "311 calls 4.4x the building's pace over the prior 12 weeks",
+    "35 311 calls Aug 3–16, 2026 (8 types over 8 days)",
+    "8 HPD violations issued Jul 18–Aug 16, 2026 (4 class C)",
+    "12 HPD complaints Aug 3–16, 2026",
+    "19 DOB complaints Jul 18–Aug 16, 2026 (6M)"
    ],
    "sources": {
     "311": {
@@ -3898,11 +3838,11 @@
    ],
    "n_sources": 2,
    "why": [
-    "311 calls 16.0x the building's prior 12-week pace",
-    "32 311 calls in 14 days (11 types over 4 days)",
-    "37 HPD violations in 30 days (18 class C)",
-    "29 HPD complaints in 14 days",
-    "1 OATH/ECB violations in 30 days"
+    "311 calls 16.0x the building's pace over the prior 12 weeks",
+    "32 311 calls Aug 3–16, 2026 (11 types over 4 days)",
+    "37 HPD violations issued Jul 18–Aug 16, 2026 (18 class C)",
+    "29 HPD complaints Aug 3–16, 2026",
+    "1 OATH/ECB violations Jul 18–Aug 16, 2026"
    ],
    "sources": {
     "311": {
@@ -3994,10 +3934,10 @@
    ],
    "n_sources": 3,
    "why": [
-    "10 311 calls in 14 days (8 types over 7 days)",
-    "21 HPD violations in 30 days (9 class C)",
-    "7 HPD complaints in 14 days",
-    "3 marshal evictions in 60 days (3 residential)"
+    "10 311 calls Aug 3–16, 2026 (8 types over 7 days)",
+    "21 HPD violations issued Jul 18–Aug 16, 2026 (9 class C)",
+    "7 HPD complaints Aug 3–16, 2026",
+    "3 marshal evictions Jun 18–Aug 16, 2026 (3 residential)"
    ],
    "sources": {
     "311": {
@@ -4086,10 +4026,10 @@
    ],
    "n_sources": 2,
    "why": [
-    "28 311 calls in 14 days (8 types over 9 days)",
-    "19 HPD complaints in 14 days",
-    "7 DOB complaints in 30 days (6M)",
-    "5 marshal evictions in 60 days (5 residential)"
+    "28 311 calls Aug 3–16, 2026 (8 types over 9 days)",
+    "19 HPD complaints Aug 3–16, 2026",
+    "7 DOB complaints Jul 18–Aug 16, 2026 (6M)",
+    "5 marshal evictions Jun 18–Aug 16, 2026 (5 residential)"
    ],
    "sources": {
     "311": {
@@ -4186,11 +4126,11 @@
    ],
    "n_sources": 3,
    "why": [
-    "311 calls 6.9x the building's prior 12-week pace",
-    "24 311 calls in 14 days (9 types over 6 days)",
-    "10 HPD violations in 30 days (2 class C)",
-    "19 HPD complaints in 14 days",
-    "1 marshal evictions in 60 days (1 residential)"
+    "311 calls 6.9x the building's pace over the prior 12 weeks",
+    "24 311 calls Aug 3–16, 2026 (9 types over 6 days)",
+    "10 HPD violations issued Jul 18–Aug 16, 2026 (2 class C)",
+    "19 HPD complaints Aug 3–16, 2026",
+    "1 marshal evictions Jun 18–Aug 16, 2026 (1 residential)"
    ],
    "sources": {
     "311": {
@@ -4279,12 +4219,12 @@
    ],
    "n_sources": 3,
    "why": [
-    "10 311 calls in 14 days (7 types over 4 days)",
-    "21 HPD violations in 30 days (4 class C)",
-    "6 HPD complaints in 14 days",
-    "1 DOB complaints in 30 days (6S)",
-    "1 OATH/ECB violations in 30 days",
-    "3 marshal evictions in 60 days (3 residential)"
+    "10 311 calls Aug 3–16, 2026 (7 types over 4 days)",
+    "21 HPD violations issued Jul 18–Aug 16, 2026 (4 class C)",
+    "6 HPD complaints Aug 3–16, 2026",
+    "1 DOB complaints Jul 18–Aug 16, 2026 (6S)",
+    "1 OATH/ECB violations Jul 18–Aug 16, 2026",
+    "3 marshal evictions Jun 18–Aug 16, 2026 (3 residential)"
    ],
    "sources": {
     "311": {
@@ -4394,11 +4334,11 @@
    ],
    "n_sources": 2,
    "why": [
-    "35 311 calls in 14 days (11 types over 6 days)",
-    "33 HPD violations in 30 days (12 class C)",
-    "26 HPD complaints in 14 days",
-    "1 DOB complaints in 30 days (6M)",
-    "1 OATH/ECB violations in 30 days"
+    "35 311 calls Aug 3–16, 2026 (11 types over 6 days)",
+    "33 HPD violations issued Jul 18–Aug 16, 2026 (12 class C)",
+    "26 HPD complaints Aug 3–16, 2026",
+    "1 DOB complaints Jul 18–Aug 16, 2026 (6M)",
+    "1 OATH/ECB violations Jul 18–Aug 16, 2026"
    ],
    "sources": {
     "311": {
@@ -4500,11 +4440,11 @@
    ],
    "n_sources": 2,
    "why": [
-    "20 311 calls in 14 days (9 types over 8 days)",
-    "58 HPD violations in 30 days (10 class C)",
-    "18 HPD complaints in 14 days",
-    "1 DOB complaints in 30 days (6S)",
-    "1 OATH/ECB violations in 30 days"
+    "20 311 calls Aug 3–16, 2026 (9 types over 8 days)",
+    "58 HPD violations issued Jul 18–Aug 16, 2026 (10 class C)",
+    "18 HPD complaints Aug 3–16, 2026",
+    "1 DOB complaints Jul 18–Aug 16, 2026 (6S)",
+    "1 OATH/ECB violations Jul 18–Aug 16, 2026"
    ],
    "sources": {
     "311": {
@@ -4606,10 +4546,10 @@
    ],
    "n_sources": 2,
    "why": [
-    "311 calls 7.4x the building's prior 12-week pace",
-    "79 311 calls in 14 days (11 types over 3 days)",
-    "62 HPD violations in 30 days (27 class C)",
-    "78 HPD complaints in 14 days"
+    "311 calls 7.4x the building's pace over the prior 12 weeks",
+    "79 311 calls Aug 3–16, 2026 (11 types over 3 days)",
+    "62 HPD violations issued Jul 18–Aug 16, 2026 (27 class C)",
+    "78 HPD complaints Aug 3–16, 2026"
    ],
    "sources": {
     "311": {
@@ -4634,13 +4574,13 @@
        "n": 7
       },
       {
-       "type": "ELECTRIC",
-       "descriptor": "OUTLET/SWITCH",
+       "type": "PAINT/PLASTER",
+       "descriptor": "CEILING",
        "n": 5
       },
       {
-       "type": "PAINT/PLASTER",
-       "descriptor": "CEILING",
+       "type": "ELECTRIC",
+       "descriptor": "OUTLET/SWITCH",
        "n": 5
       },
       {
@@ -4689,10 +4629,10 @@
    ],
    "n_sources": 2,
    "why": [
-    "311 calls 4.8x the building's prior 12-week pace",
-    "28 311 calls in 14 days (11 types over 6 days)",
-    "40 HPD violations in 30 days (14 class C)",
-    "27 HPD complaints in 14 days"
+    "311 calls 4.8x the building's pace over the prior 12 weeks",
+    "28 311 calls Aug 3–16, 2026 (11 types over 6 days)",
+    "40 HPD violations issued Jul 18–Aug 16, 2026 (14 class C)",
+    "27 HPD complaints Aug 3–16, 2026"
    ],
    "sources": {
     "311": {
@@ -4772,10 +4712,10 @@
    ],
    "n_sources": 2,
    "why": [
-    "311 calls 4.6x the building's prior 12-week pace",
-    "24 311 calls in 14 days (8 types over 6 days)",
-    "61 HPD violations in 30 days (11 class C)",
-    "21 HPD complaints in 14 days"
+    "311 calls 4.6x the building's pace over the prior 12 weeks",
+    "24 311 calls Aug 3–16, 2026 (8 types over 6 days)",
+    "61 HPD violations issued Jul 18–Aug 16, 2026 (11 class C)",
+    "21 HPD complaints Aug 3–16, 2026"
    ],
    "sources": {
     "311": {
@@ -4834,7 +4774,7 @@
   {
    "id": "district:406:Encampment",
    "kind": "district",
-   "headline": "Forest Hills / Rego Park: Encampment complaints 4.74x normal (45 in four weeks)",
+   "headline": "Forest Hills / Rego Park: Encampment complaints 4.74x normal (45 in the four weeks to Aug 16)",
    "cd": "406",
    "district": "Forest Hills / Rego Park",
    "borough": "Queens",
@@ -4849,8 +4789,8 @@
    },
    "rank": 0.607,
    "why": [
-    "45 complaints in the last 28 days vs an expected 9.5 (same weeks in prior years, drift-adjusted: 8.7; recent 8-week pace: 9.5)",
-    "last 7 days: 20 vs 8.3/week over the prior three weeks — accelerating",
+    "45 complaints Jul 20–Aug 16, 2026 vs an expected 9.5 (same weeks in prior years, drift-adjusted: 8.7; recent 8-week pace: 9.5)",
+    "Aug 10–16, 2026: 20 vs 8.3/week over the three weeks before — accelerating",
     "spread across 22 addresses; top address 107-36 71 Avenue has 16%; top descriptor: N/A (100%)"
    ],
    "stats": {
@@ -4897,7 +4837,7 @@
   {
    "id": "novel:Cooling Tower:Unsanitary Condition",
    "kind": "novelty",
-   "headline": "New in 311: \"Unsanitary Condition\" (Cooling Tower) — 29 reports in eight weeks, led by Upper East Side",
+   "headline": "New in 311: \"Unsanitary Condition\" (Cooling Tower) — 29 reports Jun 22–Aug 16, 2026, led by Upper East Side",
    "cd": "108",
    "district": "Upper East Side",
    "borough": "Manhattan",
@@ -4911,7 +4851,7 @@
    },
    "rank": 0.487,
    "why": [
-    "29 reports in the last 56 days vs 2.7 in the same weeks of the prior two years (volume-adjusted) — 10.8x",
+    "29 reports Jun 22–Aug 16, 2026 vs 2.7 in the same weeks of the prior two years (volume-adjusted) — 10.8x",
     "top districts: Upper East Side (14), Astoria / Long Island City (2), Fort Greene / Brooklyn Heights (2), Chelsea / Hell's Kitchen (2)"
    ],
    "by_cd": [
@@ -4960,7 +4900,7 @@
   {
    "id": "district:403:Curb Condition",
    "kind": "district",
-   "headline": "Jackson Heights / Elmhurst / Corona: Curb Condition complaints 6.47x normal (97 in four weeks)",
+   "headline": "Jackson Heights / Elmhurst / Corona: Curb Condition complaints 6.47x normal (97 in the four weeks to Aug 16)",
    "cd": "403",
    "district": "Jackson Heights / Elmhurst / Corona",
    "borough": "Queens",
@@ -4975,8 +4915,8 @@
    },
    "rank": 0.478,
    "why": [
-    "97 complaints in the last 28 days vs an expected 15.0 (same weeks in prior years, drift-adjusted: 9.9; recent 8-week pace: 15.0)",
-    "last 7 days: 17 vs 26.7/week over the prior three weeks",
+    "97 complaints Jul 20–Aug 16, 2026 vs an expected 15.0 (same weeks in prior years, drift-adjusted: 9.9; recent 8-week pace: 15.0)",
+    "Aug 10–16, 2026: 17 vs 26.7/week over the three weeks before",
     "spread across 95 addresses; top address 31-07 88 Street has 2%; top descriptor: Defacement (95%)"
    ],
    "stats": {
@@ -5023,7 +4963,7 @@
   {
    "id": "district:408:Building/Use",
    "kind": "district",
-   "headline": "Hillcrest / Fresh Meadows: Building/Use complaints 1.86x normal (78 in four weeks)",
+   "headline": "Hillcrest / Fresh Meadows: Building/Use complaints 1.86x normal (78 in the four weeks to Aug 16)",
    "cd": "408",
    "district": "Hillcrest / Fresh Meadows",
    "borough": "Queens",
@@ -5038,8 +4978,8 @@
    },
    "rank": 0.478,
    "why": [
-    "78 complaints in the last 28 days vs an expected 42.0 (same weeks in prior years, drift-adjusted: 36.7; recent 8-week pace: 42.0)",
-    "last 7 days: 24 vs 18.0/week over the prior three weeks — accelerating",
+    "78 complaints Jul 20–Aug 16, 2026 vs an expected 42.0 (same weeks in prior years, drift-adjusted: 36.7; recent 8-week pace: 42.0)",
+    "Aug 10–16, 2026: 24 vs 18.0/week over the three weeks before — accelerating",
     "spread across 74 addresses; top address 150-16 77 Road has 3%; top descriptor: Zoning - Non-Conforming/Illegal Vehicle Storage (47%)"
    ],
    "stats": {
@@ -5086,7 +5026,7 @@
   {
    "id": "novel:Consumer Complaint:Pawnbroker",
    "kind": "novelty",
-   "headline": "New in 311: \"Pawnbroker\" (Consumer Complaint) — 25 reports in eight weeks, led by Howard Beach / Ozone Park",
+   "headline": "New in 311: \"Pawnbroker\" (Consumer Complaint) — 25 reports Jun 22–Aug 16, 2026, led by Howard Beach / Ozone Park",
    "cd": "410",
    "district": "Howard Beach / Ozone Park",
    "borough": "Queens",
@@ -5100,7 +5040,7 @@
    },
    "rank": 0.475,
    "why": [
-    "25 reports in the last 56 days vs 5.6 in the same weeks of the prior two years (volume-adjusted) — 4.5x",
+    "25 reports Jun 22–Aug 16, 2026 vs 5.6 in the same weeks of the prior two years (volume-adjusted) — 4.5x",
     "top districts: Howard Beach / Ozone Park (16), East Harlem (3), Forest Hills / Rego Park (2), Astoria / Long Island City (1)"
    ],
    "by_cd": [
@@ -5144,7 +5084,7 @@
   {
    "id": "district:317:Graffiti",
    "kind": "district",
-   "headline": "East Flatbush: Graffiti complaints 5.65x normal (48 in four weeks)",
+   "headline": "East Flatbush: Graffiti complaints 5.65x normal (48 in the four weeks to Aug 16)",
    "cd": "317",
    "district": "East Flatbush",
    "borough": "Brooklyn",
@@ -5159,8 +5099,8 @@
    },
    "rank": 0.449,
    "why": [
-    "48 complaints in the last 28 days vs an expected 8.5 (same weeks in prior years, drift-adjusted: 8.1; recent 8-week pace: 8.5)",
-    "last 7 days: 31 vs 5.7/week over the prior three weeks — accelerating",
+    "48 complaints Jul 20–Aug 16, 2026 vs an expected 8.5 (same weeks in prior years, drift-adjusted: 8.1; recent 8-week pace: 8.5)",
+    "Aug 10–16, 2026: 31 vs 5.7/week over the three weeks before — accelerating",
     "spread across 48 addresses; top address 1012 Rogers Avenue has 2%; top descriptor: Graffiti (100%)"
    ],
    "stats": {
@@ -5207,7 +5147,7 @@
   {
    "id": "district:414:Lead",
    "kind": "district",
-   "headline": "Far Rockaway / Rockaways: Lead complaints 3.25x normal (13 in four weeks)",
+   "headline": "Far Rockaway / Rockaways: Lead complaints 3.25x normal (13 in the four weeks to Aug 16)",
    "cd": "414",
    "district": "Far Rockaway / Rockaways",
    "borough": "Queens",
@@ -5222,8 +5162,8 @@
    },
    "rank": 0.443,
    "why": [
-    "13 complaints in the last 28 days vs an expected 4.0 (same weeks in prior years, drift-adjusted: 3.0; recent 8-week pace: 4.0)",
-    "last 7 days: 8 vs 1.7/week over the prior three weeks — accelerating",
+    "13 complaints Jul 20–Aug 16, 2026 vs an expected 4.0 (same weeks in prior years, drift-adjusted: 3.0; recent 8-week pace: 4.0)",
+    "Aug 10–16, 2026: 8 vs 1.7/week over the three weeks before — accelerating",
     "spread across 13 addresses; top address 123-10 Ocean Promenade has 8%; top descriptor: Lead Kit (85%)"
    ],
    "stats": {
@@ -5270,7 +5210,7 @@
   {
    "id": "district:411:Lead",
    "kind": "district",
-   "headline": "Bayside / Douglaston / Little Neck: Lead complaints 2.12x normal (29 in four weeks)",
+   "headline": "Bayside / Douglaston / Little Neck: Lead complaints 2.12x normal (29 in the four weeks to Aug 16)",
    "cd": "411",
    "district": "Bayside / Douglaston / Little Neck",
    "borough": "Queens",
@@ -5285,8 +5225,8 @@
    },
    "rank": 0.443,
    "why": [
-    "29 complaints in the last 28 days vs an expected 13.7 (same weeks in prior years, drift-adjusted: 13.7; recent 8-week pace: 10.0)",
-    "last 7 days: 9 vs 6.7/week over the prior three weeks — accelerating",
+    "29 complaints Jul 20–Aug 16, 2026 vs an expected 13.7 (same weeks in prior years, drift-adjusted: 13.7; recent 8-week pace: 10.0)",
+    "Aug 10–16, 2026: 9 vs 6.7/week over the three weeks before — accelerating",
     "spread across 29 addresses; top address 195-33 39 Avenue has 3%; top descriptor: Lead Kit (90%)"
    ],
    "stats": {
@@ -5333,7 +5273,7 @@
   {
    "id": "district:204:Encampment",
    "kind": "district",
-   "headline": "Highbridge / Concourse: Encampment complaints 1.63x normal (67 in four weeks)",
+   "headline": "Highbridge / Concourse: Encampment complaints 1.63x normal (67 in the four weeks to Aug 16)",
    "cd": "204",
    "district": "Highbridge / Concourse",
    "borough": "Bronx",
@@ -5348,8 +5288,8 @@
    },
    "rank": 0.443,
    "why": [
-    "67 complaints in the last 28 days vs an expected 41.0 (same weeks in prior years, drift-adjusted: 23.2; recent 8-week pace: 41.0)",
-    "last 7 days: 21 vs 15.3/week over the prior three weeks — accelerating",
+    "67 complaints Jul 20–Aug 16, 2026 vs an expected 41.0 (same weeks in prior years, drift-adjusted: 23.2; recent 8-week pace: 41.0)",
+    "Aug 10–16, 2026: 21 vs 15.3/week over the three weeks before — accelerating",
     "spread across 28 addresses; top address 1398 Grand Concourse has 30%; top descriptor: N/A (100%)"
    ],
    "stats": {
@@ -5396,7 +5336,7 @@
   {
    "id": "district:308:Graffiti",
    "kind": "district",
-   "headline": "Crown Heights / Prospect Heights: Graffiti complaints 4.06x normal (65 in four weeks)",
+   "headline": "Crown Heights / Prospect Heights: Graffiti complaints 4.06x normal (65 in the four weeks to Aug 16)",
    "cd": "308",
    "district": "Crown Heights / Prospect Heights",
    "borough": "Brooklyn",
@@ -5411,8 +5351,8 @@
    },
    "rank": 0.428,
    "why": [
-    "65 complaints in the last 28 days vs an expected 16.0 (same weeks in prior years, drift-adjusted: 16.0; recent 8-week pace: 10.5)",
-    "last 7 days: 61 vs 1.3/week over the prior three weeks — accelerating",
+    "65 complaints Jul 20–Aug 16, 2026 vs an expected 16.0 (same weeks in prior years, drift-adjusted: 16.0; recent 8-week pace: 10.5)",
+    "Aug 10–16, 2026: 61 vs 1.3/week over the three weeks before — accelerating",
     "spread across 63 addresses; top address 772 Nostrand Avenue has 3%; top descriptor: Graffiti (100%)"
    ],
    "stats": {
@@ -5459,7 +5399,7 @@
   {
    "id": "district:102:Real Time Enforcement",
    "kind": "district",
-   "headline": "Greenwich Village / SoHo: Real Time Enforcement complaints 5.74x normal (109 in four weeks)",
+   "headline": "Greenwich Village / SoHo: Real Time Enforcement complaints 5.74x normal (109 in the four weeks to Aug 16)",
    "cd": "102",
    "district": "Greenwich Village / SoHo",
    "borough": "Manhattan",
@@ -5481,8 +5421,8 @@
    },
    "rank": 0.388,
    "why": [
-    "109 complaints in the last 28 days vs an expected 19.0 (same weeks in prior years, drift-adjusted: 17.7; recent 8-week pace: 19.0)",
-    "last 7 days: 3 vs 35.3/week over the prior three weeks",
+    "109 complaints Jul 20–Aug 16, 2026 vs an expected 19.0 (same weeks in prior years, drift-adjusted: 17.7; recent 8-week pace: 19.0)",
+    "Aug 10–16, 2026: 3 vs 35.3/week over the three weeks before",
     "spread across 104 addresses; top address 119 Macdougal Street has 2%; top descriptor: Work Without A Permit - Occupied Multiple Dwelling (100%)"
    ],
    "stats": {
@@ -5529,7 +5469,7 @@
   {
    "id": "district:301:For Hire Vehicle Complaint",
    "kind": "district",
-   "headline": "Greenpoint / Williamsburg: For Hire Vehicle Complaint complaints 2.6x normal (109 in four weeks)",
+   "headline": "Greenpoint / Williamsburg: For Hire Vehicle Complaint complaints 2.6x normal (109 in the four weeks to Aug 16)",
    "cd": "301",
    "district": "Greenpoint / Williamsburg",
    "borough": "Brooklyn",
@@ -5544,8 +5484,8 @@
    },
    "rank": 0.388,
    "why": [
-    "109 complaints in the last 28 days vs an expected 42.0 (same weeks in prior years, drift-adjusted: 28.3; recent 8-week pace: 42.0)",
-    "last 7 days: 38 vs 23.7/week over the prior three weeks — accelerating",
+    "109 complaints Jul 20–Aug 16, 2026 vs an expected 42.0 (same weeks in prior years, drift-adjusted: 28.3; recent 8-week pace: 42.0)",
+    "Aug 10–16, 2026: 38 vs 23.7/week over the three weeks before — accelerating",
     "spread across 47 addresses; top address 158 Franklin Street has 17%; top descriptor: Driver Complaint - Non Passenger (95%)"
    ],
    "stats": {
@@ -5592,7 +5532,7 @@
   {
    "id": "district:309:Graffiti",
    "kind": "district",
-   "headline": "Flatbush / PLG: Graffiti complaints 4.55x normal (38 in four weeks)",
+   "headline": "Flatbush / PLG: Graffiti complaints 4.55x normal (38 in the four weeks to Aug 16)",
    "cd": "309",
    "district": "Flatbush / PLG",
    "borough": "Brooklyn",
@@ -5607,8 +5547,8 @@
    },
    "rank": 0.376,
    "why": [
-    "38 complaints in the last 28 days vs an expected 8.4 (same weeks in prior years, drift-adjusted: 8.4; recent 8-week pace: 7.5)",
-    "last 7 days: 35 vs 1.0/week over the prior three weeks — accelerating",
+    "38 complaints Jul 20–Aug 16, 2026 vs an expected 8.4 (same weeks in prior years, drift-adjusted: 8.4; recent 8-week pace: 7.5)",
+    "Aug 10–16, 2026: 35 vs 1.0/week over the three weeks before — accelerating",
     "spread across 38 addresses; top address 1018 Nostrand Avenue has 3%; top descriptor: Graffiti (100%)"
    ],
    "stats": {
@@ -5655,7 +5595,7 @@
   {
    "id": "district:404:Curb Condition",
    "kind": "district",
-   "headline": "Elmhurst / South Corona: Curb Condition complaints 6.1x normal (64 in four weeks)",
+   "headline": "Elmhurst / South Corona: Curb Condition complaints 6.1x normal (64 in the four weeks to Aug 16)",
    "cd": "404",
    "district": "Elmhurst / South Corona",
    "borough": "Queens",
@@ -5670,8 +5610,8 @@
    },
    "rank": 0.369,
    "why": [
-    "64 complaints in the last 28 days vs an expected 10.5 (same weeks in prior years, drift-adjusted: 6.3; recent 8-week pace: 10.5)",
-    "last 7 days: 3 vs 20.3/week over the prior three weeks",
+    "64 complaints Jul 20–Aug 16, 2026 vs an expected 10.5 (same weeks in prior years, drift-adjusted: 6.3; recent 8-week pace: 10.5)",
+    "Aug 10–16, 2026: 3 vs 20.3/week over the three weeks before",
     "spread across 62 addresses; top address 106-02 Otis Avenue has 5%; top descriptor: Defacement (95%)"
    ],
    "stats": {
@@ -5718,7 +5658,7 @@
   {
    "id": "district:211:Drug Activity",
    "kind": "district",
-   "headline": "Morris Park / Pelham Parkway: Drug Activity complaints 3.25x normal (83 in four weeks)",
+   "headline": "Morris Park / Pelham Parkway: Drug Activity complaints 3.25x normal (83 in the four weeks to Aug 16)",
    "cd": "211",
    "district": "Morris Park / Pelham Parkway",
    "borough": "Bronx",
@@ -5733,8 +5673,8 @@
    },
    "rank": 0.367,
    "why": [
-    "83 complaints in the last 28 days vs an expected 25.5 (same weeks in prior years, drift-adjusted: 4.1; recent 8-week pace: 25.5)",
-    "last 7 days: 54 vs 9.7/week over the prior three weeks — accelerating",
+    "83 complaints Jul 20–Aug 16, 2026 vs an expected 25.5 (same weeks in prior years, drift-adjusted: 4.1; recent 8-week pace: 25.5)",
+    "Aug 10–16, 2026: 54 vs 9.7/week over the three weeks before — accelerating",
     "spread across 4 addresses; top address 1062 Rhinelander Avenue has 49% — likely one caller; top descriptor: Use Outside (55%)"
    ],
    "stats": {
@@ -5781,7 +5721,7 @@
   {
    "id": "district:407:Lead",
    "kind": "district",
-   "headline": "Flushing: Lead complaints 2.13x normal (75 in four weeks)",
+   "headline": "Flushing: Lead complaints 2.13x normal (75 in the four weeks to Aug 16)",
    "cd": "407",
    "district": "Flushing",
    "borough": "Queens",
@@ -5796,8 +5736,8 @@
    },
    "rank": 0.354,
    "why": [
-    "75 complaints in the last 28 days vs an expected 35.2 (same weeks in prior years, drift-adjusted: 35.2; recent 8-week pace: 23.0)",
-    "last 7 days: 14 vs 20.3/week over the prior three weeks",
+    "75 complaints Jul 20–Aug 16, 2026 vs an expected 35.2 (same weeks in prior years, drift-adjusted: 35.2; recent 8-week pace: 23.0)",
+    "Aug 10–16, 2026: 14 vs 20.3/week over the three weeks before",
     "spread across 75 addresses; top address 12-12 148 Street has 1%; top descriptor: Lead Kit (89%)"
    ],
    "stats": {
@@ -5844,7 +5784,7 @@
   {
    "id": "district:103:Traffic",
    "kind": "district",
-   "headline": "Lower East Side / Chinatown: Traffic complaints 13x normal (141 in four weeks)",
+   "headline": "Lower East Side / Chinatown: Traffic complaints 13x normal (141 in the four weeks to Aug 16)",
    "cd": "103",
    "district": "Lower East Side / Chinatown",
    "borough": "Manhattan",
@@ -5866,8 +5806,8 @@
    },
    "rank": 0.348,
    "why": [
-    "141 complaints in the last 28 days vs an expected 10.8 (same weeks in prior years, drift-adjusted: 10.8; recent 8-week pace: 2.5)",
-    "last 7 days: 0 vs 47.0/week over the prior three weeks",
+    "141 complaints Jul 20–Aug 16, 2026 vs an expected 10.8 (same weeks in prior years, drift-adjusted: 10.8; recent 8-week pace: 2.5)",
+    "Aug 10–16, 2026: 0 vs 47.0/week over the three weeks before",
     "spread across 3 addresses; top address 20 Clinton Street has 68% — likely one caller; top descriptor: Truck Route Violation (98%)"
    ],
    "stats": {
@@ -5914,7 +5854,7 @@
   {
    "id": "district:410:Noise - Street/Sidewalk",
    "kind": "district",
-   "headline": "Howard Beach / Ozone Park: Noise - Street/Sidewalk complaints 1.56x normal (336 in four weeks)",
+   "headline": "Howard Beach / Ozone Park: Noise - Street/Sidewalk complaints 1.56x normal (336 in the four weeks to Aug 16)",
    "cd": "410",
    "district": "Howard Beach / Ozone Park",
    "borough": "Queens",
@@ -5929,8 +5869,8 @@
    },
    "rank": 0.339,
    "why": [
-    "336 complaints in the last 28 days vs an expected 216.0 (same weeks in prior years, drift-adjusted: 193.3; recent 8-week pace: 216.0)",
-    "last 7 days: 102 vs 78.0/week over the prior three weeks — accelerating",
+    "336 complaints Jul 20–Aug 16, 2026 vs an expected 216.0 (same weeks in prior years, drift-adjusted: 193.3; recent 8-week pace: 216.0)",
+    "Aug 10–16, 2026: 102 vs 78.0/week over the three weeks before — accelerating",
     "spread across 187 addresses; top address Southern Fields has 6%; top descriptor: Loud Music/Party (77%)"
    ],
    "stats": {
@@ -5977,7 +5917,7 @@
   {
    "id": "district:209:Noise - Vehicle",
    "kind": "district",
-   "headline": "Parkchester / Soundview: Noise - Vehicle complaints 2.36x normal (266 in four weeks)",
+   "headline": "Parkchester / Soundview: Noise - Vehicle complaints 2.36x normal (266 in the four weeks to Aug 16)",
    "cd": "209",
    "district": "Parkchester / Soundview",
    "borough": "Bronx",
@@ -5992,8 +5932,8 @@
    },
    "rank": 0.336,
    "why": [
-    "266 complaints in the last 28 days vs an expected 112.6 (same weeks in prior years, drift-adjusted: 112.6; recent 8-week pace: 74.0)",
-    "last 7 days: 68 vs 66.0/week over the prior three weeks",
+    "266 complaints Jul 20–Aug 16, 2026 vs an expected 112.6 (same weeks in prior years, drift-adjusted: 112.6; recent 8-week pace: 74.0)",
+    "Aug 10–16, 2026: 68 vs 66.0/week over the three weeks before",
     "spread across 75 addresses; top address 1515 Watson Avenue has 16%; top descriptor: Car/Truck Music (96%)"
    ],
    "stats": {
@@ -6040,7 +5980,7 @@
   {
    "id": "district:112:Drug Activity",
    "kind": "district",
-   "headline": "Washington Heights / Inwood: Drug Activity complaints 3.41x normal (133 in four weeks)",
+   "headline": "Washington Heights / Inwood: Drug Activity complaints 3.41x normal (133 in the four weeks to Aug 16)",
    "cd": "112",
    "district": "Washington Heights / Inwood",
    "borough": "Manhattan",
@@ -6055,8 +5995,8 @@
    },
    "rank": 0.329,
    "why": [
-    "133 complaints in the last 28 days vs an expected 39.0 (same weeks in prior years, drift-adjusted: 17.1; recent 8-week pace: 39.0)",
-    "last 7 days: 38 vs 31.7/week over the prior three weeks",
+    "133 complaints Jul 20–Aug 16, 2026 vs an expected 39.0 (same weeks in prior years, drift-adjusted: 17.1; recent 8-week pace: 39.0)",
+    "Aug 10–16, 2026: 38 vs 31.7/week over the three weeks before",
     "spread across 20 addresses; top address 30 Park Terrace East has 75% — likely one caller; top descriptor: Use Indoor (77%)"
    ],
    "stats": {
@@ -6103,7 +6043,7 @@
   {
    "id": "district:208:Non-Emergency Police Matter",
    "kind": "district",
-   "headline": "Riverdale / Fieldston: Non-Emergency Police Matter complaints 3.1x normal (49 in four weeks)",
+   "headline": "Riverdale / Fieldston: Non-Emergency Police Matter complaints 3.1x normal (49 in the four weeks to Aug 16)",
    "cd": "208",
    "district": "Riverdale / Fieldston",
    "borough": "Bronx",
@@ -6114,9 +6054,9 @@
     "hits": 1,
     "articles": [
      {
-      "title": "Woman dies after receiving injection from unlicensed doctor at Bronx lifestyle business, police say - CBS News",
+      "title": "Woman dies after receiving injection from unlicensed doctor at Bronx lifestyle business, police say - cbsnews.com",
       "url": "https://news.google.com/rss/articles/CBMinAFBVV95cUxNUVhXWWh1RXV4VHJtN1NDZUtWbVNOM3JpdTRHLVJlS05uN1VrakRESFJIUS1yZkJyeXZISGRvcDR1T2xHX3hmVkdkN0FpbkVJRHF2b21zallhRmlnX1l5bm9uUWJMYzdNWWZyYWxwWTkxTDNraUtXdDRSc3RJREJTZDZUQThfVlRmZGVwM2VPUzFzdVVuWXptTDFZTGI?oc=5",
-      "outlet": "CBS News",
+      "outlet": "cbsnews.com",
       "date": "2026-07-21"
      }
     ],
@@ -6125,8 +6065,8 @@
    },
    "rank": 0.322,
    "why": [
-    "49 complaints in the last 28 days vs an expected 15.8 (same weeks in prior years, drift-adjusted: 15.8; recent 8-week pace: 10.0)",
-    "last 7 days: 11 vs 12.7/week over the prior three weeks",
+    "49 complaints Jul 20–Aug 16, 2026 vs an expected 15.8 (same weeks in prior years, drift-adjusted: 15.8; recent 8-week pace: 10.0)",
+    "Aug 10–16, 2026: 11 vs 12.7/week over the three weeks before",
     "spread across 17 addresses; top address 125 West 228 Street has 35%; top descriptor: Other (complaint details) (53%)"
    ],
    "stats": {
@@ -6173,7 +6113,7 @@
   {
    "id": "district:401:Rodent",
    "kind": "district",
-   "headline": "Astoria / Long Island City: Rodent complaints 1.8x normal (306 in four weeks)",
+   "headline": "Astoria / Long Island City: Rodent complaints 1.8x normal (306 in the four weeks to Aug 16)",
    "cd": "401",
    "district": "Astoria / Long Island City",
    "borough": "Queens",
@@ -6188,8 +6128,8 @@
    },
    "rank": 0.266,
    "why": [
-    "306 complaints in the last 28 days vs an expected 170.0 (same weeks in prior years, drift-adjusted: 110.3; recent 8-week pace: 170.0)",
-    "last 7 days: 68 vs 79.3/week over the prior three weeks",
+    "306 complaints Jul 20–Aug 16, 2026 vs an expected 170.0 (same weeks in prior years, drift-adjusted: 110.3; recent 8-week pace: 170.0)",
+    "Aug 10–16, 2026: 68 vs 79.3/week over the three weeks before",
     "spread across 72 addresses; top address 30-70 34 Street has 65% — likely one caller; top descriptor: Rat Sighting (85%)"
    ],
    "stats": {
@@ -6236,7 +6176,7 @@
   {
    "id": "district:211:Smoking or Vaping",
    "kind": "district",
-   "headline": "Morris Park / Pelham Parkway: Smoking or Vaping complaints 5.18x normal (44 in four weeks)",
+   "headline": "Morris Park / Pelham Parkway: Smoking or Vaping complaints 5.18x normal (44 in the four weeks to Aug 16)",
    "cd": "211",
    "district": "Morris Park / Pelham Parkway",
    "borough": "Bronx",
@@ -6251,8 +6191,8 @@
    },
    "rank": 0.251,
    "why": [
-    "44 complaints in the last 28 days vs an expected 8.5 (same weeks in prior years, drift-adjusted: 1.6; recent 8-week pace: 8.5)",
-    "last 7 days: 40 vs 1.3/week over the prior three weeks — accelerating",
+    "44 complaints Jul 20–Aug 16, 2026 vs an expected 8.5 (same weeks in prior years, drift-adjusted: 1.6; recent 8-week pace: 8.5)",
+    "Aug 10–16, 2026: 40 vs 1.3/week over the three weeks before — accelerating",
     "spread across 6 addresses; top address 1062 Rhinelander Avenue has 84% — likely one caller; top descriptor: Allowed in Smoke Free Area (100%)"
    ],
    "stats": {
@@ -6299,7 +6239,7 @@
   {
    "id": "district:102:UNSANITARY CONDITION",
    "kind": "district",
-   "headline": "Greenwich Village / SoHo: UNSANITARY CONDITION complaints 1.96x normal (114 in four weeks)",
+   "headline": "Greenwich Village / SoHo: UNSANITARY CONDITION complaints 1.96x normal (114 in the four weeks to Aug 16)",
    "cd": "102",
    "district": "Greenwich Village / SoHo",
    "borough": "Manhattan",
@@ -6333,8 +6273,8 @@
    },
    "rank": 0.246,
    "why": [
-    "114 complaints in the last 28 days vs an expected 58.3 (same weeks in prior years, drift-adjusted: 58.3; recent 8-week pace: 55.5)",
-    "last 7 days: 35 vs 26.3/week over the prior three weeks — accelerating",
+    "114 complaints Jul 20–Aug 16, 2026 vs an expected 58.3 (same weeks in prior years, drift-adjusted: 58.3; recent 8-week pace: 55.5)",
+    "Aug 10–16, 2026: 35 vs 26.3/week over the three weeks before — accelerating",
     "spread across 58 addresses; top address 29 7 Avenue South has 9%; top descriptor: PESTS (50%)"
    ],
    "stats": {
@@ -6381,7 +6321,7 @@
   {
    "id": "district:315:DOOR/WINDOW",
    "kind": "district",
-   "headline": "Sheepshead Bay / Gravesend: DOOR/WINDOW complaints 1.79x normal (43 in four weeks)",
+   "headline": "Sheepshead Bay / Gravesend: DOOR/WINDOW complaints 1.79x normal (43 in the four weeks to Aug 16)",
    "cd": "315",
    "district": "Sheepshead Bay / Gravesend",
    "borough": "Brooklyn",
@@ -6396,8 +6336,8 @@
    },
    "rank": 0.239,
    "why": [
-    "43 complaints in the last 28 days vs an expected 24.0 (same weeks in prior years, drift-adjusted: 23.8; recent 8-week pace: 24.0)",
-    "last 7 days: 15 vs 9.3/week over the prior three weeks — accelerating",
+    "43 complaints Jul 20–Aug 16, 2026 vs an expected 24.0 (same weeks in prior years, drift-adjusted: 23.8; recent 8-week pace: 24.0)",
+    "Aug 10–16, 2026: 15 vs 9.3/week over the three weeks before — accelerating",
     "spread across 21 addresses; top address 2375 East 3 Street has 30%; top descriptor: WINDOW FRAME (49%)"
    ],
    "stats": {
@@ -6444,7 +6384,7 @@
   {
    "id": "district:403:Graffiti",
    "kind": "district",
-   "headline": "Jackson Heights / Elmhurst / Corona: Graffiti complaints 2.23x normal (22 in four weeks)",
+   "headline": "Jackson Heights / Elmhurst / Corona: Graffiti complaints 2.23x normal (22 in the four weeks to Aug 16)",
    "cd": "403",
    "district": "Jackson Heights / Elmhurst / Corona",
    "borough": "Queens",
@@ -6459,8 +6399,8 @@
    },
    "rank": 0.236,
    "why": [
-    "22 complaints in the last 28 days vs an expected 9.9 (same weeks in prior years, drift-adjusted: 9.9; recent 8-week pace: 6.0)",
-    "last 7 days: 13 vs 3.0/week over the prior three weeks — accelerating",
+    "22 complaints Jul 20–Aug 16, 2026 vs an expected 9.9 (same weeks in prior years, drift-adjusted: 9.9; recent 8-week pace: 6.0)",
+    "Aug 10–16, 2026: 13 vs 3.0/week over the three weeks before — accelerating",
     "spread across 21 addresses; top address 72-11 Roosevelt Avenue has 9%; top descriptor: Graffiti (100%)"
    ],
    "stats": {
@@ -6507,7 +6447,7 @@
   {
    "id": "novel:Noise - Commercial:Loud Television",
    "kind": "novelty",
-   "headline": "New in 311: \"Loud Television\" (Noise - Commercial) — 68 reports in eight weeks, led by Greenwich Village / SoHo",
+   "headline": "New in 311: \"Loud Television\" (Noise - Commercial) — 68 reports Jun 22–Aug 16, 2026, led by Greenwich Village / SoHo",
    "cd": "102",
    "district": "Greenwich Village / SoHo",
    "borough": "Manhattan",
@@ -6521,7 +6461,7 @@
    },
    "rank": 0.204,
    "why": [
-    "68 reports in the last 56 days vs 8.8 in the same weeks of the prior two years (volume-adjusted) — 7.7x",
+    "68 reports Jun 22–Aug 16, 2026 vs 8.8 in the same weeks of the prior two years (volume-adjusted) — 7.7x",
     "top districts: Greenwich Village / SoHo (19), Lower Manhattan (10), Flushing (6), Greenpoint / Williamsburg (5)"
    ],
    "by_cd": [
@@ -6570,7 +6510,7 @@
   {
    "id": "novel:Water Quality:Odor/Taste",
    "kind": "novelty",
-   "headline": "New in 311: \"Odor/Taste\" (Water Quality) — 66 reports in eight weeks, led by Fort Greene / Brooklyn Heights",
+   "headline": "New in 311: \"Odor/Taste\" (Water Quality) — 66 reports Jun 22–Aug 16, 2026, led by Fort Greene / Brooklyn Heights",
    "cd": "302",
    "district": "Fort Greene / Brooklyn Heights",
    "borough": "Brooklyn",
@@ -6584,7 +6524,7 @@
    },
    "rank": 0.198,
    "why": [
-    "66 reports in the last 56 days vs 0.0 in the same weeks of the prior two years (volume-adjusted) — not seen in either prior year",
+    "66 reports Jun 22–Aug 16, 2026 vs 0.0 in the same weeks of the prior two years (volume-adjusted) — not seen in either prior year",
     "top districts: Fort Greene / Brooklyn Heights (5), Jamaica / Hollis / St. Albans (4), Bedford-Stuyvesant (3), Bushwick (3)"
    ],
    "by_cd": [
@@ -6633,7 +6573,7 @@
   {
    "id": "district:401:Obstruction",
    "kind": "district",
-   "headline": "Astoria / Long Island City: Obstruction complaints 1.58x normal (65 in four weeks)",
+   "headline": "Astoria / Long Island City: Obstruction complaints 1.58x normal (65 in the four weeks to Aug 16)",
    "cd": "401",
    "district": "Astoria / Long Island City",
    "borough": "Queens",
@@ -6655,8 +6595,8 @@
    },
    "rank": 0.196,
    "why": [
-    "65 complaints in the last 28 days vs an expected 41.1 (same weeks in prior years, drift-adjusted: 41.1; recent 8-week pace: 31.5)",
-    "last 7 days: 25 vs 13.3/week over the prior three weeks — accelerating",
+    "65 complaints Jul 20–Aug 16, 2026 vs an expected 41.1 (same weeks in prior years, drift-adjusted: 41.1; recent 8-week pace: 31.5)",
+    "Aug 10–16, 2026: 25 vs 13.3/week over the three weeks before — accelerating",
     "spread across 53 addresses; top address 12-28 31 Drive has 6%; top descriptor: Weeds or Grass (43%)"
    ],
    "stats": {
@@ -6703,7 +6643,7 @@
   {
    "id": "district:401:GENERAL",
    "kind": "district",
-   "headline": "Astoria / Long Island City: GENERAL complaints 2.14x normal (696 in four weeks)",
+   "headline": "Astoria / Long Island City: GENERAL complaints 2.14x normal (696 in the four weeks to Aug 16)",
    "cd": "401",
    "district": "Astoria / Long Island City",
    "borough": "Queens",
@@ -6731,8 +6671,8 @@
    },
    "rank": 0.186,
    "why": [
-    "696 complaints in the last 28 days vs an expected 325.5 (same weeks in prior years, drift-adjusted: 31.6; recent 8-week pace: 325.5)",
-    "last 7 days: 146 vs 183.3/week over the prior three weeks",
+    "696 complaints Jul 20–Aug 16, 2026 vs an expected 325.5 (same weeks in prior years, drift-adjusted: 31.6; recent 8-week pace: 325.5)",
+    "Aug 10–16, 2026: 146 vs 183.3/week over the three weeks before",
     "spread across 23 addresses; top address 30-70 34 Street has 95% — likely one caller; top descriptor: COOKING GAS (94%)"
    ],
    "stats": {
@@ -6779,7 +6719,7 @@
   {
    "id": "district:111:Graffiti",
    "kind": "district",
-   "headline": "East Harlem: Graffiti complaints 2.31x normal (67 in four weeks)",
+   "headline": "East Harlem: Graffiti complaints 2.31x normal (67 in the four weeks to Aug 16)",
    "cd": "111",
    "district": "East Harlem",
    "borough": "Manhattan",
@@ -6794,8 +6734,8 @@
    },
    "rank": 0.161,
    "why": [
-    "67 complaints in the last 28 days vs an expected 29.1 (same weeks in prior years, drift-adjusted: 29.1; recent 8-week pace: 6.5)",
-    "last 7 days: 3 vs 21.3/week over the prior three weeks",
+    "67 complaints Jul 20–Aug 16, 2026 vs an expected 29.1 (same weeks in prior years, drift-adjusted: 29.1; recent 8-week pace: 6.5)",
+    "Aug 10–16, 2026: 3 vs 21.3/week over the three weeks before",
     "spread across 65 addresses; top address 1930 3 Avenue has 3%; top descriptor: Graffiti (100%)"
    ],
    "stats": {
@@ -6840,9 +6780,91 @@
    "query": "https://data.cityofnewyork.us/resource/erm2-nwe9.json?$where=complaint_type='Graffiti' AND community_board='11 MANHATTAN' AND created_date >= '2026-07-20'&$order=created_date DESC"
   },
   {
+   "id": "district:312:Non-Emergency Police Matter",
+   "kind": "district",
+   "headline": "Borough Park / Kensington: Non-Emergency Police Matter complaints 2.53x normal (38 in the four weeks to Aug 16)",
+   "cd": "312",
+   "district": "Borough Park / Kensington",
+   "borough": "Brooklyn",
+   "complaint_type": "Non-Emergency Police Matter",
+   "signal": 0.335,
+   "coverage": {
+    "score": 0.7,
+    "hits": 3,
+    "articles": [
+     {
+      "title": "Police investigating death of 2-month-old girl in Brooklyn - ABC7 New York",
+      "url": "https://news.google.com/rss/articles/CBMijwFBVV95cUxPaW5QTy15X2REV0NOV1prdkkxLVd6UU8tNTU0cXlPRnoxS29WUmh6Q3h3czJWdGRjbnVucktfMzB5ckhJRi16SGVqMnlEUGpmN1pyTWFEcEtSTzJaUDgtNzlNbm5NRjhfTFBHdk5PcHJZMzdsN19od0pBMkM2TjdCWXBQV1Z4RHNXQjBUX0l1NA?oc=5",
+      "outlet": "ABC7 New York",
+      "date": "2026-08-01"
+     },
+     {
+      "title": "Fallen New Kensington officer’s 9th-annual memorial ride supports police academy scholarships - WPXI",
+      "url": "https://news.google.com/rss/articles/CBMi7gFBVV95cUxPYzczSGhackJVREoxTUJxYW9pY1NaNTlQVndab1k4M3lxZEgtNkpIM0c0OVQyRTQ4czU4ZU5zeEtRMlZGeGRuZGpyZ0duSHFZWm41SGRXM2VFVEVsc2o2WXNTa3NranpBNXFQVmdJbFUxd1BvVUVteEd6UEtsNlNCc2RvbGE1Qm9xY21GbEVRaGZNWWNYcGgxZVdkWnpTbVI0S1cwVzNPMnZwVmhvTS1kU0gtS1lNcTFybXdrWVZzVGdHZy1Belo1dWU3dnZoOEVfUXg5Zi1GMDVtTEZ4b2JKMEJZNTQxS3R3V1pGOHpR?oc=5",
+      "outlet": "WPXI",
+      "date": "2026-08-16"
+     },
+     {
+      "title": "Woman Fatally Stabbed Inside Brooklyn Park, Police Say - Patch",
+      "url": "https://news.google.com/rss/articles/CBMilwFBVV95cUxQc25MSmFFQnY4S2Jzb1FmMmU3SlJybnVBWVNSM0pha3hNZE13RW91eV9xVjcydktTcGd5RVpFdjIwY21QMlQ2OTZjVW1KU2JjdTRRbWxRYmR4LW9fTHlTMzZTYWFncEpoR0laeFg3RGN2V3U3ZTJQNUkzRGdCcTd6R3JYR1dFMWdyVjNXZWktR1RYYVQwX2Q40gGoAUFVX3lxTE1NT3JvU084aXJ5djA5MjdJdnd4R1dZRzhoTFZ0S01XUlhRLVFxQWRWT19ZcW5raXhxamtQU2UxVDUxSHA4b0d5TGUyc3MzUm4ya2ZPN1hPUVh6MlRXV19zSzMtRHZEMFpBdXhGal81ZVVZMEJ4SHBCc1g4T0NEQTA4X21uV1pxYTV4czVkNDNvWHVJTVZKbWFtMC1zbjRnUXlZUzZfVGpBcw?oc=5",
+      "outlet": "Patch",
+      "date": "2026-08-18"
+     }
+    ],
+    "status": "ok",
+    "query": "(\"Borough Park\" OR \"Kensington\") (\"police\") NYC"
+   },
+   "rank": 0.159,
+   "why": [
+    "38 complaints Jul 20–Aug 16, 2026 vs an expected 15.0 (same weeks in prior years, drift-adjusted: 13.3; recent 8-week pace: 15.0)",
+    "Aug 10–16, 2026: 7 vs 10.3/week over the three weeks before",
+    "spread across 26 addresses; top address 5901 8 Avenue has 11%; top descriptor: Other (complaint details) (97%)"
+   ],
+   "stats": {
+    "cd": "312",
+    "district": "Borough Park / Kensington",
+    "complaint_type": "Non-Emergency Police Matter",
+    "cur28": 38,
+    "expected": 15.0,
+    "exp_seasonal": 13.3,
+    "seasonal_years": 3,
+    "exp_recent": 15.0,
+    "ratio": 2.53,
+    "vs_seasonal": 2.85,
+    "vs_recent": 2.53,
+    "z": 5.8,
+    "last7": 7,
+    "prior3wk_avg": 10.3,
+    "accelerating": false,
+    "hazard": true,
+    "taxonomy_new": false,
+    "weeks": [
+     3,
+     6,
+     4,
+     4,
+     3,
+     5,
+     1,
+     4,
+     14,
+     8,
+     9,
+     7
+    ],
+    "distinct_addresses": 26,
+    "top_address": "5901 8 Avenue",
+    "top_address_share": 0.11,
+    "top_descriptor": "Other (complaint details)",
+    "top_descriptor_share": 0.97,
+    "concentrated": false
+   },
+   "query": "https://data.cityofnewyork.us/resource/erm2-nwe9.json?$where=complaint_type='Non-Emergency Police Matter' AND community_board='12 BROOKLYN' AND created_date >= '2026-07-20'&$order=created_date DESC"
+  },
+  {
    "id": "district:312:General Construction/Plumbing",
    "kind": "district",
-   "headline": "Borough Park / Kensington: General Construction/Plumbing complaints 1.63x normal (262 in four weeks)",
+   "headline": "Borough Park / Kensington: General Construction/Plumbing complaints 1.63x normal (262 in the four weeks to Aug 16)",
    "cd": "312",
    "district": "Borough Park / Kensington",
    "borough": "Brooklyn",
@@ -6864,8 +6886,8 @@
    },
    "rank": 0.154,
    "why": [
-    "262 complaints in the last 28 days vs an expected 160.5 (same weeks in prior years, drift-adjusted: 110.2; recent 8-week pace: 160.5)",
-    "last 7 days: 74 vs 62.7/week over the prior three weeks",
+    "262 complaints Jul 20–Aug 16, 2026 vs an expected 160.5 (same weeks in prior years, drift-adjusted: 110.2; recent 8-week pace: 160.5)",
+    "Aug 10–16, 2026: 74 vs 62.7/week over the three weeks before",
     "spread across 200 addresses; top address 1075 Ocean Parkway has 4%; top descriptor: Building Permit - None (34%)"
    ],
    "stats": {
@@ -6912,7 +6934,7 @@
   {
    "id": "district:412:APPLIANCE",
    "kind": "district",
-   "headline": "Jamaica / Hollis / St. Albans: APPLIANCE complaints 1.62x normal (72 in four weeks)",
+   "headline": "Jamaica / Hollis / St. Albans: APPLIANCE complaints 1.62x normal (72 in the four weeks to Aug 16)",
    "cd": "412",
    "district": "Jamaica / Hollis / St. Albans",
    "borough": "Queens",
@@ -6927,8 +6949,8 @@
    },
    "rank": 0.147,
    "why": [
-    "72 complaints in the last 28 days vs an expected 44.5 (same weeks in prior years, drift-adjusted: 42.7; recent 8-week pace: 44.5)",
-    "last 7 days: 25 vs 15.7/week over the prior three weeks — accelerating",
+    "72 complaints Jul 20–Aug 16, 2026 vs an expected 44.5 (same weeks in prior years, drift-adjusted: 42.7; recent 8-week pace: 44.5)",
+    "Aug 10–16, 2026: 25 vs 15.7/week over the three weeks before — accelerating",
     "spread across 30 addresses; top address 89-29 163 Street has 49% — likely one caller; top descriptor: ELECTRIC/GAS RANGE (71%)"
    ],
    "stats": {
@@ -6975,7 +6997,7 @@
   {
    "id": "district:314:Street Condition",
    "kind": "district",
-   "headline": "Midwood / Ocean Parkway: Street Condition complaints 1.69x normal (167 in four weeks)",
+   "headline": "Midwood / Ocean Parkway: Street Condition complaints 1.69x normal (167 in the four weeks to Aug 16)",
    "cd": "314",
    "district": "Midwood / Ocean Parkway",
    "borough": "Brooklyn",
@@ -6997,8 +7019,8 @@
    },
    "rank": 0.131,
    "why": [
-    "167 complaints in the last 28 days vs an expected 99.0 (same weeks in prior years, drift-adjusted: 74.7; recent 8-week pace: 99.0)",
-    "last 7 days: 48 vs 39.7/week over the prior three weeks",
+    "167 complaints Jul 20–Aug 16, 2026 vs an expected 99.0 (same weeks in prior years, drift-adjusted: 74.7; recent 8-week pace: 99.0)",
+    "Aug 10–16, 2026: 48 vs 39.7/week over the three weeks before",
     "spread across 76 addresses; top address Avenue L has 11%; top descriptor: Pothole (45%)"
    ],
    "stats": {
@@ -7045,7 +7067,7 @@
   {
    "id": "district:206:Street Light Condition",
    "kind": "district",
-   "headline": "Belmont / East Tremont: Street Light Condition complaints 1.64x normal (55 in four weeks)",
+   "headline": "Belmont / East Tremont: Street Light Condition complaints 1.64x normal (55 in the four weeks to Aug 16)",
    "cd": "206",
    "district": "Belmont / East Tremont",
    "borough": "Bronx",
@@ -7060,8 +7082,8 @@
    },
    "rank": 0.13,
    "why": [
-    "55 complaints in the last 28 days vs an expected 33.5 (same weeks in prior years, drift-adjusted: 21.7; recent 8-week pace: 33.5)",
-    "last 7 days: 32 vs 7.7/week over the prior three weeks — accelerating",
+    "55 complaints Jul 20–Aug 16, 2026 vs an expected 33.5 (same weeks in prior years, drift-adjusted: 21.7; recent 8-week pace: 33.5)",
+    "Aug 10–16, 2026: 32 vs 7.7/week over the three weeks before — accelerating",
     "spread across 15 addresses; top address 1070 East Tremont Avenue has 2%; top descriptor: Street Light Out (82%)"
    ],
    "stats": {
@@ -7108,7 +7130,7 @@
   {
    "id": "district:412:Traffic",
    "kind": "district",
-   "headline": "Jamaica / Hollis / St. Albans: Traffic complaints 2.96x normal (37 in four weeks)",
+   "headline": "Jamaica / Hollis / St. Albans: Traffic complaints 2.96x normal (37 in the four weeks to Aug 16)",
    "cd": "412",
    "district": "Jamaica / Hollis / St. Albans",
    "borough": "Queens",
@@ -7130,8 +7152,8 @@
    },
    "rank": 0.129,
    "why": [
-    "37 complaints in the last 28 days vs an expected 12.5 (same weeks in prior years, drift-adjusted: 8.9; recent 8-week pace: 12.5)",
-    "last 7 days: 7 vs 10.0/week over the prior three weeks",
+    "37 complaints Jul 20–Aug 16, 2026 vs an expected 12.5 (same weeks in prior years, drift-adjusted: 8.9; recent 8-week pace: 12.5)",
+    "Aug 10–16, 2026: 7 vs 10.0/week over the three weeks before",
     "spread across 24 addresses; top address 139-20 111 Avenue has 11%; top descriptor: Drag Racing (84%)"
    ],
    "stats": {
@@ -7178,7 +7200,7 @@
   {
    "id": "district:103:Litter Basket Request",
    "kind": "district",
-   "headline": "Lower East Side / Chinatown: Litter Basket Request complaints 6.25x normal (25 in four weeks)",
+   "headline": "Lower East Side / Chinatown: Litter Basket Request complaints 6.25x normal (25 in the four weeks to Aug 16)",
    "cd": "103",
    "district": "Lower East Side / Chinatown",
    "borough": "Manhattan",
@@ -7193,8 +7215,8 @@
    },
    "rank": 0.121,
    "why": [
-    "25 complaints in the last 28 days vs an expected 4.0 (same weeks in prior years, drift-adjusted: 3.7; recent 8-week pace: 4.0)",
-    "last 7 days: 1 vs 8.0/week over the prior three weeks",
+    "25 complaints Jul 20–Aug 16, 2026 vs an expected 4.0 (same weeks in prior years, drift-adjusted: 3.7; recent 8-week pace: 4.0)",
+    "Aug 10–16, 2026: 1 vs 8.0/week over the three weeks before",
     "spread across 23 addresses; top address 145 2 Avenue has 8%; top descriptor: Replacement Basket (80%)"
    ],
    "stats": {
@@ -7241,7 +7263,7 @@
   {
    "id": "district:315:Vendor Enforcement",
    "kind": "district",
-   "headline": "Sheepshead Bay / Gravesend: Vendor Enforcement complaints 5.2x normal (26 in four weeks)",
+   "headline": "Sheepshead Bay / Gravesend: Vendor Enforcement complaints 5.2x normal (26 in the four weeks to Aug 16)",
    "cd": "315",
    "district": "Sheepshead Bay / Gravesend",
    "borough": "Brooklyn",
@@ -7256,8 +7278,8 @@
    },
    "rank": 0.12,
    "why": [
-    "26 complaints in the last 28 days vs an expected 5.0 (same weeks in prior years, drift-adjusted: 4.1; recent 8-week pace: 5.0)",
-    "last 7 days: 4 vs 7.3/week over the prior three weeks",
+    "26 complaints Jul 20–Aug 16, 2026 vs an expected 5.0 (same weeks in prior years, drift-adjusted: 4.1; recent 8-week pace: 5.0)",
+    "Aug 10–16, 2026: 4 vs 7.3/week over the three weeks before",
     "spread across 6 addresses; top address 1902 Kings Highway has 73% — likely one caller; top descriptor: Food Vendor (88%)"
    ],
    "stats": {
@@ -7304,7 +7326,7 @@
   {
    "id": "novel:AHV Inspection Unit:After Hours Work - With An AHV Permit",
    "kind": "novelty",
-   "headline": "New in 311: \"After Hours Work - With An AHV Permit\" (AHV Inspection Unit) — 38 reports in eight weeks, led by Fort Greene / Brooklyn Heights",
+   "headline": "New in 311: \"After Hours Work - With An AHV Permit\" (AHV Inspection Unit) — 38 reports Jun 22–Aug 16, 2026, led by Fort Greene / Brooklyn Heights",
    "cd": "302",
    "district": "Fort Greene / Brooklyn Heights",
    "borough": "Brooklyn",
@@ -7318,7 +7340,7 @@
    },
    "rank": 0.114,
    "why": [
-    "38 reports in the last 56 days vs 5.5 in the same weeks of the prior two years (volume-adjusted) — 6.9x",
+    "38 reports Jun 22–Aug 16, 2026 vs 5.5 in the same weeks of the prior two years (volume-adjusted) — 6.9x",
     "top districts: Fort Greene / Brooklyn Heights (4), Crown Heights / Prospect Heights (4), Greenpoint / Williamsburg (3), Midtown (3)"
    ],
    "by_cd": [
@@ -7365,97 +7387,9 @@
    ]
   },
   {
-   "id": "district:312:Non-Emergency Police Matter",
-   "kind": "district",
-   "headline": "Borough Park / Kensington: Non-Emergency Police Matter complaints 2.53x normal (38 in four weeks)",
-   "cd": "312",
-   "district": "Borough Park / Kensington",
-   "borough": "Brooklyn",
-   "complaint_type": "Non-Emergency Police Matter",
-   "signal": 0.335,
-   "coverage": {
-    "score": 0.93,
-    "hits": 4,
-    "articles": [
-     {
-      "title": "Police investigating death of 2-month-old girl in Brooklyn - ABC7 New York",
-      "url": "https://news.google.com/rss/articles/CBMijwFBVV95cUxPaW5QTy15X2REV0NOV1prdkkxLVd6UU8tNTU0cXlPRnoxS29WUmh6Q3h3czJWdGRjbnVucktfMzB5ckhJRi16SGVqMnlEUGpmN1pyTWFEcEtSTzJaUDgtNzlNbm5NRjhfTFBHdk5PcHJZMzdsN19od0pBMkM2TjdCWXBQV1Z4RHNXQjBUX0l1NA?oc=5",
-      "outlet": "ABC7 New York",
-      "date": "2026-08-01"
-     },
-     {
-      "title": "Fallen New Kensington officer’s 9th-annual memorial ride supports police academy scholarships - WPXI",
-      "url": "https://news.google.com/rss/articles/CBMi7gFBVV95cUxPYzczSGhackJVREoxTUJxYW9pY1NaNTlQVndab1k4M3lxZEgtNkpIM0c0OVQyRTQ4czU4ZU5zeEtRMlZGeGRuZGpyZ0duSHFZWm41SGRXM2VFVEVsc2o2WXNTa3NranpBNXFQVmdJbFUxd1BvVUVteEd6UEtsNlNCc2RvbGE1Qm9xY21GbEVRaGZNWWNYcGgxZVdkWnpTbVI0S1cwVzNPMnZwVmhvTS1kU0gtS1lNcTFybXdrWVZzVGdHZy1Belo1dWU3dnZoOEVfUXg5Zi1GMDVtTEZ4b2JKMEJZNTQxS3R3V1pGOHpR?oc=5",
-      "outlet": "WPXI",
-      "date": "2026-08-16"
-     },
-     {
-      "title": "Police say group stole 16 computers from gaming lounge in Gravesend - Brooklyn Eagle",
-      "url": "https://news.google.com/rss/articles/CBMieEFVX3lxTE5HT1hZQ2x0Y3V2LWExRTkxZ2hEWnU4ZnRYTExwTGN3MlhCQlRqamhxMkdQdFg1RktKYzJWUUJaeHAwQ1JFd1FVMmNpZHNZMmRXQVJjcmF3czBxRmJFdGVMN2JqMUdaVktVb2RZNlNBcUM0aC12TGt3bw?oc=5",
-      "outlet": "Brooklyn Eagle",
-      "date": "2026-07-16"
-     },
-     {
-      "title": "Woman Fatally Stabbed Inside Brooklyn Park, Police Say - Patch",
-      "url": "https://news.google.com/rss/articles/CBMilwFBVV95cUxQc25MSmFFQnY4S2Jzb1FmMmU3SlJybnVBWVNSM0pha3hNZE13RW91eV9xVjcydktTcGd5RVpFdjIwY21QMlQ2OTZjVW1KU2JjdTRRbWxRYmR4LW9fTHlTMzZTYWFncEpoR0laeFg3RGN2V3U3ZTJQNUkzRGdCcTd6R3JYR1dFMWdyVjNXZWktR1RYYVQwX2Q40gGoAUFVX3lxTE1NT3JvU084aXJ5djA5MjdJdnd4R1dZRzhoTFZ0S01XUlhRLVFxQWRWT19ZcW5raXhxamtQU2UxVDUxSHA4b0d5TGUyc3MzUm4ya2ZPN1hPUVh6MlRXV19zSzMtRHZEMFpBdXhGal81ZVVZMEJ4SHBCc1g4T0NEQTA4X21uV1pxYTV4czVkNDNvWHVJTVZKbWFtMC1zbjRnUXlZUzZfVGpBcw?oc=5",
-      "outlet": "Patch",
-      "date": "2026-08-18"
-     }
-    ],
-    "status": "ok",
-    "query": "(\"Borough Park\" OR \"Kensington\") (\"police\") NYC"
-   },
-   "rank": 0.101,
-   "why": [
-    "38 complaints in the last 28 days vs an expected 15.0 (same weeks in prior years, drift-adjusted: 13.3; recent 8-week pace: 15.0)",
-    "last 7 days: 7 vs 10.3/week over the prior three weeks",
-    "spread across 26 addresses; top address 5901 8 Avenue has 11%; top descriptor: Other (complaint details) (97%)"
-   ],
-   "stats": {
-    "cd": "312",
-    "district": "Borough Park / Kensington",
-    "complaint_type": "Non-Emergency Police Matter",
-    "cur28": 38,
-    "expected": 15.0,
-    "exp_seasonal": 13.3,
-    "seasonal_years": 3,
-    "exp_recent": 15.0,
-    "ratio": 2.53,
-    "vs_seasonal": 2.85,
-    "vs_recent": 2.53,
-    "z": 5.8,
-    "last7": 7,
-    "prior3wk_avg": 10.3,
-    "accelerating": false,
-    "hazard": true,
-    "taxonomy_new": false,
-    "weeks": [
-     3,
-     6,
-     4,
-     4,
-     3,
-     5,
-     1,
-     4,
-     14,
-     8,
-     9,
-     7
-    ],
-    "distinct_addresses": 26,
-    "top_address": "5901 8 Avenue",
-    "top_address_share": 0.11,
-    "top_descriptor": "Other (complaint details)",
-    "top_descriptor_share": 0.97,
-    "concentrated": false
-   },
-   "query": "https://data.cityofnewyork.us/resource/erm2-nwe9.json?$where=complaint_type='Non-Emergency Police Matter' AND community_board='12 BROOKLYN' AND created_date >= '2026-07-20'&$order=created_date DESC"
-  },
-  {
    "id": "district:502:Street Light Condition",
    "kind": "district",
-   "headline": "South Beach / Dongan Hills: Street Light Condition complaints 1.66x normal (216 in four weeks)",
+   "headline": "South Beach / Dongan Hills: Street Light Condition complaints 1.66x normal (216 in the four weeks to Aug 16)",
    "cd": "502",
    "district": "South Beach / Dongan Hills",
    "borough": "Staten Island",
@@ -7470,8 +7404,8 @@
    },
    "rank": 0.096,
    "why": [
-    "216 complaints in the last 28 days vs an expected 130.0 (same weeks in prior years, drift-adjusted: 70.3; recent 8-week pace: 130.0)",
-    "last 7 days: 50 vs 55.3/week over the prior three weeks",
+    "216 complaints Jul 20–Aug 16, 2026 vs an expected 130.0 (same weeks in prior years, drift-adjusted: 70.3; recent 8-week pace: 130.0)",
+    "Aug 10–16, 2026: 50 vs 55.3/week over the three weeks before",
     "spread across 146 addresses; top address 250 Ardmore Avenue has 1%; top descriptor: Street Light Out (91%)"
    ],
    "stats": {
@@ -7518,7 +7452,7 @@
   {
    "id": "district:109:Traffic Signal Condition",
    "kind": "district",
-   "headline": "Morningside Heights / Hamilton Heights: Traffic Signal Condition complaints 2.13x normal (81 in four weeks)",
+   "headline": "Morningside Heights / Hamilton Heights: Traffic Signal Condition complaints 2.13x normal (81 in the four weeks to Aug 16)",
    "cd": "109",
    "district": "Morningside Heights / Hamilton Heights",
    "borough": "Manhattan",
@@ -7533,8 +7467,8 @@
    },
    "rank": 0.089,
    "why": [
-    "81 complaints in the last 28 days vs an expected 38.0 (same weeks in prior years, drift-adjusted: 36.3; recent 8-week pace: 38.0)",
-    "last 7 days: 13 vs 22.7/week over the prior three weeks",
+    "81 complaints Jul 20–Aug 16, 2026 vs an expected 38.0 (same weeks in prior years, drift-adjusted: 36.3; recent 8-week pace: 38.0)",
+    "Aug 10–16, 2026: 13 vs 22.7/week over the three weeks before",
     "spread across 0 addresses; top descriptor: Controller (51%)"
    ],
    "stats": {
@@ -7579,7 +7513,7 @@
   {
    "id": "district:208:Traffic Signal Condition",
    "kind": "district",
-   "headline": "Riverdale / Fieldston: Traffic Signal Condition complaints 2.56x normal (49 in four weeks)",
+   "headline": "Riverdale / Fieldston: Traffic Signal Condition complaints 2.56x normal (49 in the four weeks to Aug 16)",
    "cd": "208",
    "district": "Riverdale / Fieldston",
    "borough": "Bronx",
@@ -7594,8 +7528,8 @@
    },
    "rank": 0.085,
    "why": [
-    "49 complaints in the last 28 days vs an expected 19.2 (same weeks in prior years, drift-adjusted: 19.2; recent 8-week pace: 16.5)",
-    "last 7 days: 8 vs 13.7/week over the prior three weeks",
+    "49 complaints Jul 20–Aug 16, 2026 vs an expected 19.2 (same weeks in prior years, drift-adjusted: 19.2; recent 8-week pace: 16.5)",
+    "Aug 10–16, 2026: 8 vs 13.7/week over the three weeks before",
     "spread across 0 addresses; top descriptor: Controller (76%)"
    ],
    "stats": {
@@ -7640,7 +7574,7 @@
   {
    "id": "district:205:Drinking",
    "kind": "district",
-   "headline": "Fordham / University Heights: Drinking complaints 2.46x normal (43 in four weeks)",
+   "headline": "Fordham / University Heights: Drinking complaints 2.46x normal (43 in the four weeks to Aug 16)",
    "cd": "205",
    "district": "Fordham / University Heights",
    "borough": "Bronx",
@@ -7655,8 +7589,8 @@
    },
    "rank": 0.083,
    "why": [
-    "43 complaints in the last 28 days vs an expected 17.5 (same weeks in prior years, drift-adjusted: 17.3; recent 8-week pace: 17.5)",
-    "last 7 days: 11 vs 10.7/week over the prior three weeks",
+    "43 complaints Jul 20–Aug 16, 2026 vs an expected 17.5 (same weeks in prior years, drift-adjusted: 17.3; recent 8-week pace: 17.5)",
+    "Aug 10–16, 2026: 11 vs 10.7/week over the three weeks before",
     "spread across 12 addresses; top address 2270 Walton Avenue has 44% — likely one caller; top descriptor: In Public (100%)"
    ],
    "stats": {
@@ -7703,7 +7637,7 @@
   {
    "id": "district:109:Smoking or Vaping",
    "kind": "district",
-   "headline": "Morningside Heights / Hamilton Heights: Smoking or Vaping complaints 3.2x normal (24 in four weeks)",
+   "headline": "Morningside Heights / Hamilton Heights: Smoking or Vaping complaints 3.2x normal (24 in the four weeks to Aug 16)",
    "cd": "109",
    "district": "Morningside Heights / Hamilton Heights",
    "borough": "Manhattan",
@@ -7718,8 +7652,8 @@
    },
    "rank": 0.08,
    "why": [
-    "24 complaints in the last 28 days vs an expected 7.5 (same weeks in prior years, drift-adjusted: 6.6; recent 8-week pace: 7.5)",
-    "last 7 days: 1 vs 7.7/week over the prior three weeks",
+    "24 complaints Jul 20–Aug 16, 2026 vs an expected 7.5 (same weeks in prior years, drift-adjusted: 6.6; recent 8-week pace: 7.5)",
+    "Aug 10–16, 2026: 1 vs 7.7/week over the three weeks before",
     "spread across 12 addresses; top address 600 West 140 Street has 42% — likely one caller; top descriptor: Allowed in Smoke Free Area (100%)"
    ],
    "stats": {
@@ -7766,7 +7700,7 @@
   {
    "id": "district:203:Street Light Condition",
    "kind": "district",
-   "headline": "Morrisania / Crotona: Street Light Condition complaints 2.15x normal (52 in four weeks)",
+   "headline": "Morrisania / Crotona: Street Light Condition complaints 2.15x normal (52 in the four weeks to Aug 16)",
    "cd": "203",
    "district": "Morrisania / Crotona",
    "borough": "Bronx",
@@ -7781,8 +7715,8 @@
    },
    "rank": 0.071,
    "why": [
-    "52 complaints in the last 28 days vs an expected 24.2 (same weeks in prior years, drift-adjusted: 24.2; recent 8-week pace: 24.0)",
-    "last 7 days: 13 vs 13.0/week over the prior three weeks",
+    "52 complaints Jul 20–Aug 16, 2026 vs an expected 24.2 (same weeks in prior years, drift-adjusted: 24.2; recent 8-week pace: 24.0)",
+    "Aug 10–16, 2026: 13 vs 13.0/week over the three weeks before",
     "spread across 24 addresses; top address 1016 Washington Avenue has 2%; top descriptor: Street Light Out (85%)"
    ],
    "stats": {
@@ -7829,7 +7763,7 @@
   {
    "id": "district:110:Commercial Disposal Complaint",
    "kind": "district",
-   "headline": "Central Harlem: Commercial Disposal Complaint complaints 8.67x normal (26 in four weeks)",
+   "headline": "Central Harlem: Commercial Disposal Complaint complaints 8.67x normal (26 in the four weeks to Aug 16)",
    "cd": "110",
    "district": "Central Harlem",
    "borough": "Manhattan",
@@ -7840,9 +7774,9 @@
     "hits": 9,
     "articles": [
      {
-      "title": "Harlem parents who complained of trash, encampment outside school see progress, but want long-term change - CBS News",
+      "title": "Harlem parents who complained of trash, encampment outside school see progress, but want long-term change - cbsnews.com",
       "url": "https://news.google.com/rss/articles/CBMihAFBVV95cUxQSk54M0xZd1hXaG5BWnVRMUpfVHBHZzVVWExoLVhQOUZSU3JCRURPci1JWG1teUQtRmswaHp2MHExQUItdHV3VGdydmd3Y3FVTzF6Q0FiLTNGY3c4T0FKcnVkaEk5UmxLTy00ajBTTmlUSVEtUmNUdXdfcUhGRXJvYXh3S0Y?oc=5",
-      "outlet": "CBS News",
+      "outlet": "cbsnews.com",
       "date": "2026-07-22"
      },
      {
@@ -7869,8 +7803,8 @@
    },
    "rank": 0.04,
    "why": [
-    "26 complaints in the last 28 days vs an expected 3.0 (same weeks in prior years, drift-adjusted: 1.9; recent 8-week pace: 3.0)",
-    "last 7 days: 5 vs 7.0/week over the prior three weeks",
+    "26 complaints Jul 20–Aug 16, 2026 vs an expected 3.0 (same weeks in prior years, drift-adjusted: 1.9; recent 8-week pace: 3.0)",
+    "Aug 10–16, 2026: 5 vs 7.0/week over the three weeks before",
     "spread across 8 addresses; top address 316 West 117 Street has 50% — likely one caller; top descriptor: Waste Disposal (73%)"
    ],
    "stats": {
@@ -7917,7 +7851,7 @@
   {
    "id": "district:110:Street Condition",
    "kind": "district",
-   "headline": "Central Harlem: Street Condition complaints 1.8x normal (87 in four weeks)",
+   "headline": "Central Harlem: Street Condition complaints 1.8x normal (87 in the four weeks to Aug 16)",
    "cd": "110",
    "district": "Central Harlem",
    "borough": "Manhattan",
@@ -7946,9 +7880,9 @@
       "date": "2026-08-05"
      },
      {
-      "title": "Manhattan roads close for NYC Summer Streets for 2nd weekend - CBS News",
+      "title": "Manhattan roads close for NYC Summer Streets for 2nd weekend - cbsnews.com",
       "url": "https://news.google.com/rss/articles/CBMihAFBVV95cUxORnVUTmZHem9xRTh3QUhEY3U1eEpCd0w3S21fYkFjWnFrdlZGbjZLU0ozRjNUYUZjcTRhZ3g4MVZ3bWNQZjRENDRtRk1Ja3V4eE8wZ0NJYkpHTHJfcVlTRlJRUm5saVNPM2otZWZjUUFLOFpDVDJuazhzYmhrNkNBUkFxTl8?oc=5",
-      "outlet": "CBS News",
+      "outlet": "cbsnews.com",
       "date": "2026-08-07"
      }
     ],
@@ -7957,8 +7891,8 @@
    },
    "rank": 0.032,
    "why": [
-    "87 complaints in the last 28 days vs an expected 48.3 (same weeks in prior years, drift-adjusted: 48.3; recent 8-week pace: 47.0)",
-    "last 7 days: 19 vs 22.7/week over the prior three weeks",
+    "87 complaints Jul 20–Aug 16, 2026 vs an expected 48.3 (same weeks in prior years, drift-adjusted: 48.3; recent 8-week pace: 47.0)",
+    "Aug 10–16, 2026: 19 vs 22.7/week over the three weeks before",
     "spread across 52 addresses; top address West 111 Street has 9%; top descriptor: Pothole (32%)"
    ],
    "stats": {

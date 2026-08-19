@@ -7,7 +7,7 @@
 - **New in 311** — descriptors that did not exist in the same window of prior years, with 311's own taxonomy churn set aside.
 - **Coverage check** — every lead is searched against Google News and local RSS; rank = signal x (1 - 0.75 x coverage). Uncovered signals rank first.
 
-The district map (`map.html`) and resolution-times page remain. The former citywide "performance tracker" front page was retired; its weekly citywide scan (`data/scanners/weekly_scan.py`) still appends to `data/output/weekly-trends.csv` for the record.
+The front page is itself the map (MapLibre choropleth, colorable by any signal, with the district panel alongside). The old 311-only map (`map.html`, `app.js`) and the citywide "performance tracker" were retired in Aug 2026: the former's category chips lit every district, its theme titles overused "surge/spike", and its data lagged the date stamp. The resolution-times page remains. The weekly citywide scan (`data/scanners/weekly_scan.py`) still appends to `data/output/weekly-trends.csv` for the record.
 
 Live: https://joshgreenman1973.github.io/nyc-311-complaint-tracker/ (repo name predates the rebrand).
 

@@ -303,6 +303,21 @@ def cd_search_names(cd):
     return out[:4]
 
 
+def date_range(start, end):
+    """'Aug 3–16, 2026' / 'Jul 20–Aug 16, 2026' for human-readable windows (end inclusive)."""
+    if start.year != end.year:
+        return f"{start.strftime('%b')} {start.day}, {start.year}–{end.strftime('%b')} {end.day}, {end.year}"
+    if start.month == end.month:
+        return f"{start.strftime('%b')} {start.day}–{end.day}, {end.year}"
+    return f"{start.strftime('%b')} {start.day}–{end.strftime('%b')} {end.day}, {end.year}"
+
+
+def span(end, days):
+    """Human-readable label for the `days`-day window ending on `end` (inclusive)."""
+    s, _ = window(end, days)
+    return date_range(s, end)
+
+
 def save_json(path, obj):
     os.makedirs(os.path.dirname(path), exist_ok=True)
     with open(path, "w") as f:

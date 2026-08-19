@@ -6,6 +6,8 @@ The front page of the Neighborhood Story Finder is district-first: pick one of t
 
 - **311, four ways.** *Above seasonal norm* — the anomaly test below. *Biggest by volume* — the district's 15 largest complaint types this month, each shown against its own expected value. *Rising this week* — types whose last 7 days beat the average of the prior three weeks by 50%+ (5+ complaints). *12-week trends* — weekly counts for the largest types. All from `erm2-nwe9`, grouped server-side by community board and complaint type in twelve 7-day buckets.
 - **Other record systems, latest window vs the window before** (`district_stats.py`): HPD violations issued (30 days, `wvxf-dwi5`), HPD complaints received (28 days, `ygpa-z7cr`), DOB complaints (30 days, `eabe-havv`), residential marshal evictions (60 days, `6z8x-wfk4`), HPD vacate orders (60 days, `tb8q-a3ar`). Ratios are suppressed when the prior window has fewer than 5 records.
+- **Also on the district page:** major felonies (NYPD CompStat 28-day precinct counts, area-weighted onto districts via a precinct/district overlap crosswalk — approximate, and labelled with the report week), HPD litigation opened, new-building and demolition filings, DOB safety violations, restaurants closed by DOHMH, deeds recorded (ACRIS master + legals + parties, mapped to districts through PLUTO; ACRIS runs 2-3 weeks behind, so its window is its own and is printed on the tile), and news attention (Google News headlines naming the district in the last 7 days).
+- **Every number on a tile opens the underlying records** — the exact SoQL query for that district and window — so nothing has to be taken on faith. Every window is printed as a date range, never as "30 days".
 - **Buildings, leads, liquor filings, land use, City Record notices** — described below.
 
 ## What a lead is
@@ -75,7 +77,8 @@ Kept out on purpose because they cannot support an early-warning claim:
 - **DOB stalled sites** (`i296-73x5`) stopped receiving complaints in December 2024.
 - **CouncilStat constituent cases** (`b9km-gdpy`) stopped updating.
 - **Community board WordPress scraping** returns nothing from CI runners.
-- **Reddit** JSON is blocked from CI runners.
+- **Reddit** JSON is blocked from CI runners. Reddit also attaches no location to posts; the only geography available is neighborhood-specific subreddits and name-matching in text. Buildable as a local job; not wired.
+- **The old 311-only map** (`map.html`) was retired: it colored every district for broad categories, its auto-generated titles leaned on "surge"/"spike", and its data lagged its date stamp.
 
 ## Known failure modes
 

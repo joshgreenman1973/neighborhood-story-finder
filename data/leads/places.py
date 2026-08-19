@@ -24,7 +24,7 @@ import re
 from collections import defaultdict
 from datetime import timedelta
 
-from common import (NYS, DistrictLocator, addr_key, bbl_from_parts, cd_from_311, cd_from_3digit,
+from common import (NYS, DistrictLocator, addr_key, span, bbl_from_parts, cd_from_311, cd_from_3digit,
                     cd_from_num, data_end, iso, soql, soql_all, split_311_address, where_between,
                     window, BORO_NAME, CD_NAMES)
 
@@ -378,6 +378,7 @@ def collect_places(end=None):
     print(f"[places] SLA pending: {len(rows)} NYC applications in {WSLA}d, {sum(len(v) for v in sla_by_cd.values())} located, {kept} joined to places")
 
     # ---- score + prune -----------------------------------------------------------------
+    d14, d30, d60 = span(end, W311), span(end, WHPD_V), span(end, WVAC)
     out = []
     for key, pl in places.items():
         srcs = pl["sources"]
@@ -390,24 +391,24 @@ def collect_places(end=None):
             score += min(s311["n14"] / 4.0, 5.0)
             if s311.get("ratio", 0) >= 3 and s311["n14"] >= 8:
                 score += 1.5
-                why.append(f"311 calls {s311['ratio']}x the building's prior 12-week pace")
-            why.append(f"{s311['n14']} 311 calls in 14 days ({s311.get('types_n', '?')} types over {s311.get('days', '?')} days)")
+                why.append(f"311 calls {s311['ratio']}x the building's pace over the prior 12 weeks")
+            why.append(f"{s311['n14']} 311 calls {d14} ({s311.get('types_n', '?')} types over {s311.get('days', '?')} days)")
         hv = srcs.get("hpd_violations")
         if hv:
             score += min(hv["class_c"] / 3.0, 3.0) + min(hv["n30"] / 10.0, 2.0)
-            why.append(f"{hv['n30']} HPD violations in 30 days ({hv['class_c']} class C)")
+            why.append(f"{hv['n30']} HPD violations issued {d30} ({hv['class_c']} class C)")
         hc = srcs.get("hpd_complaints")
         if hc:
             score += min(hc["n14"] / 4.0, 2.5)
-            why.append(f"{hc['n14']} HPD complaints in 14 days")
+            why.append(f"{hc['n14']} HPD complaints {d14}")
         dc = srcs.get("dob_complaints")
         if dc:
             score += min(dc["n30"] * 1.2, 3.5)
-            why.append(f"{dc['n30']} DOB complaints in 30 days" + (f" ({dc['categories'][0]['label']})" if dc.get("categories") else ""))
+            why.append(f"{dc['n30']} DOB complaints {d30}" + (f" ({dc['categories'][0]['label']})" if dc.get("categories") else ""))
         ec = srcs.get("ecb_violations")
         if ec:
             score += min(ec["n30"] * 0.6, 2.0) + (1.0 if ec["hazardous"] else 0)
-            why.append(f"{ec['n30']} OATH/ECB violations in 30 days" + (f", {ec['hazardous']} hazardous" if ec["hazardous"] else ""))
+            why.append(f"{ec['n30']} OATH/ECB violations {d30}" + (f", {ec['hazardous']} hazardous" if ec["hazardous"] else ""))
         vo = srcs.get("vacate_orders")
         if vo:
             score += 3.5
@@ -416,11 +417,11 @@ def collect_places(end=None):
         evx = srcs.get("evictions")
         if evx:
             score += 1.0 + min(evx["residential"] * 0.8, 2.5)
-            why.append(f"{evx['n60']} marshal evictions in 60 days ({evx['residential']} residential)")
+            why.append(f"{evx['n60']} marshal evictions {d60} ({evx['residential']} residential)")
         sla = srcs.get("sla_pending")
         if sla:
             score += 1.5
-            why.append(f"pending liquor license: {sla['applications'][0]['name']} ({sla['applications'][0]['type']})")
+            why.append(f"liquor license pending with the SLA: {sla['applications'][0]['name']} ({sla['applications'][0]['type']}, received {sla['applications'][0]['received']})")
         # Convergence is counted across INDEPENDENT families, not raw feeds:
         # 311, HPD complaints and DOB complaints are all resident reports (the
         # latter two are largely 311 intake), so they count once together.

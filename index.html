@@ -272,29 +272,36 @@ function initMap() {
     MAP.addSource('pts', { type: 'geojson', data: { type: 'FeatureCollection', features: [] } });
     MAP.addLayer({ id: 'pts-halo', type: 'circle', source: 'pts', paint: { 'circle-radius': ['interpolate', ['linear'], ['get', 'score'], 6, 7, 26, 15], 'circle-color': '#ff7c53', 'circle-opacity': 0.18 } });
     MAP.addLayer({ id: 'pts', type: 'circle', source: 'pts', paint: { 'circle-radius': ['interpolate', ['linear'], ['get', 'score'], 6, 3.5, 26, 8], 'circle-color': '#ff7c53', 'circle-stroke-color': '#050507', 'circle-stroke-width': 1.2, 'circle-opacity': 0.95 } });
-    MAP.on('mousemove', 'pts', e => {
-      MAP.getCanvas().style.cursor = 'pointer';
-      const p = e.features[0].properties; const tip = $('#tip');
-      tip.style.display = 'block'; tip.style.left = (e.point.x + 14) + 'px'; tip.style.top = (e.point.y + 14) + 'px';
-      tip.innerHTML = `<b>${esc(p.address)}</b><span style="color:var(--muted)">${p.n_sources} record famil${p.n_sources > 1 ? 'ies' : 'y'} agree</span><div class="ll">${esc(p.why)}</div><div style="color:var(--faint);margin-top:.3rem;font-size:11px">click to jump to it in the panel</div>`;
-    });
-    MAP.on('mouseleave', 'pts', () => { MAP.getCanvas().style.cursor = ''; $('#tip').style.display = 'none'; });
-    MAP.on('click', 'pts', e => { const el = document.getElementById('bld-' + e.features[0].properties.key); if (el) { el.scrollIntoView({ behavior: 'smooth', block: 'center' }); el.style.background = 'rgba(255,124,83,.12)'; setTimeout(() => el.style.background = '', 1600); } });
     paint(); paintPoints();
     if (sel) { const f = GEO.features.find(x => x.properties.cd_code === sel); if (f) MAP.fitBounds(bbox(f.geometry), { padding: 60, maxZoom: 12.5, duration: 0 }); }
     let hovered = null;
-    MAP.on('mousemove', 'cd-fill', e => {
+    // One handler: a building dot under the cursor wins over the district fill
+    MAP.on('mousemove', e => {
+      const tip = $('#tip');
+      const pts = MAP.getLayer('pts') ? MAP.queryRenderedFeatures(e.point, { layers: ['pts'] }) : [];
+      const fills = MAP.queryRenderedFeatures(e.point, { layers: ['cd-fill'] });
+      if (!pts.length && !fills.length) { MAP.getCanvas().style.cursor = ''; tip.style.display = 'none'; if (hovered !== null) MAP.setFeatureState({ source: 'cd', id: hovered }, { hover: false }); hovered = null; return; }
       MAP.getCanvas().style.cursor = 'pointer';
-      const f = e.features[0]; const cd = f.properties.cd_code;
+      tip.style.display = 'block'; tip.style.left = (e.point.x + 14) + 'px'; tip.style.top = (e.point.y + 14) + 'px';
+      if (pts.length) {
+        const p = pts[0].properties;
+        tip.innerHTML = `<b>${esc(p.address)}</b><span style="color:var(--muted)">${p.n_sources} record famil${p.n_sources > 1 ? "ies agree" : "y"}</span><div class="ll">${esc(p.why)}</div><div style="color:var(--faint);margin-top:.3rem;font-size:11px">click to jump to it in the panel</div>`;
+        return;
+      }
+      const f = fills[0]; const cd = f.properties.cd_code;
       if (hovered !== null && hovered !== f.id) MAP.setFeatureState({ source: 'cd', id: hovered }, { hover: false });
       hovered = f.id; MAP.setFeatureState({ source: 'cd', id: hovered }, { hover: true });
       const d = DATA.districts[cd]; const L = LENSES.find(x => x.id === lens);
-      const tip = $('#tip'); if (!d) return;
-      tip.style.display = 'block'; tip.style.left = (e.point.x + 14) + 'px'; tip.style.top = (e.point.y + 14) + 'px';
+      if (!d) return;
       tip.innerHTML = `<b>${esc(d.name)}</b><span style="color:var(--muted)">${esc(d.borough)} CD ${parseInt(cd.slice(1))}</span><br>${esc(L.label)}: <span class="v">${L.fmt(L.value(d))}</span>${lensDetail(d)}<div style="color:var(--faint);margin-top:.3rem;font-size:11px">click for the district page</div>`;
     });
-    MAP.on('mouseleave', 'cd-fill', () => { MAP.getCanvas().style.cursor = ''; $('#tip').style.display = 'none'; if (hovered !== null) MAP.setFeatureState({ source: 'cd', id: hovered }, { hover: false }); hovered = null; });
-    MAP.on('click', 'cd-fill', e => select(e.features[0].properties.cd_code, true));
+    MAP.on('click', e => {
+      const pts = MAP.getLayer('pts') ? MAP.queryRenderedFeatures(e.point, { layers: ['pts'] }) : [];
+      if (pts.length) { const el = document.getElementById('bld-' + pts[0].properties.key); if (el) { el.scrollIntoView({ behavior: 'smooth', block: 'center' }); el.style.background = 'rgba(255,124,83,.12)'; setTimeout(() => el.style.background = '', 1600); } return; }
+      const fills = MAP.queryRenderedFeatures(e.point, { layers: ['cd-fill'] });
+      if (fills.length) select(fills[0].properties.cd_code, true);
+    });
+
   });
 }
 function paint() {

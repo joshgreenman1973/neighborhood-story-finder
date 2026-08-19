@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Records — Neighborhood Story Finder</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="stylesheet" href="https://use.typekit.net/qqk2vto.css" />
+<style>
+@font-face { font-family: 'GascogneTS'; src: url('fonts/GascogneTS-Light.ttf') format('truetype'); font-weight: 300; font-display: swap; }
+:root { --bg:#050507; --panel:#0c0c0f; --panel2:#121216; --line:rgba(255,255,255,.08); --line2:rgba(255,255,255,.16); --text:rgba(255,255,255,.9); --muted:rgba(255,255,255,.5); --faint:rgba(255,255,255,.3); --chart:#dde44c; --sans:'halyard-text','Halyard','Inter','Helvetica Neue',Arial,sans-serif; --serif:'GascogneTS','Source Serif 4',Georgia,serif; }
+* { box-sizing: border-box; } html, body { margin:0; background:var(--bg); color:var(--text); font-family:var(--sans); -webkit-font-smoothing:antialiased; }
+.nav { display:flex; align-items:center; padding:0 2rem; height:48px; background:var(--panel); border-bottom:1px solid var(--line); position:sticky; top:0; z-index:5; }
+.nav-brand { font-size:13px; font-weight:900; text-transform:uppercase; color:var(--text); text-decoration:none; } .nav-brand span { color:var(--chart); }
+.wrap { max-width:1400px; margin:0 auto; padding:1.4rem 2rem 4rem; }
+h1 { font-family:var(--serif); font-weight:300; font-size:30px; margin:0 0 .3rem; line-height:1.1; }
+.sub { color:var(--muted); font-size:13px; margin-bottom:1rem; line-height:1.5; }
+.sub a { color:var(--chart); }
+.tools { display:flex; gap:.6rem; align-items:center; margin-bottom:.8rem; flex-wrap:wrap; }
+input[type=search] { font:inherit; font-size:13px; background:var(--panel2); color:var(--text); border:1px solid var(--line2); border-radius:6px; padding:.4rem .6rem; min-width:260px; }
+.count { font-size:12.5px; color:var(--muted); }
+table { width:100%; border-collapse:collapse; font-size:12.5px; }
+th { text-align:left; font-size:10.5px; text-transform:uppercase; letter-spacing:.06em; color:var(--faint); font-weight:600; padding:.4rem .5rem .4rem 0; border-bottom:1px solid var(--line2); position:sticky; top:48px; background:var(--bg); cursor:pointer; white-space:nowrap; }
+td { padding:.35rem .5rem .35rem 0; border-bottom:1px solid var(--line); vertical-align:top; max-width:420px; }
+tr:hover td { background:rgba(255,255,255,.02); }
+.loading, .err { padding:3rem 0; color:var(--muted); text-align:center; }
+.err { color:#ff7c53; }
+code { font-size:11px; color:var(--faint); word-break:break-all; }
+@media (max-width:800px) { .wrap { padding:1rem; } td, th { font-size:11.5px; } }
+</style>
+</head>
+<body>
+<nav class="nav"><a href="index.html" class="nav-brand">Neighborhood <span>Story Finder</span></a></nav>
+<div class="wrap">
+  <h1 id="title">Records</h1>
+  <div class="sub" id="sub"></div>
+  <div class="tools"><input type="search" id="filter" placeholder="Filter rows…" /><span class="count" id="count"></span></div>
+  <div id="out" class="loading">Loading records…</div>
+</div>
+<script>
+// Human-readable views of the exact query behind a number on the district page.
+// URL: records.html?u=<encoded Socrata resource URL>&t=<title>&s=<subtitle>
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const P = new URLSearchParams(location.search);
+const U = P.get('u'), T = P.get('t') || 'Records', S = P.get('s') || '';
+
+// Preferred columns and friendly headers per dataset (others are appended, blank-only columns dropped)
+const VIEWS = {
+  'erm2-nwe9': { name: '311 service requests', cols: { created_date: 'Created', complaint_type: 'Complaint type', descriptor: 'Descriptor', incident_address: 'Address', status: 'Status', agency: 'Agency', resolution_description: 'Resolution', closed_date: 'Closed' } },
+  'wvxf-dwi5': { name: 'HPD housing-code violations', cols: { novissueddate: 'Issued', class: 'Class', housenumber: 'No.', streetname: 'Street', apartment: 'Apt', novdescription: 'Violation', currentstatus: 'Status', inspectiondate: 'Inspected' } },
+  'ygpa-z7cr': { name: 'HPD housing complaints', cols: { received_date: 'Received', house_number: 'No.', street_name: 'Street', apartment: 'Apt', major_category: 'Category', minor_category: 'Subcategory', problem_code: 'Problem', complaint_status: 'Status', status_description: 'Status detail' } },
+  'eabe-havv': { name: 'DOB complaints', cols: { date_entered: 'Entered', house_number: 'No.', house_street: 'Street', complaint_category: 'Category code', status: 'Status', disposition_date: 'Disposition', disposition_code: 'Disp. code', inspection_date: 'Inspected' } },
+  '6bgk-3dad': { name: 'OATH/ECB violations (DOB)', cols: { issue_date: 'Issued', severity: 'Severity', violation_type: 'Type', violation_description: 'Description', ecb_violation_status: 'Status', respondent_name: 'Respondent', hearing_date: 'Hearing' } },
+  '59kj-x8nc': { name: 'HPD litigation', cols: { caseopendate: 'Opened', housenumber: 'No.', streetname: 'Street', casetype: 'Case type', casestatus: 'Status', respondent: 'Respondent', casejudgement: 'Judgment' } },
+  '6z8x-wfk4': { name: 'Marshal evictions', cols: { executed_date: 'Executed', eviction_address: 'Address', eviction_apt_num: 'Apt', residential_commercial_ind: 'Type', marshal_first_name: 'Marshal', marshal_last_name: ' ', eviction_possession: 'Possession/ejectment' } },
+  'tb8q-a3ar': { name: 'HPD vacate orders', cols: { vacate_effective_date: 'Effective', house_number: 'No.', street_name: 'Street', primary_vacate_reason: 'Reason', vacate_type: 'Type', number_of_vacated_units: 'Units', actual_rescind_date: 'Rescinded' } },
+  'w9ak-ipjd': { name: 'DOB job filings', cols: { filing_date: 'Filed', house_no: 'No.', street_name: 'Street', job_type: 'Job type', filing_status: 'Status', initial_cost: 'Est. cost ($)', owner_s_business_name: 'Owner', job_description: 'Description' } },
+  '855j-jady': { name: 'DOB safety violations', cols: { violation_issue_date: 'Issued', house_number: 'No.', street: 'Street', violation_type: 'Type', device_type: 'Device', violation_status: 'Status', violation_remarks: 'Remarks' } },
+  '43nn-pn8j': { name: 'DOHMH restaurant inspections', cols: { inspection_date: 'Inspected', dba: 'Restaurant', building: 'No.', street: 'Street', cuisine_description: 'Cuisine', action: 'Action', critical_flag: 'Critical', violation_description: 'Violation', grade: 'Grade' } },
+  'f8i8-k2gm': { name: 'SLA pending liquor licenses', cols: { received_date: 'Received', legalname: 'Applicant', actual_address_of_premises: 'Premises', description: 'License type', status: 'Status' } },
+  'hgx4-8ukb': { name: 'ZAP land-use applications', cols: { project_name: 'Project', current_milestone: 'Milestone', current_milestone_date: 'Date', ulurp_non: 'ULURP', project_brief: 'Brief' } },
+};
+const DATE_RE = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/;
+const fmtVal = v => { if (v == null) return ''; if (typeof v === 'object') return v.coordinates ? v.coordinates.map(x => x.toFixed(5)).join(', ') : JSON.stringify(v); const s = String(v); if (DATE_RE.test(s)) return s.slice(0, 10) + (s.slice(11, 16) !== '00:00' ? ' ' + s.slice(11, 16) : ''); return s; };
+
+let ROWS = [], COLS = [], sortKey = null, sortDir = -1;
+async function go() {
+  if (!U || !/^https:\/\/data\.(cityofnewyork\.us|ny\.gov)\/resource\//.test(U)) { $('#out').innerHTML = '<div class="err">No query given.</div>'; return; }
+  const ds = (U.match(/\/resource\/([a-z0-9]{4}-[a-z0-9]{4})/) || [])[1];
+  const view = VIEWS[ds] || { name: ds, cols: {} };
+  const domain = U.includes('data.ny.gov') ? 'https://data.ny.gov' : 'https://data.cityofnewyork.us';
+  const url = new URL(U);
+  if (!url.searchParams.get('$limit')) url.searchParams.set('$limit', '2000');
+  document.title = `${T} — records`;
+  $('#title').textContent = T;
+  $('#sub').innerHTML = `${esc(S)}${S ? ' · ' : ''}Source: <a href="${domain}/d/${ds}" target="_blank" rel="noopener">${esc(view.name)} (${ds}) on ${domain.includes('ny.gov') ? 'NY State' : 'NYC'} Open Data</a> · <a href="${esc(url.toString())}" target="_blank" rel="noopener">raw JSON</a><br><code>${esc(decodeURIComponent(url.search))}</code>`;
+  let rows;
+  try { const r = await fetch(url.toString()); if (!r.ok) throw new Error(r.status + ' ' + r.statusText); rows = await r.json(); }
+  catch (e) { $('#out').innerHTML = `<div class="err">Could not load records (${esc(e.message)}). <a href="${esc(url)}" target="_blank" rel="noopener">Try the raw query</a>.</div>`; return; }
+  if (!Array.isArray(rows)) { $('#out').innerHTML = `<div class="err">${esc(JSON.stringify(rows).slice(0, 300))}</div>`; return; }
+  ROWS = rows;
+  const seen = new Set();
+  COLS = Object.entries(view.cols).map(([k, l]) => ({ k, l })).filter(c => rows.some(r => r[c.k] != null && r[c.k] !== ''));
+  COLS.forEach(c => seen.add(c.k));
+  const extra = {}; rows.forEach(r => Object.keys(r).forEach(k => { if (!seen.has(k) && !k.startsWith(':') && r[k] != null && r[k] !== '') extra[k] = (extra[k] || 0) + 1; }));
+  Object.keys(extra).sort().slice(0, 30 - COLS.length).forEach(k => COLS.push({ k, l: k.replace(/_/g, ' ') }));
+  sortKey = COLS[0] ? COLS[0].k : null;
+  render();
+  $('#filter').oninput = render;
+}
+function render() {
+  const q = $('#filter').value.trim().toLowerCase();
+  let rows = ROWS.filter(r => !q || COLS.some(c => fmtVal(r[c.k]).toLowerCase().includes(q)));
+  if (sortKey) rows = rows.slice().sort((a, b) => { const x = fmtVal(a[sortKey]), y = fmtVal(b[sortKey]); const nx = parseFloat(x), ny = parseFloat(y); const c = (!isNaN(nx) && !isNaN(ny) && /^-?[\d.]+$/.test(x) && /^-?[\d.]+$/.test(y)) ? nx - ny : x.localeCompare(y); return c * sortDir; });
+  $('#count').textContent = `${rows.length.toLocaleString()} record${rows.length === 1 ? '' : 's'}${ROWS.length >= 2000 ? ' (first 2,000)' : ''}${q ? ` matching "${q}"` : ''}`;
+  $('#out').className = '';
+  $('#out').innerHTML = rows.length ? `<div style="overflow-x:auto"><table><thead><tr>${COLS.map(c => `<th data-k="${esc(c.k)}">${esc(c.l)}${sortKey === c.k ? (sortDir < 0 ? ' ↓' : ' ↑') : ''}</th>`).join('')}</tr></thead><tbody>${rows.map(r => `<tr>${COLS.map(c => `<td>${esc(fmtVal(r[c.k]))}</td>`).join('')}</tr>`).join('')}</tbody></table></div>` : '<div class="loading">No records match.</div>';
+  document.querySelectorAll('th').forEach(th => th.onclick = () => { const k = th.dataset.k; if (sortKey === k) sortDir = -sortDir; else { sortKey = k; sortDir = -1; } render(); });
+}
+go();
+</script>
+</body>
+</html>

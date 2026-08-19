@@ -29,15 +29,15 @@ MIN_OBS_HAZARD = 10
 MIN_RATIO = 1.5
 MIN_Z = 3.0
 
-# Types where even modest counts matter (life-safety / habitability)
+# Habitability / life-safety types where a lower count threshold is warranted
+# (10 rather than 20 in 28 days). Kept tight on purpose: rodents, drugs,
+# homelessness and police matters are NOT here -- they are stories, not
+# habitability emergencies, and the lower bar just produced noise.
 HAZARD_TYPES = {
-    "HEAT/HOT WATER", "HEATING", "ELEVATOR", "STRUCTURAL", "GAS", "ELECTRIC", "WATER LEAK",
-    "LEAD", "ASBESTOS", "MOLD", "UNSANITARY CONDITION", "SEWER", "WATER SYSTEM",
-    "Building/Use", "Emergency Response Team (ERT)", "Scaffold Safety", "Boilers",
-    "Plumbing", "Non-Emergency Police Matter", "Drug Activity", "Homeless Person Assistance",
-    "Encampment", "Rodent", "Food Poisoning", "Lead", "Asbestos", "Mold", "Sewer",
-    "Water Quality", "Indoor Air Quality", "Hazardous Materials", "Radioactive Material",
-    "Unsanitary Animal Pvt Property", "Illegal Fireworks", "Fire Safety Director - F58",
+    "HEAT/HOT WATER", "WATER LEAK", "ELECTRIC", "PLUMBING", "ELEVATOR", "SAFETY",
+    "Elevator", "Boilers", "Gas", "Lead", "Asbestos", "Mold", "Structural", "Scaffold Safety",
+    "Emergency Response Team (ERT)", "Water Quality", "Indoor Air Quality", "Hazardous Materials",
+    "Radioactive Material", "Illegal Fireworks", "Cooling Tower", "Sewer Backup",
 }
 
 # Complaint types that are agency-internal or too noisy to be useful leads

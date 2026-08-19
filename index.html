@@ -36,7 +36,10 @@ a { color: inherit; }
 .overlay h1 span { color: var(--chart); }
 .overlay .dek { color: var(--muted); font-size: 12.5px; line-height: 1.45; margin: 0 0 .6rem; text-shadow: 0 1px 6px rgba(0,0,0,.9); max-width: 46ch; }
 .lens { background: rgba(12,12,15,.92); border: 1px solid var(--line2); border-radius: 10px; padding: .55rem .6rem; backdrop-filter: blur(6px); }
-.lens .lh { font-size: 10px; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); margin: 0 0 .35rem; }
+.lens .lh { font-size: 10px; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); margin: 0 0 .35rem; cursor: pointer; }
+.lens .lh .cur { color: var(--chart); font-weight: 700; }
+.lens .lh .tog { display: none; }
+@media (max-width: 980px) { .lens .lh .tog { display: inline; } .lens:not(.open) .lgrid, .lens:not(.open) .legend { display: none; } .lens .lh { margin: 0; } }
 .lens .lgrid { display: flex; flex-wrap: wrap; gap: .25rem; }
 .lbtn { font: inherit; font-size: 11.5px; font-weight: 600; background: none; border: 1px solid var(--line2); color: var(--muted); border-radius: 999px; padding: .22rem .55rem; cursor: pointer; }
 .lbtn:hover { color: var(--text); }
@@ -44,7 +47,8 @@ a { color: inherit; }
 .legend { margin-top: .5rem; font-size: 10.5px; color: var(--muted); display: flex; align-items: center; gap: .4rem; }
 .legend .ramp { flex: 1; height: 8px; border-radius: 4px; }
 .legend .note { width: 100%; margin-top: .2rem; color: var(--faint); }
-.tip { position: absolute; z-index: 6; pointer-events: none; background: rgba(12,12,15,.95); border: 1px solid var(--line2); border-radius: 8px; padding: .45rem .6rem; font-size: 12px; max-width: 260px; display: none; }
+.tip { position: absolute; z-index: 6; pointer-events: none; background: rgba(12,12,15,.96); border: 1px solid var(--line2); border-radius: 8px; padding: .5rem .65rem; font-size: 12px; max-width: 320px; display: none; line-height: 1.4; }
+.tip .ll { color: var(--muted); margin-top: .25rem; font-size: 11.5px; } .tip .ll a { color: var(--text); text-decoration: none; }
 .tip b { display: block; font-size: 13px; }
 .tip .v { color: var(--chart); font-weight: 700; }
 .asof { position: absolute; right: 12px; bottom: 26px; z-index: 5; font-size: 10.5px; color: var(--muted); background: rgba(12,12,15,.8); padding: .25rem .5rem; border-radius: 6px; }
@@ -57,7 +61,14 @@ a { color: inherit; }
 /* main */
 .empty-main { border: 1px dashed var(--line2); border-radius: 10px; padding: 1.4rem 1.4rem 1rem; }
 .empty-main h2 { font-family: var(--serif); font-weight: 300; font-size: 26px; margin: 0 0 .3rem; }
-.empty-main p { color: var(--muted); font-size: 14px; line-height: 1.5; margin: 0 0 1rem; max-width: 70ch; }
+.empty-main p { color: var(--muted); font-size: 13.5px; line-height: 1.5; margin: 0 0 .8rem; max-width: 70ch; }
+.lr { padding: .5rem 0; border-bottom: 1px solid var(--line); cursor: pointer; font-size: 13px; }
+.lr:hover { background: rgba(255,255,255,.02); }
+.lr .ln { display: flex; align-items: baseline; gap: .5rem; }
+.lr .li { color: var(--faint); font-family: var(--serif); font-size: 15px; width: 1.4em; }
+.lr .lv { margin-left: auto; font-weight: 700; white-space: nowrap; }
+.lr .ll { font-size: 12px; color: var(--muted); margin-top: .15rem; padding-left: 1.9em; line-height: 1.45; }
+.lr .ll a { color: var(--text); }
 .dhead { display: flex; justify-content: space-between; align-items: flex-end; gap: 1rem; flex-wrap: wrap; margin-bottom: .9rem; }
 .dhead h2 { font-family: var(--serif); font-weight: 300; font-size: 30px; margin: 0; line-height: 1.05; }
 .dhead .sub { color: var(--muted); font-size: 13px; margin-top: .3rem; }
@@ -66,10 +77,12 @@ a { color: inherit; }
 .tile { background: var(--panel); padding: .7rem .8rem; min-width: 0; }
 .tile small { display: block; font-size: 10px; text-transform: uppercase; letter-spacing: .05em; color: var(--muted); margin-bottom: .25rem; line-height: 1.3; min-height: 2.6em; }
 .tile:hover { background: var(--panel2); }
+.tile .see { margin-top: .35rem; font-size: 10.5px; color: var(--faint); }
+.tile:hover .see { color: var(--chart); text-decoration: underline; }
 .tile b { font-family: var(--serif); font-weight: 300; font-size: 26px; line-height: 1; }
 .tile .cmp { font-size: 11.5px; color: var(--muted); margin-top: .3rem; }
 .tile .cmp i { font-style: normal; font-weight: 700; }
-.up { color: var(--orange); } .dn { color: var(--green); } .flat { color: var(--muted); }
+.up { color: var(--orange); } .dn { color: #9ba1e0; } .flat { color: var(--muted); }
 .tile svg { display: block; margin-top: .35rem; }
 section.blk { margin-top: 1.4rem; }
 section.blk > h3 { font-size: 11px; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); margin: 0 0 .5rem; display: flex; align-items: center; gap: .8rem; flex-wrap: wrap; }
@@ -86,7 +99,7 @@ table.t tr:hover td { background: rgba(255,255,255,.02); }
 .rat { font-weight: 700; }
 .chip { font-size: 10.5px; padding: .1rem .35rem; border-radius: 3px; background: var(--line); color: var(--muted); white-space: nowrap; margin-left: .3rem; }
 .chip.acc { color: var(--orange); background: rgba(255,124,83,.12); }
-.chip.haz { color: var(--magenta); background: rgba(231,70,109,.14); }
+.ag { font-size: 9.5px; color: var(--faint); border: 1px solid var(--line); border-radius: 3px; padding: 0 .25rem; margin-left: .25rem; vertical-align: middle; letter-spacing: .04em; }
 .spark { vertical-align: middle; }
 .none { color: var(--faint); font-size: 13px; padding: .5rem 0; }
 .grid2 { display: grid; grid-template-columns: 1fr; gap: 1rem; }
@@ -153,13 +166,13 @@ details.ev summary { cursor: pointer; color: var(--muted); font-size: 11.5px; te
     <div class="overlay">
       <h1>Emerging trends, <span>district by district</span></h1>
       <p class="dek">Click a community district. Color the map by any signal — 311 against its seasonal norm, major felonies, HPD violations, evictions, deeds, new buildings, news attention — then read what's behind it on the right.</p>
-      <div class="lens"><div class="lh">Color districts by</div><div class="lgrid" id="lenses"></div><div class="legend" id="legend"></div></div>
+      <div class="lens" id="lens"><div class="lh" onclick="document.getElementById('lens').classList.toggle('open')">Color districts by <span class="cur" id="lenscur"></span> <span class="tog">▾</span></div><div class="lgrid" id="lenses"></div><div class="legend" id="legend"></div></div>
     </div>
     <div class="tip" id="tip"></div>
     <div class="asof" id="asof">Loading…</div>
   </div>
   <aside class="side" id="side">
-    <div class="sh"><input type="search" id="q" placeholder="Jump to a district or neighborhood…" list="dl" /><datalist id="dl"></datalist><select id="jump"><option value="">All districts</option></select></div>
+    <div class="sh"><input type="search" id="q" placeholder="Address, neighborhood or district…" list="dl" /><datalist id="dl"></datalist><select id="jump"><option value="">All districts</option></select></div>
     <main id="main"><div class="loading">Loading…</div></main>
 <footer class="foot">
     <div>
@@ -210,7 +223,7 @@ const LENSES = [
   { id: 'bldg',  label: 'Converging buildings', kind: 'seq', value: d => d.n_places, fmt: v => fmt(v), note: 'tax lots where record families agree' },
   { id: 'leads', label: 'Leads', kind: 'seq', value: d => d.lead_ids.length, fmt: v => fmt(v), note: 'leads this week' },
 ];
-const DIV_COLORS = ['#57aa4a', '#3b3f45', '#ff7c53'];   // below / flat / above
+const DIV_COLORS = ['#7d84c9', '#3b3f45', '#ff7c53'];   // below / flat / above — deliberately not green/red: lower is not 'good'
 function lensColor(L, v, vmax) {
   if (v == null) return '#1a1a1f';
   if (L.kind === 'div') {
@@ -229,7 +242,8 @@ function init() {
   $('#asof').innerHTML = `Data through <b>${DATA.as_of}</b> · built ${DATA.generated.slice(0,10)} · ${DATA.counts.leads} leads`;
   // lens buttons
   $('#lenses').innerHTML = LENSES.map(L => `<button class="lbtn ${L.id === lens ? 'on' : ''}" data-l="${L.id}">${L.label}</button>`).join('');
-  document.querySelectorAll('.lbtn').forEach(b => b.onclick = () => { lens = b.dataset.l; document.querySelectorAll('.lbtn').forEach(x => x.classList.toggle('on', x === b)); paint(); });
+  document.querySelectorAll('.lbtn').forEach(b => b.onclick = () => { lens = b.dataset.l; document.querySelectorAll('.lbtn').forEach(x => x.classList.toggle('on', x === b)); $('#lenscur').textContent = b.textContent; $('#lens').classList.remove('open'); paint(); if (sel) { renderMain(); const tgt = document.getElementById('sec-' + lens); if (tgt) tgt.scrollIntoView({ behavior: 'smooth', block: 'start' }); } else { renderMain(); $('#side').scrollTo({ top: 0, behavior: 'smooth' }); } });
+  $('#lenscur').textContent = LENSES.find(x => x.id === lens).label;
   // jump select + datalist
   const ds = Object.values(DATA.districts).sort((a, b) => a.cd.localeCompare(b.cd));
   $('#jump').innerHTML = '<option value="">All districts</option>' + BORO_ORDER.map(bo => `<optgroup label="${bo}">` + ds.filter(d => d.borough === bo).map(d => `<option value="${d.cd}">${esc(d.name)}</option>`).join('') + '</optgroup>').join('');
@@ -255,7 +269,19 @@ function initMap() {
     MAP.addLayer({ id: 'cd-fill', type: 'fill', source: 'cd', paint: { 'fill-color': ['get', 'color'], 'fill-opacity': ['case', ['boolean', ['feature-state', 'hover'], false], 0.85, 0.62] } });
     MAP.addLayer({ id: 'cd-line', type: 'line', source: 'cd', paint: { 'line-color': 'rgba(255,255,255,0.35)', 'line-width': 0.8 } });
     MAP.addLayer({ id: 'cd-sel', type: 'line', source: 'cd', filter: ['==', 'cd_code', ''], paint: { 'line-color': '#dde44c', 'line-width': 2.5 } });
-    paint();
+    MAP.addSource('pts', { type: 'geojson', data: { type: 'FeatureCollection', features: [] } });
+    MAP.addLayer({ id: 'pts-halo', type: 'circle', source: 'pts', paint: { 'circle-radius': ['interpolate', ['linear'], ['get', 'score'], 6, 7, 26, 15], 'circle-color': '#ff7c53', 'circle-opacity': 0.18 } });
+    MAP.addLayer({ id: 'pts', type: 'circle', source: 'pts', paint: { 'circle-radius': ['interpolate', ['linear'], ['get', 'score'], 6, 3.5, 26, 8], 'circle-color': '#ff7c53', 'circle-stroke-color': '#050507', 'circle-stroke-width': 1.2, 'circle-opacity': 0.95 } });
+    MAP.on('mousemove', 'pts', e => {
+      MAP.getCanvas().style.cursor = 'pointer';
+      const p = e.features[0].properties; const tip = $('#tip');
+      tip.style.display = 'block'; tip.style.left = (e.point.x + 14) + 'px'; tip.style.top = (e.point.y + 14) + 'px';
+      tip.innerHTML = `<b>${esc(p.address)}</b><span style="color:var(--muted)">${p.n_sources} record famil${p.n_sources > 1 ? 'ies' : 'y'} agree</span><div class="ll">${esc(p.why)}</div><div style="color:var(--faint);margin-top:.3rem;font-size:11px">click to jump to it in the panel</div>`;
+    });
+    MAP.on('mouseleave', 'pts', () => { MAP.getCanvas().style.cursor = ''; $('#tip').style.display = 'none'; });
+    MAP.on('click', 'pts', e => { const el = document.getElementById('bld-' + e.features[0].properties.key); if (el) { el.scrollIntoView({ behavior: 'smooth', block: 'center' }); el.style.background = 'rgba(255,124,83,.12)'; setTimeout(() => el.style.background = '', 1600); } });
+    paint(); paintPoints();
+    if (sel) { const f = GEO.features.find(x => x.properties.cd_code === sel); if (f) MAP.fitBounds(bbox(f.geometry), { padding: 60, maxZoom: 12.5, duration: 0 }); }
     let hovered = null;
     MAP.on('mousemove', 'cd-fill', e => {
       MAP.getCanvas().style.cursor = 'pointer';
@@ -265,10 +291,10 @@ function initMap() {
       const d = DATA.districts[cd]; const L = LENSES.find(x => x.id === lens);
       const tip = $('#tip'); if (!d) return;
       tip.style.display = 'block'; tip.style.left = (e.point.x + 14) + 'px'; tip.style.top = (e.point.y + 14) + 'px';
-      tip.innerHTML = `<b>${esc(d.name)}</b><span style="color:var(--muted)">${esc(d.borough)} CD ${parseInt(cd.slice(1))}</span><br>${esc(L.label)}: <span class="v">${L.fmt(L.value(d))}</span>`;
+      tip.innerHTML = `<b>${esc(d.name)}</b><span style="color:var(--muted)">${esc(d.borough)} CD ${parseInt(cd.slice(1))}</span><br>${esc(L.label)}: <span class="v">${L.fmt(L.value(d))}</span>${lensDetail(d)}<div style="color:var(--faint);margin-top:.3rem;font-size:11px">click for the district page</div>`;
     });
     MAP.on('mouseleave', 'cd-fill', () => { MAP.getCanvas().style.cursor = ''; $('#tip').style.display = 'none'; if (hovered !== null) MAP.setFeatureState({ source: 'cd', id: hovered }, { hover: false }); hovered = null; });
-    MAP.on('click', 'cd-fill', e => select(e.features[0].properties.cd_code, false));
+    MAP.on('click', 'cd-fill', e => select(e.features[0].properties.cd_code, true));
   });
 }
 function paint() {
@@ -281,15 +307,21 @@ function paint() {
     ? `<span>−50%</span><span class="ramp" style="background:linear-gradient(90deg,${DIV_COLORS[0]},${DIV_COLORS[1]},${DIV_COLORS[2]})"></span><span>+100%</span><span class="note">${esc(L.note)}. Grey = no data or too few to compare.</span>`
     : `<span>0</span><span class="ramp" style="background:linear-gradient(90deg,#1f2024,#dde44c)"></span><span>${fmt(Math.round(vmax))}</span><span class="note">${esc(L.note)}</span>`;
 }
+function paintPoints() {
+  if (!MAP || !MAP.getSource('pts')) return;
+  const feats = sel ? (DATA.districts[sel].places || []).filter(p => p.lat && p.lon).map(p => ({ type: 'Feature', geometry: { type: 'Point', coordinates: [p.lon, p.lat] }, properties: { key: p.key, address: p.address, score: p.score, n_sources: p.n_sources, why: p.why.slice(0, 3).join('; ') } })) : [];
+  MAP.getSource('pts').setData({ type: 'FeatureCollection', features: feats });
+}
 function select(cd, fly) {
   sel = (sel === cd) ? null : cd;
   history.replaceState(null, '', sel ? '#cd=' + sel : location.pathname);
   $('#jump').value = sel || '';
-  renderMain(); paint();
+  renderMain(); paint(); paintPoints();
   $('#side').scrollTo({ top: 0, behavior: 'smooth' });
   if (sel && fly && MAP) { const f = GEO.features.find(x => x.properties.cd_code === sel); if (f) { const b = bbox(f.geometry); MAP.fitBounds(b, { padding: 60, maxZoom: 12.5, duration: 700 }); } }
 }
 function setTab(t) { tab311 = t; renderMain(); }
+function crimeRange() { const p = DATA.trend_meta && DATA.trend_meta.crime && DATA.trend_meta.crime.period; if (!p || !p.week_end) return '28 days'; const [m, dd, y] = p.week_end.split('/').map(Number); const e = new Date(y, m - 1, dd), s0 = new Date(e); s0.setDate(e.getDate() - 27); const M = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']; return `${M[s0.getMonth()]} ${s0.getDate()}–${s0.getMonth() === e.getMonth() ? '' : M[e.getMonth()] + ' '}${e.getDate()}, ${y}`; }
 function ord(n) { n = parseInt(n); const s = ['th','st','nd','rd'], v = n % 100; return n + (s[(v - 20) % 10] || s[v] || s[0]); }
 
 // ---- address search (NYC Planning GeoSearch, keyless) + district-name jump ----
@@ -335,8 +367,8 @@ function inRing(x, y, ring) { let inside = false; for (let i = 0, j = ring.lengt
 function bbox(g) { let minx = 180, miny = 90, maxx = -180, maxy = -90; const walk = c => { if (typeof c[0] === 'number') { minx = Math.min(minx, c[0]); maxx = Math.max(maxx, c[0]); miny = Math.min(miny, c[1]); maxy = Math.max(maxy, c[1]); } else c.forEach(walk); }; walk(g.coordinates); return [[minx, miny], [maxx, maxy]]; }
 
 // 311 complaint types that are really HPD housing-complaint categories (uppercase in the data) or DOB categories
-const TYPE_LABELS = { 'HEAT/HOT WATER': 'Heat / hot water (HPD housing complaint)', 'DOOR/WINDOW': 'Door / window (HPD housing complaint)', 'PAINT/PLASTER': 'Paint / plaster (HPD housing complaint)', 'UNSANITARY CONDITION': 'Unsanitary condition — pests, mold, sewage (HPD housing complaint)', 'GENERAL': 'General (HPD housing complaint — bell/buzzer, cooking gas, mailbox, signage)', 'APPLIANCE': 'Appliance (HPD housing complaint)', 'ELECTRIC': 'Electric (HPD housing complaint)', 'FLOORING/STAIRS': 'Flooring / stairs (HPD housing complaint)', 'SAFETY': 'Safety — window guards, smoke/CO detectors, sprinklers (HPD housing complaint)', 'OUTSIDE BUILDING': 'Outside building — roof, facade, sidewalk (HPD housing complaint)', 'PLUMBING': 'Plumbing (HPD housing complaint)', 'WATER LEAK': 'Water leak (HPD housing complaint)', 'ELEVATOR': 'Elevator (HPD housing complaint)', 'Building/Use': 'Building / use (DOB: illegal conversion, work without permit, zoning)', 'General Construction/Plumbing': 'General construction / plumbing (DOB)', 'Real Time Enforcement': 'Real-time enforcement (DOB: work in progress complaints)', 'Non-Emergency Police Matter': 'Non-emergency police matter (NYPD via 311)', 'Emergency Response Team (ERT)': 'Emergency response team (DOB structural)' };
-const typeLabel = t => TYPE_LABELS[t] ? `<span title="${esc(TYPE_LABELS[t])}">${esc(TYPE_LABELS[t].split(' (')[0])}</span> <span style="color:var(--faint);font-size:11px">${esc('(' + TYPE_LABELS[t].split(' (').slice(1).join(' ('))}</span>` : esc(t);
+const TYPE_LABELS = { 'HEAT/HOT WATER': ['Heat / hot water', 'HPD', 'HPD housing complaint filed through 311'], 'DOOR/WINDOW': ['Door / window', 'HPD', 'HPD housing complaint filed through 311'], 'PAINT/PLASTER': ['Paint / plaster', 'HPD', 'HPD housing complaint filed through 311'], 'UNSANITARY CONDITION': ['Unsanitary condition', 'HPD', 'HPD housing complaint: pests, mold, sewage, garbage'], 'GENERAL': ['General', 'HPD', 'HPD housing complaint: bell/buzzer, cooking gas, mailbox, signage'], 'APPLIANCE': ['Appliance', 'HPD', 'HPD housing complaint: stove, refrigerator'], 'ELECTRIC': ['Electric', 'HPD', 'HPD housing complaint'], 'FLOORING/STAIRS': ['Flooring / stairs', 'HPD', 'HPD housing complaint'], 'SAFETY': ['Safety', 'HPD', 'HPD housing complaint: window guards, smoke/CO detectors, sprinklers'], 'OUTSIDE BUILDING': ['Outside building', 'HPD', 'HPD housing complaint: roof, facade, sidewalk, porch'], 'PLUMBING': ['Plumbing', 'HPD', 'HPD housing complaint'], 'WATER LEAK': ['Water leak', 'HPD', 'HPD housing complaint'], 'ELEVATOR': ['Elevator', 'HPD', 'HPD housing complaint'], 'Building/Use': ['Building / use', 'DOB', 'DOB: illegal conversion, work without permit, zoning, occupancy'], 'General Construction/Plumbing': ['General construction / plumbing', 'DOB', 'DOB complaint'], 'Real Time Enforcement': ['Real-time enforcement', 'DOB', 'DOB: work in progress complaints'], 'Emergency Response Team (ERT)': ['Emergency response team', 'DOB', 'DOB structural emergency'], 'Non-Emergency Police Matter': ['Non-emergency police matter', 'NYPD', 'NYPD via 311'], 'Illegal Parking': ['Illegal parking', 'NYPD', 'NYPD via 311'], 'Blocked Driveway': ['Blocked driveway', 'NYPD', 'NYPD via 311'], 'Noise - Residential': ['Noise — residential', 'NYPD', 'NYPD via 311'], 'Noise - Street/Sidewalk': ['Noise — street/sidewalk', 'NYPD', 'NYPD via 311'], 'Noise - Commercial': ['Noise — commercial', 'NYPD', 'NYPD via 311'], 'Noise - Vehicle': ['Noise — vehicle', 'NYPD', 'NYPD via 311'], 'Rodent': ['Rodent', 'DOHMH', 'DOHMH via 311'], 'Sewer Maintenance': ['Sewer maintenance', 'DEP', 'DEP via 311'], 'Water Maintenance': ['Water maintenance', 'DEP', 'DEP via 311'], 'Street Condition': ['Street condition', 'DOT', 'DOT via 311'], 'Dirty Condition': ['Dirty condition', 'DSNY', 'DSNY via 311'], 'Encampment': ['Encampment', 'DHS', 'DHS via 311'], 'Homeless Person Assistance': ['Homeless person assistance', 'DHS', 'DHS via 311'] };
+const typeLabel = t => { const m = TYPE_LABELS[t]; return m ? `<span title="${esc(m[2])}">${esc(m[0])}</span> <span class="ag">${esc(m[1])}</span>` : esc(t); };
 const NYC = 'https://data.cityofnewyork.us/resource';
 function cbLabel(cd) { return `${String(parseInt(cd.slice(1))).padStart(2,'0')}%20${encodeURIComponent(DATA.districts[cd].borough.toUpperCase())}`; }
 function isoDays(n) { const e = new Date(DATA.as_of + 'T00:00:00'); const s = new Date(e); s.setDate(e.getDate() - n + 1); const e2 = new Date(e); e2.setDate(e.getDate() + 1); return [s.toISOString().slice(0,10), e2.toISOString().slice(0,10)]; }
@@ -361,6 +393,8 @@ function tileLink(k, cd) {
   return null;
 }
 const DATES = () => (DATA.windows && DATA.windows.dates) || {};
+// Route raw Socrata resource URLs through the human-readable records viewer
+const view = (u, title, sub) => u && /^https:\/\/data\.(cityofnewyork\.us|ny\.gov)\/resource\//.test(u) ? `records.html?u=${encodeURIComponent(u)}&t=${encodeURIComponent(title || 'Records')}${sub ? '&s=' + encodeURIComponent(sub) : ''}` : u;
 
 function covTag(cov) {
   if (!cov || cov.score === null || cov.score === undefined) return `<span class="tag covx">coverage not checked</span>`;
@@ -382,13 +416,14 @@ function renderMain() {
   const t = d.three11 || { cur28: 0, weeks: [], top_by_volume: [], rising: [] }, tr = d.trends || {}, meta = DATA.trend_meta || {};
   const r311 = ratio311(d);
   const DT = DATES();
-  const tile = (key, label, cur, cmpTxt, r, weeks) => { const u = tileLink(key, sel); const inner = `<small>${label}</small><b>${fmt(cur)}${u ? ' <span style="font-size:12px;color:var(--chart)">↗</span>' : ''}</b><div class="cmp"><i class="${cls(r)}">${pct(r)}</i> ${cmpTxt}</div>${weeks ? spark(weeks, 120, 22) : ''}`; return u ? `<a class="tile" href="${u}" target="_blank" rel="noopener" title="Open the underlying records" style="text-decoration:none;color:inherit;display:block">${inner}</a>` : `<div class="tile">${inner}</div>`; };
+  const TILE_ID = { hpd_violations: 'hpdv', evictions: 'evic', hpd_litigation: 'lit', dob_filings: 'dobf', restaurant_closures: 'rest' };
+  const tile = (key, label, cur, cmpTxt, r, weeks) => { const raw = tileLink(key, sel); const u = view(raw, `${label.replace(/ · .*/, '')} — ${d.name}`, label); const inner = `<small>${label}</small><b>${fmt(cur)}</b><div class="cmp"><i class="${cls(r)}">${pct(r)}</i> ${cmpTxt}</div>${weeks ? spark(weeks, 120, 22) : ''}${u ? '<div class="see">see the records</div>' : ''}`; const idAttr = TILE_ID[key] ? ` id="sec-${TILE_ID[key]}"` : ''; return u ? `<a class="tile"${idAttr} href="${u}" target="_blank" rel="noopener" style="text-decoration:none;color:inherit;display:block">${inner}</a>` : `<div class="tile"${idAttr}>${inner}</div>`; };
   const cr = tr.crime, dd = tr.deeds;
   const dayLabel = k => ({28: DT.d28, 30: DT.d30, 60: DT.d60}[meta[k]?.days] || (meta[k]?.days + ' days'));
   const priorLabel = k => ({28: DT.prior28, 30: DT.prior30, 60: DT.prior60}[meta[k]?.days] || ('prior ' + meta[k]?.days + 'd'));
   const tiles = [
     tile('311', `311 requests · ${DT.d28 || '28 days'}`, t.cur28, `vs seasonal norm ${fmt(Math.round(t.exp_seasonal ?? t.exp_recent ?? 0))}`, r311, t.weeks),
-    cr ? tile('crime', `Major felonies · 28 days to ${meta.crime && meta.crime.period ? esc(meta.crime.period.week_end) : ''}`, cr.cur, `vs ${fmt(cr.prior)} same 28 days last year`, cr.ratio) : '',
+    cr ? tile('crime', `Major felonies · ${crimeRange()}`, cr.cur, `vs ${fmt(cr.prior)} same 28 days last year`, cr.ratio) : '',
     ...['hpd_violations', 'hpd_complaints', 'dob_complaints', 'hpd_litigation', 'evictions', 'vacates', 'dob_filings', 'dob_safety', 'restaurant_closures'].map(k => {
       const v = tr[k]; if (!v) return '';
       return tile(k, `${meta[k]?.label || k} · ${dayLabel(k)}`, v.cur, `vs ${fmt(v.prior)} ${priorLabel(k)}`, v.ratio);
@@ -406,7 +441,7 @@ function renderMain() {
   const trendTab = tab311 === 'trend';
   const table311 = rows311.length ? `<table class="t"><thead><tr><th>Complaint type</th><th class="r">${trendTab ? '12 weeks' : (DATES().d28 || '28 days')}</th><th class="r">${trendTab ? (DATES().d7 || 'last 7d') : (tab311 === 'rising' ? 'prior 3-wk avg' : (tab311 === 'volume' ? 'seasonal norm' : 'expected'))}</th><th class="r">${tab311 === 'rising' ? '7d vs prior' : (tab311 === 'volume' ? 'vs seasonal' : 'vs expected')}</th>${!trendTab ? '<th class="r">12 wk</th>' : ''}</tr></thead><tbody>${rows311.map(a => {
     const rv = tab311 === 'rising' ? (a.prior3wk_avg ? a.last7 / a.prior3wk_avg : null) : (tab311 === 'volume' ? (a.vs_seasonal ?? a.vs_recent) : a.ratio);
-    return `<tr><td>${typeLabel(a.complaint_type)}${a.accelerating && tab311 !== 'rising' ? '<span class="chip acc">accelerating</span>' : ''}${a.hazard ? '<span class="chip haz">life-safety</span>' : ''}${a.taxonomy_new ? '<span class="chip">new category</span>' : ''}${a.concentrated ? '<span class="chip" title="one address accounts for 40%+ of these complaints">mostly one address</span>' : ''}${a.distinct_addresses ? `<span class="chip" title="distinct addresses in 28 days">${a.distinct_addresses} addr</span>` : ''}</td>
+    return `<tr><td>${typeLabel(a.complaint_type)}${a.accelerating && tab311 !== 'rising' ? '<span class="chip acc" title="the last 7 days ran at least 1.3x the average of the three weeks before">accelerating</span>' : ''}${a.taxonomy_new ? '<span class="chip" title="311 began using this complaint type recently; no prior-year history to compare with">new category</span>' : ''}${a.concentrated ? '<span class="chip" title="one address accounts for 40%+ of these complaints">mostly one address</span>' : ''}${a.distinct_addresses ? `<span class="chip" title="distinct addresses in 28 days">${a.distinct_addresses} addr</span>` : ''}</td>
       <td class="r">${trendTab ? spark(a.weeks, 160, 24) : fmt(a.cur28)}</td>
       <td class="r m">${trendTab ? fmt(a.last7) : (tab311 === 'rising' ? fmt(a.prior3wk_avg) + '/wk' : fmt(tab311 === 'volume' ? (a.exp_seasonal ?? a.exp_recent) : a.expected))}</td>
       <td class="r"><span class="rat ${cls(rv)}">${rv == null ? '—' : rv.toFixed(2) + 'x'}</span></td>
@@ -420,30 +455,30 @@ function renderMain() {
   el.innerHTML = `
     <div class="dhead">
       <div><h2>${esc(d.name)}</h2><div class="sub">${esc(d.borough)} Community District ${parseInt(d.cd.slice(1))}${d.neighborhoods.length ? ' · ' + esc(d.neighborhoods.join(', ')) : ''}</div></div>
-      <div class="links"><a href="${q311}" target="_blank" rel="noopener">Latest 311 ↗</a><a href="https://zap.planning.nyc.gov/projects?community-districts=${'MXKQR'[parseInt(d.cd[0])-1]}${d.cd.slice(1)}" target="_blank" rel="noopener">ZAP ↗</a><a href="#" onclick="select('${d.cd}', false);return false;">All districts</a></div>
+      <div class="links"><a href="${view(q311, 'Latest 311 requests — ' + d.name)}" target="_blank" rel="noopener">Latest 311</a><a href="https://zap.planning.nyc.gov/projects?community-districts=${'MXKQR'[parseInt(d.cd[0])-1]}${d.cd.slice(1)}" target="_blank" rel="noopener">Land-use filings</a><a href="#" onclick="select('${d.cd}', false);return false;">All districts</a></div>
     </div>
     <div class="tiles">${tiles}</div>
 
-    <section class="blk">
+    <section class="blk" id="sec-r311">
       <h3>311 complaints, several ways <span class="tabs"><button class="tab ${tab311==='norm'?'on':''}" onclick="setTab('norm')">Above seasonal norm</button><button class="tab ${tab311==='volume'?'on':''}" onclick="setTab('volume')">Biggest by volume</button><button class="tab ${tab311==='rising'?'on':''}" onclick="setTab('rising')">Rising this week</button><button class="tab ${tab311==='trend'?'on':''}" onclick="setTab('trend')">12-week trends</button></span></h3>
       <div class="none" style="padding:0 0 .4rem">${hdr}.${tab311 === 'norm' ? ' Expected = the higher of the seasonal norm and the recent eight-week pace, so a type must beat both to appear here.' : ''}</div>
       ${table311}
     </section>
 
-    <section class="blk">
-      <h3>Buildings where records converge <span class="hint">tax lots where two or more independent record families agree — or one source is extreme (12+ 311 calls in a fortnight, a vacate order, 10+ class C violations). 311 and HPD complaints ${DATES().d14 || ''}; violations ${DATES().d30 || ''}; evictions and vacates ${DATES().d60 || ''}</span></h3>
-      ${places.length ? places.map(p => `<div class="bld"><div><b>${esc(p.address)}</b><a class="q" href="https://zola.planning.nyc.gov/l/lot/${p.key[0]}/${parseInt(p.key.slice(1,6))}/${parseInt(p.key.slice(6))}" target="_blank" rel="noopener">lot ↗</a><div class="w">${esc(p.why.join('; '))}</div></div><div class="fam"><i>${p.n_sources}</i>record famil${p.n_sources > 1 ? 'ies' : 'y'}</div></div>`).join('') : '<div class="none">No multi-source buildings in this district this fortnight.</div>'}
+    <section class="blk" id="sec-bldg">
+      <h3>Buildings where records converge <span class="hint">${places.length < d.n_places ? `top ${places.length} of ${d.n_places}, ` : ''}shown as orange dots on the map · tax lots where two or more independent record families agree — or one source is extreme (12+ 311 calls in a fortnight, a vacate order, 10+ class C violations). 311 and HPD complaints ${DATES().d14 || ''}; violations ${DATES().d30 || ''}; evictions and vacates ${DATES().d60 || ''}</span></h3>
+      ${places.length ? places.map(p => `<div class="bld" id="bld-${esc(p.key)}"><div><b>${esc(p.address)}</b><a class="q" href="https://zola.planning.nyc.gov/l/lot/${p.key[0]}/${parseInt(p.key.slice(1,6))}/${parseInt(p.key.slice(6))}" target="_blank" rel="noopener">lot on ZoLa</a><div class="w">${esc(p.why.join('; '))}</div></div><div class="fam"><i>${p.n_sources}</i>record famil${p.n_sources > 1 ? 'ies' : 'y'}</div></div>`).join('') : '<div class="none">No multi-source buildings in this district this fortnight.</div>'}
     </section>
 
-    <section class="blk">
+    <section class="blk" id="sec-leads">
       <h3>Leads in this district <span class="hint">the strongest signals, checked against news coverage</span></h3>
       ${leads.length ? leads.map(leadCard).join('') : '<div class="none">Nothing here made the citywide leads list this week.</div>'}
     </section>
 
     <section class="blk grid2">
-      ${cr && cr.precincts ? `<div class="card"><h4>Crime · CompStat 28 days${meta.crime && meta.crime.period ? ' · ' + esc(meta.crime.period.raw) : ''}</h4><ul>${cr.precincts.map(p => `<li><b>${ord(p.precinct)} Precinct</b> (${Math.round(p.share*100)}% of district area): ${fmt(p.cur)} major felonies vs ${fmt(p.prior)} same 28 days last year</li>`).join('')}<li style="color:var(--faint)">Seven major felonies; precinct totals area-weighted onto the district, so treat the district figure as approximate. Source: <a href="https://www.nyc.gov/site/nypd/stats/crime-statistics/compstat.page" target="_blank" rel="noopener">NYPD CompStat</a> via the compstat scraper.</li></ul></div>` : ''}
-      ${dd ? `<div class="card"><h4>Real estate · deeds recorded${meta.deeds && meta.deeds.window ? ' · ' + meta.deeds.window.start + ' → ' + meta.deeds.window.end : ''}</h4><ul><li><b>${fmt(dd.cur)}</b> deeds vs ${fmt(dd.prior)} in the prior 30 recorded days · $${fmt(Math.round((dd.dollar_volume || 0) / 1e6))}M stated consideration</li>${(dd.top_buyers || []).length ? `<li>Repeat buyers: ${dd.top_buyers.map(b => `<b>${esc(b.name)}</b> (${b.deeds})`).join(', ')}</li>` : ''}<li style="color:var(--faint)">ACRIS runs 2-3 weeks behind; $0 deeds (transfers, refinancings) are counted but add nothing to volume.</li></ul></div>` : ''}
-      ${d.attention && d.attention.top && d.attention.top.length ? `<div class="card"><h4>In the news · last 7 days (${d.attention.n7})</h4><ul>${d.attention.top.map(a => `<li><a href="${esc(a.url)}" target="_blank" rel="noopener">${esc(a.title)}</a> <span style="color:var(--faint)">— ${esc(a.outlet)}${a.date ? ', ' + a.date : ''}</span></li>`).join('')}</ul></div>` : ''}
+      ${cr && cr.precincts ? `<div class="card" id="sec-crime"><h4>Crime · CompStat, ${crimeRange()}</h4><ul>${cr.precincts.map(p => `<li><b>${ord(p.precinct)} Precinct</b> (${Math.round(p.share*100)}% of district area): ${fmt(p.cur)} major felonies vs ${fmt(p.prior)} same 28 days last year</li>`).join('')}<li style="color:var(--faint)">Seven major felonies; precinct totals area-weighted onto the district, so treat the district figure as approximate. Source: <a href="https://www.nyc.gov/site/nypd/stats/crime-statistics/compstat.page" target="_blank" rel="noopener">NYPD CompStat</a> via the compstat scraper.</li></ul></div>` : ''}
+      ${dd ? `<div class="card" id="sec-deeds"><h4>Real estate · deeds recorded${meta.deeds && meta.deeds.window ? ' · ' + meta.deeds.window.start + ' → ' + meta.deeds.window.end : ''}</h4><ul><li><b>${fmt(dd.cur)}</b> deeds vs ${fmt(dd.prior)} in the prior 30 recorded days · $${fmt(Math.round((dd.dollar_volume || 0) / 1e6))}M stated consideration</li>${(dd.top_buyers || []).length ? `<li>Repeat buyers: ${dd.top_buyers.map(b => `<b>${esc(b.name)}</b> (${b.deeds})`).join(', ')}</li>` : ''}<li style="color:var(--faint)">ACRIS runs 2-3 weeks behind; $0 deeds (transfers, refinancings) are counted but add nothing to volume.</li></ul></div>` : ''}
+      ${d.attention ? `<div class="card" id="sec-news"><h4>In the news · ${DATES().d7 || 'last 7 days'} (${d.attention.n7} headline${d.attention.n7 === 1 ? '' : 's'})</h4>${d.attention.top && d.attention.top.length ? `<ul>${d.attention.top.map(a => `<li><a href="${esc(a.url)}" target="_blank" rel="noopener">${esc(a.title)}</a> <span style="color:var(--faint)">— ${esc(a.outlet)}${a.date ? ', ' + a.date : ''}</span></li>`).join('')}</ul>` : '<div class="none">No Google News headline named this district\'s neighborhoods this week.</div>'}${d.attention.query ? `<div style="margin-top:.4rem;font-size:11.5px"><a href="https://news.google.com/search?q=${encodeURIComponent(d.attention.query)}" target="_blank" rel="noopener">Search Google News for this district</a></div>` : ''}</div>` : ''}
       <div class="card"><h4>Pending liquor licenses · 60 days</h4>${d.sla_pending.length ? `<ul>${d.sla_pending.map(s => `<li><b>${esc(s.name)}</b> — ${esc(s.type)}, ${esc(s.address)} (${s.received})</li>`).join('')}</ul>` : '<div class="none">None located.</div>'}</div>
       <div class="card"><h4>Land use · milestones in the last 60 days</h4>${d.land_use.length ? `<ul>${d.land_use.map(z => `<li><a href="${esc(z.url)}" target="_blank" rel="noopener"><b>${esc(z.name)}</b></a> — ${esc(z.milestone)} (${z.date})${z.brief ? '<br>' + esc(z.brief) : ''}</li>`).join('')}</ul>` : '<div class="none">No active applications with a recent milestone.</div>'}</div>
       <div class="card"><h4>City Record notices naming this district · 14 days</h4>${d.city_record.length ? `<ul>${d.city_record.map(n => `<li><b>${esc(n.agency)}</b> · ${esc(n.type)}: ${esc(n.title)}${n.event_date ? ' (event ' + n.event_date + ')' : ''}</li>`).join('')}</ul>` : '<div class="none">None matched.</div>'}</div>
@@ -451,20 +486,34 @@ function renderMain() {
     </section>`;
 }
 
+function lensDetail(d) {
+  const tr = d.trends || {};
+    if (lens === 'news' && d.attention && d.attention.top && d.attention.top[0]) return `<div class="ll">${d.attention.top.slice(0, 2).map(a => `<a href="${esc(a.url)}" target="_blank" rel="noopener">${esc(a.title)}</a> <span style="color:var(--faint)">— ${esc(a.outlet)}</span>`).join('<br>')}</div>`;
+    if (lens === 'r311') { const t = d.three11; const a = (d.anomalies || [])[0]; return `<div class="ll">${fmt(t.cur28)} requests vs a seasonal norm of ${fmt(Math.round(t.exp_seasonal ?? t.exp_recent ?? 0))}${a ? ` · biggest gap: ${esc(a.complaint_type)} ${a.ratio}x expected` : ''}</div>`; }
+    if (lens === 'crime' && tr.crime) return `<div class="ll">${fmt(tr.crime.cur)} major felonies vs ${fmt(tr.crime.prior)} in the same 28 days last year · precinct${tr.crime.precincts.length > 1 ? 's' : ''} ${tr.crime.precincts.map(p => p.precinct).join(', ')}</div>`;
+    if (lens === 'deeds' && tr.deeds) return `<div class="ll">${fmt(tr.deeds.cur)} deeds vs ${fmt(tr.deeds.prior)} · $${fmt(Math.round((tr.deeds.dollar_volume || 0) / 1e6))}M${(tr.deeds.top_buyers || []).length ? ' · repeat buyer: ' + esc(tr.deeds.top_buyers[0].name) : ''}</div>`;
+    if (lens === 'bldg') { const p = (d.places || [])[0]; return p ? `<div class="ll">${d.n_places} buildings · top: <b>${esc(p.address)}</b> — ${esc(p.why[0])}</div>` : ''; }
+    if (lens === 'leads') { const l = DATA.leads.find(x => x.cd === d.cd); return l ? `<div class="ll">${esc(l.headline)}</div>` : ''; }
+    const key = { hpdv: 'hpd_violations', evic: 'evictions', lit: 'hpd_litigation', dobf: 'dob_filings', rest: 'restaurant_closures' }[lens];
+    if (key && tr[key]) return `<div class="ll">${fmt(tr[key].cur)} vs ${fmt(tr[key].prior)} in the ${DATA.trend_meta[key].days} days before</div>`;
+    return '';
+}
+
 function renderCitywide() {
-  const top = DATA.leads.slice(0, 12);
-  const nov = DATA.leads.filter(l => l.kind === 'novelty').slice(0, 6);
-  const ds = Object.values(DATA.districts).map(d => ({ d, r: ratio311(d) })).filter(x => x.r != null).sort((a, b) => b.r - a.r);
-  const upList = ds.slice(0, 6), dnList = ds.slice(-6).reverse();
+  const L = LENSES.find(x => x.id === lens);
+  const rows = Object.values(DATA.districts).map(d => ({ d, v: L.value(d) })).filter(x => x.v != null && isFinite(x.v));
+  rows.sort((a, b) => b.v - a.v);
+  const top = rows.slice(0, 12), bottom = L.kind === 'div' ? rows.slice(-6).reverse() : [];
+  const detail = x => lensDetail(x.d);
+  const row = (x, i) => `<div class="lr" onclick="select('${x.d.cd}', true)"><div class="ln">${i != null ? `<span class="li">${i + 1}</span>` : ''}<b>${esc(x.d.name)}</b> <span style="color:var(--muted)">${esc(x.d.borough)} CD ${parseInt(x.d.cd.slice(1))}</span><span class="lv ${L.kind === 'div' ? cls(x.v) : ''}">${L.fmt(x.v)}</span></div>${detail(x)}</div>`;
+  const nov = DATA.leads.filter(l => l.kind === 'novelty').slice(0, 5);
   return `<div class="empty-main">
-      <h2>Click a district on the map</h2>
-      <p>Or type an address or neighborhood above. Each district shows this month's 311 four ways, eleven other record systems (crime, HPD, DOB, evictions, deeds, liquor licenses, land use, news attention) against the month before, the buildings where those records converge, and any leads that cleared the coverage check. Until you pick one, here is the citywide picture.</p>
-      <div class="grid2">
-        <div class="card"><h4>311 furthest above its seasonal norm</h4><ul>${upList.map(x => `<li><a class="dlink" href="#cd=${x.d.cd}" onclick="select('${x.d.cd}', true);return false;">${esc(x.d.name)}</a> <span class="up">${pct(x.r)}</span></li>`).join('')}</ul></div>
-        <div class="card"><h4>311 furthest below its seasonal norm</h4><ul>${dnList.map(x => `<li><a class="dlink" href="#cd=${x.d.cd}" onclick="select('${x.d.cd}', true);return false;">${esc(x.d.name)}</a> <span class="dn">${pct(x.r)}</span></li>`).join('')}</ul></div>
-      </div>
+      <h2>${esc(L.label)}</h2>
+      <p>${esc(L.note)}. Click a district on the map, pick another lens above the map, or type an address. ${rows.length < 59 ? `${59 - rows.length} district${59 - rows.length === 1 ? ' has' : 's have'} too little data to compare.` : ''}</p>
+      ${top.map((x, i) => row(x, i)).join('')}
+      ${bottom.length ? `<h4 style="margin:1rem 0 .3rem;font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted)">Furthest the other way</h4>${bottom.map(x => row(x, null)).join('')}` : ''}
     </div>
-    <section class="blk"><h3>This week's top leads, citywide <span class="hint">rank = signal × (1 − 0.75 × coverage); uncovered signals first</span></h3>${top.map(leadCard).join('')}</section>
+    <section class="blk"><h3>This week's top leads, citywide <span class="hint">rank = signal × (1 − 0.75 × coverage); uncovered signals first</span></h3>${DATA.leads.slice(0, 10).map(leadCard).join('')}</section>
     ${nov.length ? `<section class="blk"><h3>New kinds of 311 complaints <span class="hint">descriptors absent from the same weeks of prior years; 311's own renames set aside</span></h3>${nov.map(leadCard).join('')}</section>` : ''}`;
 }
 
@@ -492,7 +541,7 @@ function evidenceRows(l) {
   } else if (l.kind === 'novelty') {
     rows.push(['By district', (l.by_cd || []).map(x => `${esc(x.district)} (${x.n})`).join(', '), null]);
   }
-  return rows.map(([k, v, u]) => `<tr><td>${esc(k)}</td><td>${v}${u ? ` &nbsp;<a href="${esc(u)}" target="_blank" rel="noopener">query ↗</a>` : ''}</td></tr>`).join('');
+  return rows.map(([k, v, u]) => `<tr><td>${esc(k)}</td><td>${v}${u ? ` &nbsp;<a href="${esc(view(u, k + ' — ' + (l.address || l.district), l.headline))}" target="_blank" rel="noopener">see the records</a>` : ''}</td></tr>`).join('');
 }
 
 function leadCard(l) {

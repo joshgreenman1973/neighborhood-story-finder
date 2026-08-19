@@ -60,7 +60,7 @@ def _place_signal(p):
 def _district_signal(a):
     s = min(1.0, a["z"] / 30.0) * 0.7
     if a["hazard"]:
-        s += 0.2
+        s += 0.1
     if a["accelerating"]:
         s += 0.15
     if a["complaint_type"] in LOW_VALUE_TYPES:
@@ -270,7 +270,7 @@ def build(no_claude=False):
             "trends": {k: v["by_cd"][cd] for k, v in dstats.items() if k != "as_of"},
             "attention": attention.get(cd),
             "places": [{"key": p["key"], "address": _tidy_addr(p.get("address")), "score": p["score"],
-                        "n_sources": p["n_sources"], "why": p["why"]} for p in places["places"] if p["cd"] == cd][:15],
+                        "n_sources": p["n_sources"], "why": p["why"], "lat": p.get("lat"), "lon": p.get("lon")} for p in places["places"] if p["cd"] == cd][:25],
             "sla_pending": places["sla_by_cd"].get(cd, [])[:12],
             "land_use": feeds["land_use"].get(cd, [])[:8],
             "city_record": feeds["city_record"].get(cd, [])[:8],

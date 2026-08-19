@@ -444,6 +444,25 @@ def collect_places(end=None):
         pl.pop("boro", None)
         out.append(pl)
     out.sort(key=lambda p: -p["score"])
+    # coordinates for the map: 311's own geocode per BBL (any request in the last year)
+    ys, ye = window(end, 365)
+    keys = [p["bbl"] for p in out if p.get("bbl")]
+    coords = {}
+    for i in range(0, len(keys), 150):
+        batch = keys[i:i + 150]
+        rows = soql("erm2-nwe9", select="bbl, avg(latitude) as lat, avg(longitude) as lon",
+                    where=f"{where_between('created_date', ys, ye)} AND latitude IS NOT NULL AND bbl in(" + ",".join(f"'{k}'" for k in batch) + ")",
+                    group="bbl", limit=5000)
+        for r in rows:
+            try:
+                coords[r["bbl"]] = (round(float(r["lat"]), 6), round(float(r["lon"]), 6))
+            except (TypeError, ValueError, KeyError):
+                pass
+    for p in out:
+        c = coords.get(p.get("bbl"))
+        if c:
+            p["lat"], p["lon"] = c
+    print(f"[places] coordinates for {len(coords)} of {len(keys)} places")
     print(f"[places] {len(out)} places kept ({sum(1 for p in out if p['n_sources'] >= 2)} multi-family)")
     return {"as_of": iso(end), "places": out, "sla_by_cd": {k: sorted(v, key=lambda x: x["received"], reverse=True) for k, v in sla_by_cd.items()}}
 

@@ -259,7 +259,7 @@ function init() {
 function initMap() {
   MAP = new maplibregl.Map({
     container: 'map',
-    style: { version: 8, sources: { carto: { type: 'raster', tiles: ['https://a.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}@2x.png', 'https://b.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}@2x.png', 'https://c.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}@2x.png'], tileSize: 256, attribution: '&copy; <a href="https://carto.com/">CARTO</a> &copy; <a href="https://www.openstreetmap.org/copyright">OSM</a>' } }, layers: [{ id: 'carto', type: 'raster', source: 'carto' }] },
+    style: { version: 8, sources: { carto: { type: 'raster', tiles: ['https://a.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}@2x.png?key=cb1_2r82_1_ae4e70b6166057bc41b89638', 'https://b.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}@2x.png?key=cb1_2r82_1_ae4e70b6166057bc41b89638', 'https://c.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}@2x.png?key=cb1_2r82_1_ae4e70b6166057bc41b89638'], tileSize: 256, attribution: '&copy; <a href="https://carto.com/">CARTO</a> &copy; <a href="https://www.openstreetmap.org/copyright">OSM</a>' } }, layers: [{ id: 'carto', type: 'raster', source: 'carto' }] },
     center: [-73.93, 40.72], zoom: 9.9, minZoom: 8.5, maxZoom: 15, maxBounds: [[-74.6, 40.3], [-73.3, 41.1]], attributionControl: { compact: true },
   });
   MAP.addControl(new maplibregl.NavigationControl({ showCompass: false }), 'bottom-right');
